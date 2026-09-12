@@ -45,7 +45,7 @@
   font-family: var(--font-mono);
   font-size: var(--fs-label);
   font-weight: 700;
-  opacity: 0.75;
+  opacity: var(--opacity-strong);
 }
 
 .grain {
@@ -94,7 +94,7 @@
 }
 
 .chip:disabled {
-  opacity: 0.4;
+  opacity: var(--opacity-disabled);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;

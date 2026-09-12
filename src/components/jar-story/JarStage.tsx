@@ -43,10 +43,40 @@ interface JarStageProps {
 }
 
 /**
- * The pinned, scroll-driven build sequence. Mounted only when JS is
- * available and the user hasn't asked for reduced motion — JarStory always
- * renders JarStoryFallback underneath as the accessible, readable content;
- * this layer is a progressive visual enhancement on top of it.
+ * Pinned, scroll-driven ingredient build sequence. Progressive enhancement over JarStoryFallback.
+ *
+ * **Implementation:**
+ * - Built with GSAP ScrollTrigger (`scrub: 1` for smooth scrubbing)
+ * - Scroll progress (0→1) drives all animations via `onUpdate` callback
+ * - Particles are absolutely-positioned SVG sprites; all animation is transform-only (`will-change`)
+ * - Particle settle positions pre-computed (no live physics engine — prevents jank on Android)
+ * - ~140 total DOM nodes across all particles (heavily optimized)
+ *
+ * **Scroll map:**
+ * - 0.00–0.10: Jar fades in + scales (0.9→1)
+ * - 0.10–0.95: Each ingredient pours in sequence, settles, then next ingredient starts
+ * - 0.86–0.95: THE SHAKE — lid slams, jar rotates ±8° × 6 oscillations, screen shakes 4px
+ * - 0.95–1.00: Settles; product pack + finale headline fade in
+ *
+ * **Label card management:**
+ * - Shows during ingredient sequences (0.10–0.86), hides during shake (0.86+)
+ * - activeBeatIndex becomes -1 once scroll moves past the last ingredient beat
+ * - This prevents the label card from freezing on the last ingredient during the shake
+ *
+ * **Progress rail (visual affordance):**
+ * - 7 notches, one per ingredient beat
+ * - Fills in accent colour as scroll progresses
+ * - Stays filled at 100% even during shake/finale (activeBeatIndex === -1 check)
+ *
+ * **Reduced motion:**
+ * - Entire component is unmounted when `prefers-reduced-motion: reduce`
+ * - JarStoryFallback (static infographic) renders instead
+ * - Same content, no pinning, no animation
+ *
+ * **Sound:**
+ * - Optional crunch SFX on jar shake (shake progress 0.86–0.95)
+ * - Synthesised via WebAudio (filtered noise burst), no audio file
+ * - Off by default; toggle persists in localStorage
  */
 export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -154,7 +184,11 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
     return () => ctx.revert();
   }, [playCrunch]);
 
-  const activeBeat = RAIL_BEATS[activeBeatIndex];
+  // Past the last ingredient beat (shake/finale), keep the jar's fill/tint
+  // frozen at the final ingredient's values, but suppress the label card —
+  // see the onUpdate comment above for why idx goes to -1 there.
+  const activeBeat = activeBeatIndex >= 0 ? RAIL_BEATS[activeBeatIndex] : RAIL_BEATS[RAIL_BEATS.length - 1];
+  const showLabel = activeBeatIndex >= 0 && !!RAIL_BEATS[activeBeatIndex]?.label;
 
   return (
     <div ref={sectionRef} className={styles.stage}>
@@ -206,7 +240,7 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
           </div>
         </div>
 
-        {activeBeat?.label ? (
+        {showLabel ? (
           <div ref={labelRef} className={styles.labelCard} aria-hidden="true">
             <p className={styles.labelTitle}>{activeBeat.label}</p>
             <p className={styles.labelCopy}>{activeBeat.copy}</p>
@@ -215,7 +249,10 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
 
         <div className={styles.rail} aria-hidden="true">
           {RAIL_BEATS.map((beat, i) => (
-            <span key={beat.id} className={[styles.notch, i <= activeBeatIndex ? styles.notchFilled : ""].join(" ")} />
+            <span
+              key={beat.id}
+              className={[styles.notch, i <= activeBeatIndex || activeBeatIndex === -1 ? styles.notchFilled : ""].join(" ")}
+            />
           ))}
         </div>
 

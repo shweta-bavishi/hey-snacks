@@ -46,6 +46,26 @@ function ToneGrain({ tone }: { tone: PillTone }) {
   return <Grain scope="panel" intensity="subtle" className={styles.grain} />;
 }
 
+/**
+ * Compact tagged label or action button.
+ *
+ * **Variant naming convention:**
+ * Unlike Button (primary/secondary/ghost), Pill uses semantic variant names (label/action/kbd)
+ * because each variant maps to a specific HTML element with distinct responsibilities:
+ * - `label`: <span> — static text, no interactivity (section eyebrows, badges)
+ * - `action`: <button> — clickable filter chips, secondary CTAs
+ * - `kbd`: <kbd> — keyboard shortcut display (⌘K affordance, hotkey references)
+ *
+ * This semantic naming makes the element type and accessibility contract explicit at the call site,
+ * and prevents misuse (e.g., accidentally nesting a button inside a button).
+ *
+ * **Tone system:**
+ * Separate from variant. Controls background and text colour (default/accent/inverse).
+ * Tones with solid fills (accent/inverse) get the grain overlay per brand rules.
+ *
+ * **Glyph:**
+ * Optional leading ✱ character. Always hidden from screen readers (`aria-hidden`).
+ */
 export function Pill(props: PillProps) {
   const { variant = "label", tone = "default", glyph, children, className, ...rest } = props;
   const classes = [styles.pill, styles[variant], styles[tone], className].filter(Boolean).join(" ");

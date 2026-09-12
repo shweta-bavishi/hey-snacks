@@ -73,7 +73,7 @@
 
 .interactive:disabled,
 .interactive[aria-disabled="true"] {
-  opacity: 0.4;
+  opacity: var(--opacity-disabled);
   cursor: not-allowed;
   transform: rotate(var(--card-tilt, 0deg));
 }

@@ -14,7 +14,7 @@
 
 .row[data-disabled] {
   cursor: not-allowed;
-  opacity: 0.4;
+  opacity: var(--opacity-disabled);
 }
 
 /* Real checkbox, visually hidden but still focusable and in the tab order. */

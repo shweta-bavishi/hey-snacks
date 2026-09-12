@@ -58,6 +58,28 @@ function matchesQuery(command: Pick<CommandDef, "label" | "description" | "keywo
   );
 }
 
+/**
+ * Global command palette: keyboard-driven navigation, theme switcher, and inline notify flow.
+ *
+ * **Scrim implementation:**
+ * - Overlay uses `.overlay` class with `rgb(var(--scrim) / var(--scrim-opacity-default))`
+ * - This is a 60% opacity dark overlay; differs from Modal's 70% (`--scrim-opacity-dark`)
+ * - Both scrims use the same scrim colour token (20 17 15) but different opacity scales for UX
+ *
+ * **Focus management:**
+ * - Focus is trapped inside the palette when open (via cmdk library)
+ * - Focus is returned to the trigger pill on close
+ * - Live region announces search results to screen readers (polite priority)
+ *
+ * **Inline notify morph:**
+ * - When "Notify me" is selected, the palette morphs in place (height animates, content cross-fades)
+ * - Only shows email + flavour chips + submit (phone/pin code stay in Modal at §08)
+ * - On success: panel fills with flavour colour, shows "✱ you're in." for 1.2s, then closes
+ *
+ * **Reduced motion:**
+ * - All animations disabled; content appears instantly
+ * - Marquee (in header) becomes static when open, resumes on close
+ */
 export function CommandPalette({
   open,
   onOpenChange,

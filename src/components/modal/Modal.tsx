@@ -32,10 +32,34 @@ interface ModalProps {
 }
 
 /**
- * Nested modals are not supported. Opening a second Modal while one is
- * already open will fight the first over the inert app root, the scroll
- * lock, and the trigger to restore focus to. If you need a confirmation
- * step, replace the open modal's content instead of stacking a new one.
+ * Dialog overlay for forms (Notify Me), confirmations, or focused content.
+ *
+ * **Scrim implementation:**
+ * - Background scrim uses `.scrim` class with `rgb(var(--scrim) / var(--scrim-opacity-dark))`
+ * - This is a 70% opacity dark overlay (darker than CommandPalette's 60% for higher contrast)
+ * - Both use the same `--scrim` colour token (20 17 15) but different opacity scales
+ *
+ * **Decoration slot:**
+ * - Positioned absolutely to overlap the panel's top-left corner
+ * - Always `aria-hidden` — it's visual decoration, never accessible content
+ * - Example: the Notify Me modal's mascot peeking from the corner
+ *
+ * **Scroll handling:**
+ * - `.scroll` wrapper handles overflow (max-height: 90vh); `.panel` stays overflow:visible
+ * - This allows the decoration slot to hang off the panel edge without being clipped
+ * - Scrollbar lives on the wrapper, not the panel itself
+ *
+ * **Focus management:**
+ * - Focus is trapped inside the modal when open
+ * - Focus is returned to the trigger element (document.activeElement at open time) on close
+ * - Background scroll is locked (padding-right preserves layout; no shift)
+ * - App root gets `inert` attribute; modal content is removed from inert subtree
+ *
+ * **Nested modals:**
+ * - Not supported. If you need a confirmation step, replace the content instead of stacking.
+ *
+ * **Reduced motion:**
+ * - Animations disabled; modal appears instantly without scale/translate effects
  */
 export function Modal({
   open,

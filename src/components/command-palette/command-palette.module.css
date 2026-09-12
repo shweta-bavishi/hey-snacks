@@ -4,7 +4,7 @@
   position: fixed;
   inset: 0;
   z-index: var(--z-modal);
-  background: rgb(20 17 15 / 0.6);
+  background: rgb(var(--scrim) / var(--scrim-opacity-default));
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   animation: overlay-in var(--dur-base) var(--ease-out);
@@ -73,7 +73,7 @@
 
 .input::placeholder {
   color: var(--ink);
-  opacity: 0.4;
+  opacity: var(--opacity-disabled);
 }
 
 /* ---- list & groups ---- */
@@ -90,7 +90,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--ink);
-  opacity: 0.5;
+  opacity: var(--opacity-secondary);
 }
 
 .group + .group :global([cmdk-group-heading]) {
@@ -152,7 +152,7 @@
   font-weight: 400;
   font-size: var(--fs-label);
   color: inherit;
-  opacity: 0.6;
+  opacity: var(--opacity-tertiary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -189,7 +189,7 @@
 }
 
 .row[aria-selected="true"] .rowDescription {
-  opacity: 0.75;
+  opacity: var(--opacity-strong);
 }
 
 /* ---- empty state ---- */

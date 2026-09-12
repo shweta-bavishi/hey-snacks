@@ -63,6 +63,12 @@
 
     /* ---- grain overlay opacity ---- */
     --grain-opacity-subtle:0.03; --grain-opacity-default:0.045; --grain-opacity-heavy:0.065;
+
+    /* ---- opacity scale ---- */
+    --opacity-disabled:0.4; --opacity-secondary:0.5; --opacity-tertiary:0.6; --opacity-helper:0.65; --opacity-strong:0.75; --opacity-intense:0.7;
+
+    /* ---- scrim (dark overlay for modals/palettes) ---- */
+    --scrim: 20 17 15; --scrim-opacity-default:0.6; --scrim-opacity-dark:0.7;
   }
   [data-theme="malai"]{--accent:var(--malai);--accent-sh:var(--malai-sh);--accent-tint:var(--malai-tint);--accent-on:var(--malai-on)}
   [data-theme="jaadu"]{--accent:var(--jaadu);--accent-sh:var(--jaadu-sh);--accent-tint:var(--jaadu-tint);--accent-on:var(--jaadu-on)}

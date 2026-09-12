@@ -166,15 +166,20 @@
 .mascotRow {
   position: relative;
   z-index: 0;
+  overflow: hidden;
   display: flex;
   justify-content: center;
   gap: var(--s-7);
   height: 44px;
   pointer-events: none;
 }
+/* MascotAvatar's own border reads var(--ink), tuned for light backgrounds —
+   invisible against this footer's ink fill. Ring it in paper here instead
+   of touching the shared component's default. */
 .mascotRow > :global(.avatar) {
   position: relative;
   top: -44px;
+  box-shadow: 0 0 0 var(--stroke) var(--paper);
 }
 
 @media (max-width: 640px) {
