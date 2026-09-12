@@ -1,0 +1,307 @@
+.section {
+  position: relative;
+  background: var(--paper);
+}
+
+/* ---- shared jar illustration ---- */
+.jarSvg {
+  width: 100%;
+  height: auto;
+  max-width: 260px;
+  display: block;
+}
+
+/* ---- accessible content that is always present ---- */
+.fallbackWrap {
+  padding: var(--s-8) var(--s-5);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.fallback {
+  display: grid;
+  grid-template-columns: minmax(200px, 320px) 1fr;
+  gap: var(--s-7);
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .fallback {
+    grid-template-columns: 1fr;
+  }
+  .fallbackJar {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+}
+
+.fallbackJar {
+  position: sticky;
+  top: var(--s-6);
+}
+
+.fallbackCards {
+  list-style: none;
+  padding: 0;
+  margin: var(--s-5) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.fallbackCardItem {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+}
+
+.fallbackCardItem.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fallbackCardItem {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.fallbackCardRow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+}
+
+.dustSwatch {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: var(--accent-tint);
+  border: 2px solid var(--ink);
+}
+
+.fallbackLabel {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--fs-label);
+  letter-spacing: 0.04em;
+  margin: 0 0 var(--s-1);
+}
+
+.fallbackCopy {
+  margin: 0;
+  font-size: var(--fs-body);
+}
+
+.fallbackFinale {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  margin-top: var(--s-6);
+}
+
+.fallbackSub {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  margin-top: var(--s-2);
+}
+
+/* ---- pinned scrollytelling stage ---- */
+.stage {
+  position: relative;
+  height: 420vh;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.skipLink {
+  position: absolute;
+  top: var(--s-5);
+  right: var(--s-5);
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: var(--s-2) var(--s-4);
+  background: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.skipLink:focus-visible {
+  outline: 4px solid var(--indigo);
+  outline-offset: 4px;
+}
+
+.soundToggle {
+  position: absolute;
+  bottom: var(--s-5);
+  left: var(--s-5);
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  padding: var(--s-2) var(--s-3);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.soundToggle:focus-visible {
+  outline: 4px solid var(--indigo);
+  outline-offset: 4px;
+}
+
+.introQuestion {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  text-align: center;
+  max-width: 16ch;
+  margin: 0 auto;
+}
+
+.jarWrap {
+  position: relative;
+  width: min(40vw, 320px);
+  will-change: transform, opacity;
+}
+
+.particleField {
+  position: absolute;
+  inset: 8% 12%;
+}
+
+.particle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-pill);
+  background: var(--paper-2);
+  border: 1.5px solid var(--ink);
+  will-change: transform, opacity;
+}
+
+.shape-dust {
+  background: var(--accent-tint);
+  border-color: var(--accent-sh);
+  width: 20px;
+  height: 20px;
+}
+
+.labelCard {
+  position: absolute;
+  left: var(--s-6);
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 260px;
+  background: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--s-4);
+}
+
+.labelTitle {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--fs-label);
+  margin: 0 0 var(--s-2);
+}
+
+.labelCopy {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+}
+
+.rail {
+  position: absolute;
+  right: var(--s-6);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.notch {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--ink);
+  background: var(--paper);
+}
+
+.notchFilled {
+  background: var(--accent);
+}
+
+.finale {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: var(--s-6);
+  pointer-events: none;
+}
+
+.finale > * {
+  pointer-events: auto;
+}
+
+.finaleHeadline {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  margin: 0;
+}
+
+.finaleSub {
+  font-size: var(--fs-body-l);
+  margin: var(--s-3) 0 var(--s-4);
+}
+
+.finaleCta {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  display: inline-block;
+  padding: var(--s-3) var(--s-5);
+  background: var(--accent);
+  color: var(--accent-on);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+}
+
+.finaleCta:focus-visible {
+  outline: 4px solid var(--indigo);
+  outline-offset: 4px;
+}
