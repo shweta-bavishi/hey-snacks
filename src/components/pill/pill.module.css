@@ -1,0 +1,108 @@
+.pill {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  padding-inline: var(--s-3);
+  padding-block: var(--s-1);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  transform: translate(0, 0);
+  transition: transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.glyph {
+  display: inline-flex;
+}
+
+.grain {
+  border-radius: inherit;
+}
+
+/* ---- variant: kbd — a key, not a tag, so it stays squared-ish ---- */
+.kbd {
+  border-radius: var(--radius-key);
+  font-style: normal;
+}
+
+/* ---- tones ---- */
+.default {
+  background: var(--paper);
+  color: var(--ink);
+}
+.accent {
+  background: var(--accent-tint);
+  color: var(--ink);
+}
+.inverse {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---- variant: label — static, never interactive ---- */
+.label {
+  cursor: default;
+}
+
+/* ---- variant: action — clickable, mirrors Button's press/hover logic at pill scale ---- */
+.action {
+  cursor: pointer;
+  border: var(--stroke) solid var(--ink);
+  background-color: var(--paper);
+  font: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.action.accent {
+  background-color: var(--accent-tint);
+}
+.action.inverse {
+  background-color: var(--ink);
+}
+
+.action:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.action:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.action:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
+}
+.action:active:focus-visible {
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
+}
+
+.action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill {
+    transition: box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .action:hover:not(:disabled),
+  .action:active:not(:disabled) {
+    transform: none;
+  }
+}

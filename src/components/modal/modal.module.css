@@ -1,0 +1,122 @@
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-5);
+  background: rgb(20 17 15 / 0.7);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  animation: scrim-in var(--dur-base) var(--ease-out);
+}
+
+.panel {
+  position: relative;
+  width: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--stroke) solid var(--ink);
+  border-top: 12px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-xl);
+  animation: panel-in var(--dur-base) var(--ease-spring);
+}
+
+/* Scrolling lives on this inner wrapper, not .panel — setting overflow-y on
+   .panel forces overflow-x to 'auto' too (the CSS spec auto-promotes the
+   'visible' axis when only one axis is set), which clips the decoration
+   slot's negative-offset overlap into a crescent. .panel itself stays
+   overflow: visible so the decoration can hang off its edge freely. */
+.scroll {
+  max-height: min(720px, 90vh);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: var(--s-6) var(--s-5) var(--s-5);
+  border-radius: inherit;
+}
+
+.panel:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-xl), 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
+}
+
+.sm {
+  max-width: 400px;
+}
+.md {
+  max-width: 460px;
+}
+.lg {
+  max-width: 620px;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  line-height: 1.15;
+  padding-right: var(--s-5);
+}
+
+.body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+}
+
+.grain {
+  border-radius: inherit;
+}
+
+/* Decoration slot: absolutely positioned so it can overlap the panel's top
+   edge without the panel's own overflow (or border) clipping it. Always
+   aria-hidden by the component — it's the mascot, not content. */
+.decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-25%, -35%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes scrim-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(12px);
+  }
+}
+
+@media (max-width: 640px) {
+  .scrim {
+    padding: 0;
+  }
+  .panel {
+    max-width: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+  .scroll {
+    max-height: none;
+    height: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .panel {
+    animation: none;
+  }
+}

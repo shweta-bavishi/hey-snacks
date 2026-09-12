@@ -1,0 +1,22 @@
+/* Applied to the wrapper's *children*, not the wrapper — the wrapper is
+   display:contents and has no box of its own to animate. Only present once
+   JS has confirmed motion isn't reduced and is arming the observer, so
+   no-JS visitors never see this at all. */
+.armed > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+}
+
+.revealed > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .armed > * {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,130 @@
+.marquee {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  height: 44px;
+  border-bottom: var(--stroke) solid var(--ink);
+  color: var(--ink);
+  font-family: var(--font-chunky);
+  font-size: 19px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.grain {
+  border-radius: 0;
+}
+
+/* ---- tones ---- */
+.marigold {
+  background: var(--marigold);
+}
+.peacock {
+  background: var(--peacock);
+}
+.rani {
+  background: var(--rani);
+}
+.ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Single-pass width probe: laid out like the real content (so its
+   scrollWidth is meaningful) but removed from flow and invisible, so it
+   never affects layout or paints anything. */
+.measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  display: flex;
+  white-space: nowrap;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll-left var(--marquee-duration, 40s) linear infinite;
+}
+
+.marquee[data-direction="right"] .track {
+  animation-name: marquee-scroll-right;
+}
+
+.unit {
+  display: flex;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.separator {
+  display: inline-block;
+  margin-inline: var(--s-3);
+}
+
+@keyframes marquee-scroll-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* Exactly -50%: the track is two identical, full-viewport-width units,
+       so this hands off seamlessly regardless of viewport width. */
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-scroll-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.marquee:hover .track,
+.marquee:focus-within .track {
+  animation-play-state: paused;
+}
+
+/* Screen-reader-only static announcement of the real message this
+   instance carries (shipping threshold etc). Visually hidden, not
+   display:none, so it stays in the accessibility tree. */
+.srMessage {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Hidden by default; swapped in for the scrolling track under
+   prefers-reduced-motion. Never rendered at the same time as .viewport. */
+.staticMessage {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    display: none;
+  }
+  .staticMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-inline: var(--s-4);
+    /* No scroll at all, per spec — not a slowed-down animation. */
+    animation: none;
+  }
+}

@@ -1,0 +1,209 @@
+.column {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 78vh;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--accent);
+  border-right: var(--stroke) solid var(--ink);
+  transition: flex var(--dur-flex) var(--ease-spring), border-width var(--dur-fast) var(--ease-out);
+}
+.column:last-child {
+  border-right: none;
+}
+.column.expanded {
+  flex: 1.7 1 0;
+  border-left: var(--stroke-heavy) solid var(--ink);
+  border-right: var(--stroke-heavy) solid var(--ink);
+  z-index: 1;
+}
+.column:last-child.expanded {
+  border-right: none;
+}
+
+.hit {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-5) var(--s-3) var(--s-8);
+  text-decoration: none;
+  color: inherit;
+}
+
+.index {
+  position: absolute;
+  top: var(--s-4);
+  left: var(--s-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.05em;
+}
+
+.mascotWrap {
+  margin-top: auto;
+  transition: transform var(--dur-flex) var(--ease-spring);
+}
+.expanded .mascotWrap {
+  transform: scale(1.1);
+}
+
+.name {
+  font-family: var(--font-chunky);
+  font-size: var(--fs-h2);
+  transform: rotate(-4deg);
+  line-height: 1;
+}
+
+.descriptor {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.heat {
+  margin-top: var(--s-1);
+}
+
+.notify {
+  position: absolute;
+  left: var(--s-3);
+  right: var(--s-3);
+  bottom: var(--s-3);
+  z-index: 2;
+  appearance: none;
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: var(--s-2) var(--s-4);
+  cursor: pointer;
+  /* Pixel offset, not a %-of-self translate — this box's own height isn't
+     known at transform-resolution time inside the absolutely-positioned,
+     overflow:hidden column, so a percentage here collapses to 0 in some
+     engines. --s-7 comfortably clears the button's rendered height. */
+  transform: translateY(var(--s-7));
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-base) var(--ease-spring), opacity var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+.expanded .notify {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.notify:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow);
+}
+.notify:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.notify:focus-visible {
+  outline: none;
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+  box-shadow: var(--shadow-sm), 0 0 0 4px var(--accent), 0 0 0 8px var(--indigo);
+}
+.notify:hover:focus-visible {
+  box-shadow: var(--shadow), 0 0 0 4px var(--accent), 0 0 0 8px var(--indigo);
+}
+
+.grain {
+  border-radius: inherit;
+}
+
+.puffs {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.puffSlot {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transform: translateX(var(--puff-x, 0));
+  animation: puff-burst 700ms var(--ease-out) forwards;
+}
+
+.puff {
+  display: block;
+}
+
+@keyframes puff-burst {
+  from {
+    opacity: 1;
+    transform: translate(var(--puff-x, 0), 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(var(--puff-x, 0), -120px) scale(0.6);
+  }
+}
+
+@media (max-width: 900px) {
+  .column {
+    flex: 0 0 88%;
+    scroll-snap-align: start;
+    height: 70vh;
+  }
+  .column.expanded {
+    flex: 0 0 88%;
+    border-width: var(--stroke);
+  }
+  .expanded .mascotWrap {
+    transform: none;
+  }
+  .notify,
+  .expanded .notify {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .column {
+    transition: border-width var(--dur-fast) var(--ease-out);
+  }
+  .column.expanded {
+    flex: 1 1 0;
+  }
+  .mascotWrap,
+  .expanded .mascotWrap {
+    transition: none;
+    transform: none;
+  }
+  .notify {
+    transition: none;
+  }
+  .notify:hover,
+  .notify:active {
+    transform: translateY(0);
+  }
+  .expanded .notify:hover,
+  .expanded .notify:active {
+    transform: translateY(0);
+  }
+  .puffSlot {
+    display: none;
+  }
+}

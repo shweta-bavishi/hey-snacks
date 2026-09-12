@@ -1,0 +1,48 @@
+.puff {
+  display: inline-block;
+  flex: none;
+  transform-origin: 50% 50%;
+}
+
+.fill {
+  fill: var(--paper-2);
+}
+
+.toasted {
+  fill: color-mix(in srgb, var(--paper-2) 68%, var(--malai-sh) 32%);
+}
+
+.spiced {
+  fill: var(--paper-2);
+}
+
+.seam {
+  opacity: 0.35;
+}
+
+.speckle {
+  fill: var(--pataka);
+  opacity: 0.85;
+}
+
+.spin {
+  animation: spin var(--dur-slow) var(--ease-out) infinite;
+  animation-duration: 900ms;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+  }
+}
+

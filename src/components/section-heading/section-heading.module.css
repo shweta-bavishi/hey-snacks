@@ -1,0 +1,75 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.center {
+  align-items: center;
+  text-align: center;
+}
+
+.eyebrow {
+  /* Pill already reads its own tokens; this just spaces it from the heading. */
+  margin-bottom: var(--s-1);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--font-display);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---- visual size, decoupled from the semantic <hN> tag ---- */
+.size-h1 {
+  font-size: var(--fs-h1);
+}
+.size-h2 {
+  font-size: var(--fs-h2);
+}
+.size-h3 {
+  font-size: var(--fs-h3);
+}
+.size-h4 {
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+}
+
+/* ---- misregister: a second, offset copy of the glyphs via text-shadow.
+   Kept to a single 3px hard offset (no blur, per the brand's print-error
+   conceit) and dropped by default on any lowercase body-weight run, since
+   two overlapping colours only reads as "bad printing" at display size. ---- */
+.misregister {
+  --misregister-color: var(--rani);
+  text-shadow: 3px 3px 0 var(--misregister-color);
+}
+
+.swoosh {
+  display: block;
+  height: 0.5em;
+  width: auto;
+  max-width: 320px;
+  color: var(--rani);
+}
+
+.center .swoosh {
+  margin-inline: auto;
+}
+
+.lede {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body-l);
+  color: var(--ink);
+  max-width: 62ch;
+}
+
+.center .lede {
+  margin-inline: auto;
+}

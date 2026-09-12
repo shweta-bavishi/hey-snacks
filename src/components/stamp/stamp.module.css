@@ -1,0 +1,85 @@
+/*
+  Distressed edge, no raster: an inline feTurbulence + feDisplacementMap
+  filter (same trick as Grain, just applied to the whole box instead of a
+  flat rect). Displacing the source graphic — border, fill and text
+  together — makes the vector rectangle look like it was pushed through
+  a rubber stamp rather than drawn with border-radius. Widen the filter
+  region (-40%/-40%/180%/180%) so the displaced edges don't clip.
+*/
+.stamp {
+  --stamp-rotation: -12deg;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-2) var(--s-4);
+  border: var(--stroke-heavy) solid var(--ink);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--paper) 82%, transparent);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  white-space: nowrap;
+  transform: rotate(var(--stamp-rotation));
+  filter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='i' x='-40%25' y='-40%25' width='180%25' height='180%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='3' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='4' xChannelSelector='R' yChannelSelector='G'/%3E%3C/filter%3E%3C/svg%3E#i");
+  pointer-events: none;
+}
+
+.srPrefix {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- variants: text tint only, border stays ink per spec ---- */
+.stamp[data-variant="coming-soon"] {
+  color: var(--indigo);
+}
+.stamp[data-variant="limited"] {
+  color: var(--rani);
+}
+.stamp[data-variant="new"] {
+  color: var(--peacock);
+}
+
+/* ---- hover jitter: one 200ms shake, triggered by an ancestor, not self ---- */
+@keyframes stampJitter {
+  0% {
+    transform: rotate(var(--stamp-rotation)) translate(0, 0);
+  }
+  20% {
+    transform: rotate(calc(var(--stamp-rotation) - 3deg)) translate(-2px, 1px);
+  }
+  40% {
+    transform: rotate(calc(var(--stamp-rotation) + 4deg)) translate(2px, -1px);
+  }
+  60% {
+    transform: rotate(calc(var(--stamp-rotation) - 2deg)) translate(-1px, 1px);
+  }
+  80% {
+    transform: rotate(calc(var(--stamp-rotation) + 1deg)) translate(1px, 0);
+  }
+  100% {
+    transform: rotate(var(--stamp-rotation)) translate(0, 0);
+  }
+}
+
+.hoverGroup:hover .jitterEnabled {
+  animation: stampJitter 200ms var(--ease-spring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hoverGroup:hover .jitterEnabled {
+    animation: none;
+  }
+}

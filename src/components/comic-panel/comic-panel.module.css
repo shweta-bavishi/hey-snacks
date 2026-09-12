@@ -1,0 +1,119 @@
+.panel {
+  position: relative;
+  aspect-ratio: var(--panel-aspect, 1 / 1);
+  padding: var(--s-3);
+  opacity: 0;
+  transform: translateY(22px) rotate(-3deg);
+  transition: opacity var(--dur-slow) var(--ease-spring),
+    transform var(--dur-slow) var(--ease-spring);
+  transition-delay: var(--panel-delay, 0ms);
+}
+
+.panel[data-layout="solo"] {
+  padding: var(--s-5);
+}
+
+.panel[data-revealed="true"] {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg);
+}
+
+/* ---- ink border, drawn on its own unmasked layer underneath the fill,
+   so the torn-edge mask on .fill never clips the stroke ---- */
+.border {
+  position: absolute;
+  inset: 0;
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--ink);
+  box-shadow: 6px 6px 0 var(--pataka-sh, var(--ink));
+}
+.panel[data-layout="solo"] .border {
+  border-width: var(--stroke-heavy);
+  box-shadow: 9px 9px 0 var(--pataka-sh, var(--ink));
+}
+.panel[data-flavour="pataka"] .border {
+  box-shadow: 6px 6px 0 var(--pataka-sh);
+}
+.panel[data-flavour="malai"] .border {
+  box-shadow: 6px 6px 0 var(--malai-sh);
+}
+.panel[data-flavour="jaadu"] .border {
+  box-shadow: 6px 6px 0 var(--jaadu-sh);
+}
+.panel[data-flavour="pehelwan"] .border {
+  box-shadow: 6px 6px 0 var(--pehelwan-sh);
+}
+.panel[data-layout="solo"][data-flavour="pataka"] .border {
+  box-shadow: 9px 9px 0 var(--pataka-sh);
+}
+.panel[data-layout="solo"][data-flavour="malai"] .border {
+  box-shadow: 9px 9px 0 var(--malai-sh);
+}
+.panel[data-layout="solo"][data-flavour="jaadu"] .border {
+  box-shadow: 9px 9px 0 var(--jaadu-sh);
+}
+.panel[data-layout="solo"][data-flavour="pehelwan"] .border {
+  box-shadow: 9px 9px 0 var(--pehelwan-sh);
+}
+
+.maskDefs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ---- flavour tint + torn bottom edge, masked, sitting inside the border ---- */
+.fill {
+  position: absolute;
+  inset: var(--stroke);
+  border-radius: var(--radius);
+  overflow: hidden;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+}
+.panel[data-flavour="pataka"] .fill {
+  background: var(--pataka-tint);
+}
+.panel[data-flavour="malai"] .fill {
+  background: var(--malai-tint);
+}
+.panel[data-flavour="jaadu"] .fill {
+  background: var(--jaadu-tint);
+}
+.panel[data-flavour="pehelwan"] .fill {
+  background: var(--pehelwan-tint);
+}
+
+.grain {
+  border-radius: inherit;
+}
+
+.mascotSlot {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.speech {
+  position: absolute;
+  z-index: 3;
+  top: var(--s-2);
+  right: var(--s-2);
+  max-width: 60%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    transition-delay: 0ms;
+  }
+}

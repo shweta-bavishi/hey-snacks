@@ -1,0 +1,102 @@
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--s-6);
+  z-index: var(--z-toast);
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  max-width: min(90vw, 420px);
+  padding: var(--s-3) var(--s-4);
+  background: var(--ink);
+  color: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  transform: translate(-50%, 0);
+  transition: transform var(--dur-base) var(--ease-spring), opacity var(--dur-base) var(--ease-out);
+}
+
+.toast.hidden {
+  opacity: 0;
+  transform: translate(-50%, 120%);
+  pointer-events: none;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Tone reads as a small dot ahead of the message — background/border stay
+   ink+paper per the brand rule, tone never repaints the whole pill. */
+.message {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: var(--s-2);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  vertical-align: middle;
+}
+
+.success .message::before {
+  background: var(--pehelwan);
+}
+
+.error .message::before {
+  background: var(--chilli);
+}
+
+.action {
+  flex-shrink: 0;
+  padding: var(--s-1) var(--s-2);
+  background: transparent;
+  color: var(--paper);
+  border: none;
+  border-bottom: 2px solid var(--paper);
+  font-family: var(--font-body);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.action:hover {
+  opacity: 0.8;
+}
+
+.action:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ink), 0 0 0 4px var(--paper);
+  border-radius: var(--radius);
+}
+
+.toast:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow), 0 0 0 2px var(--ink), 0 0 0 4px var(--paper);
+}
+
+.grain {
+  border-radius: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: opacity var(--dur-base) var(--ease-out);
+    transform: translate(-50%, 0) !important;
+  }
+}

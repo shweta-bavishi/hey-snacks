@@ -1,0 +1,50 @@
+.meter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.word {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+
+.squares {
+  display: inline-flex;
+  gap: var(--s-1);
+}
+
+.square {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--ink);
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.filled {
+  background: var(--ink);
+}
+
+/* ---- crunch glyph: same squares, filled cells get a diagonal split so
+   heat and crunch read as different marks even in a black-and-white scan ---- */
+.crunch.filled {
+  background: linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+}
+
+/* ---- size: sm — 10px squares for tight list rows ---- */
+.sm .square {
+  width: 10px;
+  height: 10px;
+  border-width: 2px;
+}
+
+.md .square {
+  width: 15px;
+  height: 15px;
+}

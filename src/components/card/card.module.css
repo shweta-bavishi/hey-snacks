@@ -1,0 +1,89 @@
+.card {
+  --card-padding-none: 0;
+  --card-padding-sm: var(--s-3);
+  --card-padding-md: var(--s-4);
+  --card-padding-lg: var(--s-5);
+
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: inherit;
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  transform: rotate(var(--card-tilt, 0deg)) translate(0, 0);
+  transition: transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+/* ---- elevation ---- */
+.flat {
+  box-shadow: none;
+}
+.raised {
+  box-shadow: 6px 6px 0 var(--card-shadow-color, var(--ink));
+}
+.floating {
+  box-shadow: 9px 9px 0 var(--card-shadow-color, var(--ink));
+}
+
+.grain {
+  border-radius: inherit;
+}
+
+/* ---- interactive ---- */
+.interactive {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--paper);
+  text-decoration: none;
+}
+.interactive.flat:hover {
+  box-shadow: 6px 6px 0 var(--card-shadow-color, var(--ink));
+}
+.interactive:hover {
+  transform: rotate(var(--card-tilt, 0deg)) translate(-3px, -3px);
+}
+.interactive.raised:hover {
+  box-shadow: 9px 9px 0 var(--card-shadow-color, var(--ink));
+}
+.interactive.floating:hover {
+  box-shadow: 12px 12px 0 var(--card-shadow-color, var(--ink));
+}
+
+.interactive:active {
+  transform: rotate(var(--card-tilt, 0deg)) translate(3px, 3px);
+  box-shadow: 3px 3px 0 var(--card-shadow-color, var(--ink)) !important;
+}
+
+/* Same painted two-tone ring as Button, so focus reads identically across
+   every focusable surface on the page regardless of what's behind it. */
+.interactive:focus-visible {
+  outline: none;
+  box-shadow: 6px 6px 0 var(--card-shadow-color, var(--ink)), 0 0 0 4px var(--paper),
+    0 0 0 8px var(--indigo);
+}
+.interactive:active:focus-visible {
+  box-shadow: 3px 3px 0 var(--card-shadow-color, var(--ink)), 0 0 0 4px var(--paper),
+    0 0 0 8px var(--indigo);
+}
+
+.interactive:disabled,
+.interactive[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: rotate(var(--card-tilt, 0deg));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .interactive:hover,
+  .interactive:active {
+    transform: rotate(var(--card-tilt, 0deg));
+  }
+}

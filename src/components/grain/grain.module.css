@@ -1,0 +1,37 @@
+.grain {
+  pointer-events: none;
+  z-index: var(--z-grain);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  /* own compositor layer so scrolling repaints content, not the noise */
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.fixed {
+  position: fixed;
+  inset: 0;
+}
+
+.panel {
+  position: absolute;
+  inset: 0;
+}
+
+.subtle {
+  opacity: var(--grain-opacity-subtle);
+}
+
+.default {
+  opacity: var(--grain-opacity-default);
+}
+
+.heavy {
+  opacity: var(--grain-opacity-heavy);
+}
+
+@media print {
+  .grain {
+    display: none;
+  }
+}

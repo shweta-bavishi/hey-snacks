@@ -1,0 +1,200 @@
+/* ---- contrast note ----
+   All text/link colours below use var(--paper) at full opacity against the
+   var(--ink) footer background (~19:1). Reduced-opacity paper was tried for
+   a "muted" look and measured: below ~47% alpha over --ink it drops under
+   the 4.5:1 AA minimum (e.g. 40% opacity ~= 3.7:1 — fails). Any softer tone
+   in this file therefore uses a solid colour-mix, never a bare opacity, and
+   is verified above 4.5:1 before use. */
+.footer {
+  --footer-muted: color-mix(in srgb, var(--paper) 65%, var(--ink)); /* ~7.8:1 on --ink, verified AA */
+
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---- giant cropped wordmark ---- */
+.wordmarkCrop {
+  overflow: hidden;
+  height: calc(min(26vw, 300px) * 0.7);
+  display: flex;
+  justify-content: center;
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-size: min(26vw, 300px);
+  line-height: 1;
+  color: var(--paper);
+  user-select: none;
+}
+
+.inner {
+  position: relative;
+  z-index: 1;
+  padding-inline: var(--s-5);
+  padding-top: var(--s-4);
+}
+
+/* ---- columns ---- */
+.columns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--s-6);
+  padding-bottom: var(--s-7);
+  border-bottom: var(--stroke) solid var(--paper);
+}
+
+@media (max-width: 900px) {
+  .columns {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-5);
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  min-width: 0;
+}
+
+.columnHeading {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--footer-muted);
+  margin: 0;
+}
+
+.linkList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.link {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--paper);
+  text-decoration: none;
+  border-bottom: var(--stroke) solid transparent;
+  width: fit-content;
+}
+.link:hover {
+  border-bottom-color: var(--accent);
+}
+.link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ink), 0 0 0 8px var(--paper);
+  border-radius: var(--radius);
+}
+
+/* ---- newsletter ---- */
+.newsletterCopy {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--paper);
+  margin: 0;
+}
+
+.newsletterForm {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+}
+
+.newsletterInput {
+  flex: 1;
+  min-width: 0;
+}
+.newsletterInput :global(.label) {
+  color: var(--paper);
+}
+.newsletterInput :global(.input) {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--paper);
+}
+.newsletterInput :global(.helperText) {
+  color: var(--footer-muted);
+}
+
+.newsletterSubmit {
+  flex-shrink: 0;
+}
+
+/* ---- social row ---- */
+.socialRow {
+  list-style: none;
+  margin: 0;
+  padding: var(--s-5) 0;
+  display: flex;
+  gap: var(--s-3);
+}
+
+.socialSticker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  border: var(--stroke) solid var(--paper);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  text-decoration: none;
+}
+.socialSticker:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-on);
+}
+.socialSticker:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ink), 0 0 0 8px var(--paper);
+}
+
+/* ---- mascots, half-cropped along the bottom edge ---- */
+.mascotRow {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  gap: var(--s-7);
+  height: 44px;
+  pointer-events: none;
+}
+.mascotRow > :global(.avatar) {
+  position: relative;
+  top: -44px;
+}
+
+@media (max-width: 640px) {
+  .mascotRow > :global(.avatar):nth-child(n + 3) {
+    display: none;
+  }
+}
+
+/* ---- bottom bar ---- */
+.bottomBar {
+  position: relative;
+  z-index: 1;
+  border-top: var(--stroke) solid var(--paper);
+  padding: var(--s-3) var(--s-5);
+}
+
+.bottomBarText {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  color: var(--paper);
+  text-align: center;
+  margin: 0;
+}

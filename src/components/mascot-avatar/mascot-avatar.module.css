@@ -1,0 +1,69 @@
+.avatar {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  border: var(--stroke) solid var(--ink);
+  transform: translate(0, 0) rotate(0deg);
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+
+.avatar[data-flavour="pataka"] { background: var(--pataka-tint); }
+.avatar[data-flavour="malai"] { background: var(--malai-tint); }
+.avatar[data-flavour="jaadu"] { background: var(--jaadu-tint); }
+.avatar[data-flavour="pehelwan"] { background: var(--pehelwan-tint); }
+
+.art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-image: var(--mascot-src);
+  /* The reframing trick: one master bitmap, cropped per size via zoom
+     (background-size) + pan (background-position-y). See SIZE_FRAMES in
+     MascotAvatar.tsx for the values driving these two custom properties. */
+  background-size: var(--mascot-zoom) var(--mascot-zoom);
+  background-position: 50% var(--mascot-pan-y);
+  background-repeat: no-repeat;
+}
+
+.avatar:hover,
+.avatar:focus-visible {
+  transform: translateY(-5px) rotate(-6deg);
+}
+
+.avatar:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
+}
+
+/* ---- idle loop ----
+   Opt in with animateIdle, but it never runs standing alone: it's gated on
+   an ANCESTOR hover/focus, not the avatar's own. Wrap the containing
+   interactive element (chip, tab, palette row) in a node carrying
+   `.mascotHoverScope` — that's what actually triggers the loop below. An
+   avatar with data-idle="true" but no such ancestor never animates. */
+.mascotHoverScope:hover .avatar[data-idle="true"] .art,
+.mascotHoverScope:focus-within .avatar[data-idle="true"] .art {
+  animation: mascotIdle 1.8s var(--ease-spring) infinite;
+}
+
+@keyframes mascotIdle {
+  0%, 100% { transform: translateY(0) scale(1); }
+  40% { transform: translateY(-2px) scale(1.03); }
+  60% { transform: translateY(0) scale(0.99); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar {
+    transition: none;
+  }
+  .avatar:hover,
+  .avatar:focus-visible {
+    transform: none;
+  }
+  .mascotHoverScope:hover .avatar[data-idle="true"] .art,
+  .mascotHoverScope:focus-within .avatar[data-idle="true"] .art {
+    animation: none;
+  }
+}

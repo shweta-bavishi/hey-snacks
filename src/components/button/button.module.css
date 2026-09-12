@@ -1,0 +1,156 @@
+.button {
+  --btn-h: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  position: relative;
+  overflow: hidden;
+  height: var(--btn-h);
+  padding-inline: var(--s-5);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transform: translate(0, 0);
+  transition: transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+}
+
+/* ---- sizes ---- */
+.sm {
+  --btn-h: 40px;
+  padding-inline: var(--s-4);
+  font-size: var(--fs-label);
+}
+.md {
+  --btn-h: 48px;
+}
+.lg {
+  --btn-h: 56px;
+  padding-inline: var(--s-6);
+  font-size: var(--fs-body-l);
+}
+
+/* Icon-only: square, and never smaller than the 44px touch target. */
+.iconOnly {
+  padding-inline: 0;
+  width: var(--btn-h);
+}
+.iconOnly.sm {
+  --btn-h: 44px;
+}
+.iconOnly .label {
+  display: none;
+}
+
+/* ---- variants ---- */
+.primary {
+  background: var(--accent);
+  color: var(--accent-on);
+}
+.secondary {
+  background: var(--paper);
+  color: var(--ink);
+}
+.ghost {
+  background: transparent;
+  box-shadow: none;
+}
+.ghost:hover:not(:disabled) {
+  box-shadow: var(--shadow-lg);
+}
+.danger {
+  background: var(--chilli);
+  color: var(--chilli-on);
+}
+
+.label {
+  white-space: nowrap;
+  z-index: 1;
+}
+.grain {
+  border-radius: inherit;
+}
+.trailing {
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- states ---- */
+.button:hover:not(:disabled) {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow-lg);
+}
+.ghost:hover:not(:disabled) {
+  transform: translate(-3px, -3px);
+}
+
+.button:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: var(--shadow-sm);
+}
+.ghost:active:not(:disabled) {
+  box-shadow: none;
+}
+
+/* Painted two-tone ring: a solid --paper moat isolates --indigo from
+   whatever colour sits behind the button, so it reads at 3:1+ against
+   every flavour background, not just --paper. */
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow), 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
+}
+.button:active:focus-visible {
+  box-shadow: var(--shadow-sm), 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
+}
+.ghost:focus-visible {
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
+}
+
+.button:disabled,
+.button[aria-disabled="true"] {
+  opacity: 0.4;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading .label {
+  visibility: visible;
+}
+.spinner {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: box-shadow var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+  }
+  .button:hover:not(:disabled),
+  .button:active:not(:disabled),
+  .ghost:hover:not(:disabled) {
+    transform: none;
+  }
+  .spinner {
+    animation: none;
+  }
+}

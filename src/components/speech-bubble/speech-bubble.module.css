@@ -1,0 +1,63 @@
+.bubble {
+  position: relative;
+  display: inline-block;
+  max-width: 34ch;
+  box-sizing: border-box;
+  /* Clears the wobble margin baked into the 240x200 authoring viewBox
+     (see paths.ts) so no glyph ever touches the inked line. Extra bottom
+     room absorbs a merged tail spike without the text overlapping it. */
+  padding: 1.7em 1.9em 2.5em 1.7em;
+  color: var(--ink);
+}
+
+.art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  z-index: 0;
+}
+
+.shape {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: var(--stroke);
+}
+
+.grain {
+  z-index: 1;
+  /* the SVG shape is the only clip we have; grain still needs to stay
+     inside the drawn outline rather than the rectangular wrapper */
+  clip-path: polygon(8% 7%, 92% 7%, 92% 81%, 8% 81%);
+  mix-blend-mode: multiply;
+}
+
+.text {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  font-family: var(--font-chunky);
+  font-size: max(14px, 1rem);
+  line-height: 1.15;
+  overflow-wrap: break-word;
+  text-align: center;
+}
+
+/* ---- shout: jagged starburst reads louder, so give the type more room
+   from the spikes and let it run slightly bigger ---- */
+.bubble[data-tone="shout"] {
+  padding: 2.6em 2.8em 3.3em 2.8em;
+}
+.bubble[data-tone="shout"] .text {
+  font-size: max(14px, 1.1rem);
+  letter-spacing: 0.01em;
+}
+
+/* ---- thought: softer body, no ink spike, trailing circles do the work ---- */
+.bubble[data-tone="thought"] {
+  padding-bottom: 2.9em;
+}
+.bubble[data-tone="thought"] .shape {
+  stroke-width: calc(var(--stroke) - 1px);
+}

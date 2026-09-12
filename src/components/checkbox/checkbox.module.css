@@ -1,0 +1,111 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  font-family: var(--font-body);
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+  cursor: pointer;
+}
+
+.row[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+/* Real checkbox, visually hidden but still focusable and in the tab order. */
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.indicator {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  width: var(--s-5);
+  height: var(--s-5);
+  margin-block-start: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: transparent;
+}
+
+.grain {
+  border-radius: inherit;
+  /* Only visible once .input:checked paints the solid --accent fill;
+     transparent background beneath is a no-op. */
+}
+
+.tick {
+  position: relative;
+  z-index: 1;
+  width: 70%;
+  height: 70%;
+  stroke-dasharray: 32;
+  stroke-dashoffset: 32;
+  transition: stroke-dashoffset var(--dur-base) var(--ease-out);
+}
+
+.input:checked + .indicator {
+  background: var(--accent);
+  border-color: var(--ink);
+  color: var(--accent-on);
+}
+
+.input:checked + .indicator .tick {
+  stroke-dashoffset: 0;
+}
+
+.input:focus-visible + .indicator {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
+}
+
+.input:disabled + .indicator {
+  cursor: not-allowed;
+}
+
+.errorState {
+  border-color: var(--chilli);
+}
+
+.label {
+  color: var(--ink);
+  font-size: var(--fs-body);
+  padding-block-start: 2px;
+}
+
+.label a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.errorText {
+  color: var(--chilli);
+  font-weight: 600;
+  font-size: var(--fs-label);
+  padding-inline-start: calc(var(--s-5) + var(--s-3));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tick {
+    transition: none;
+  }
+}

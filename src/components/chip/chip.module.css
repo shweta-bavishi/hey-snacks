@@ -1,0 +1,114 @@
+.group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.chip {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding-block: var(--s-2);
+  padding-inline: var(--s-4);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-body);
+  line-height: 1;
+  color: var(--ink);
+  cursor: pointer;
+  transform: translate(0, 0);
+  transition:
+    transform var(--dur-fast) var(--ease-spring),
+    box-shadow var(--dur-fast) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--ink);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.label {
+  white-space: nowrap;
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+.grain {
+  border-radius: inherit;
+}
+
+/* ---- unselected: theme tint ---- */
+.chip[data-theme="pataka"] { background: var(--pataka-tint); }
+.chip[data-theme="malai"] { background: var(--malai-tint); }
+.chip[data-theme="jaadu"] { background: var(--jaadu-tint); }
+.chip[data-theme="pehelwan"] { background: var(--pehelwan-tint); }
+
+/* ---- selected: theme fill + hard shadow + lift ---- */
+.chip[aria-pressed="true"] {
+  box-shadow: var(--shadow-sm);
+  transform: translate(-2px, -2px);
+}
+.chip[aria-pressed="true"][data-theme="pataka"] { background: var(--pataka); color: var(--pataka-on); }
+.chip[aria-pressed="true"][data-theme="malai"] { background: var(--malai); color: var(--malai-on); }
+.chip[aria-pressed="true"][data-theme="jaadu"] { background: var(--jaadu); color: var(--jaadu-on); }
+.chip[aria-pressed="true"][data-theme="pehelwan"] { background: var(--pehelwan); color: var(--pehelwan-on); }
+
+.chip:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-sm);
+}
+.chip[aria-pressed="true"]:hover:not(:disabled) {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow);
+}
+
+.chip:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.chip:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
+}
+.chip[aria-pressed="true"]:focus-visible {
+  box-shadow: var(--shadow-sm), 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
+}
+.chip:active:focus-visible {
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
+}
+
+.chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip {
+    transition:
+      background-color var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
+  }
+  .chip:hover:not(:disabled),
+  .chip:active:not(:disabled),
+  .chip[aria-pressed="true"] {
+    transform: none;
+  }
+}

@@ -1,0 +1,83 @@
+:root{
+    /* ---- foundation ---- */
+    --ink:#14110F; --paper:#FFF8EE; --paper-2:#FFF3D6;
+  
+    /* ---- flavour: pataka (peri peri) ---- */
+    --pataka:#EF3E2F; --pataka-sh:#8C1A12; --pataka-tint:#FFE3DE; --pataka-on:var(--ink);
+    /* ---- flavour: malai (cream cheese) ---- */
+    --malai:#FFC93C;  --malai-sh:#C4820A;  --malai-tint:#FFF3D6; --malai-on:var(--ink);
+    /* ---- flavour: jaadu (masala magic) ---- */
+    --jaadu:#6B2FD6;  --jaadu-sh:#3D137F;  --jaadu-tint:#EBE1FF; --jaadu-on:var(--paper);
+    /* ---- flavour: pehelwan (tangy mint) ---- */
+    --pehelwan:#3FBF6F; --pehelwan-sh:#1B7442; --pehelwan-tint:#DDF6E6; --pehelwan-on:var(--ink);
+  
+    /* ---- accents ---- */
+    --marigold:#FF9F1C; --rani:#FF2E88; --peacock:#0FA3A3; --indigo:#2D3EA8;
+    /* readable text colour when one of the accents above is used as a fill
+       (e.g. a command palette row highlight), same idea as --{flavour}-on */
+    --marigold-on:var(--ink); --rani-on:var(--paper); --peacock-on:var(--paper); --indigo-on:var(--paper);
+  
+    /* ---- semantic: the active theme. Swapped by the palette. ---- */
+    --accent:var(--pataka); --accent-sh:var(--pataka-sh);
+    --accent-tint:var(--pataka-tint); --accent-on:var(--pataka-on);
+
+    /* ---- semantic: danger. Same red as pataka, named for its job (errors, destructive confirmations) not its flavour. ---- */
+    --chilli:var(--pataka); --chilli-sh:var(--pataka-sh); --chilli-on:var(--paper);
+
+    /* ---- structure ---- */
+    --stroke:3px; --stroke-heavy:4px;
+    --radius:4px; --radius-key:6px; --radius-pill:999px;
+    --shadow-sm:4px 4px 0 var(--ink);
+    --shadow:6px 6px 0 var(--ink);
+    --shadow-lg:9px 9px 0 var(--ink);
+    --shadow-xl:12px 12px 0 var(--ink);
+  
+    /* ---- space (4px base) ---- */
+    --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
+    --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px; --s-10:128px;
+  
+    /* ---- type ----
+       --font-hind/rozha/modak/space-mono are supplied by next/font in
+       layout.tsx; the stacks below just add the generic fallback. */
+    --font-display:var(--font-rozha, 'Rozha One'),serif;
+    --font-chunky:var(--font-modak, Modak),cursive;
+    --font-body:var(--font-hind, Hind),system-ui,sans-serif;
+    --font-mono:var(--font-space-mono, 'Space Mono'),monospace;
+    --fs-mega:clamp(3.5rem,12vw,11rem);
+    --fs-h1:clamp(2.5rem,7vw,6rem);
+    --fs-h2:clamp(1.75rem,4vw,3rem);
+    --fs-h3:clamp(1.25rem,2.5vw,1.75rem);
+    --fs-body-l:clamp(1.125rem,2vw,1.5rem);
+    --fs-body:1rem; --fs-label:0.8125rem;
+  
+    /* ---- motion ---- */
+    --ease-spring:cubic-bezier(.34,1.56,.64,1);
+    --ease-out:cubic-bezier(.16,1,.3,1);
+    --dur-fast:160ms; --dur-base:320ms; --dur-slow:560ms; --dur-flex:420ms;
+    /* debounce windows for hover-intent components (e.g. FlavourColumn) */
+    --debounce-hover-in:90ms; --debounce-hover-out:90ms;
+  
+    /* ---- z ---- */
+    /* grain sits above page content but below header/sound/modal/toast chrome */
+    --z-grain:10; --z-header:900; --z-sound:950; --z-modal:1000; --z-toast:1100;
+
+    /* ---- grain overlay opacity ---- */
+    --grain-opacity-subtle:0.03; --grain-opacity-default:0.045; --grain-opacity-heavy:0.065;
+  }
+  [data-theme="malai"]{--accent:var(--malai);--accent-sh:var(--malai-sh);--accent-tint:var(--malai-tint);--accent-on:var(--malai-on)}
+  [data-theme="jaadu"]{--accent:var(--jaadu);--accent-sh:var(--jaadu-sh);--accent-tint:var(--jaadu-tint);--accent-on:var(--jaadu-on)}
+  [data-theme="pehelwan"]{--accent:var(--pehelwan);--accent-sh:var(--pehelwan-sh);--accent-tint:var(--pehelwan-tint);--accent-on:var(--pehelwan-on)}
+
+  /* ---- night mode: inverts ink/paper only, flavour colours untouched ---- */
+  [data-night="true"]{--ink:#FFF8EE; --paper:#14110F; --paper-2:#241F19;}
+
+  /* ---- theme cross-fade: background + border colour only, never text ----
+     Opt in per surface with .themed-surface (any box whose bg/border reads
+     an --accent-* or --paper* token should carry this class). */
+  html,.themed-surface{
+    transition:background-color var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out);
+  }
+  @media (prefers-reduced-motion: reduce){
+    html,.themed-surface{transition:none;}
+  }
