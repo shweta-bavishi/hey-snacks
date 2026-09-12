@@ -60,7 +60,12 @@ export function useJarSound() {
     noise.stop(ctx.currentTime + duration);
   }, [enabled]);
 
-  useEffect(() => () => ctxRef.current?.close(), []);
+  useEffect(
+    () => () => {
+      ctxRef.current?.close();
+    },
+    []
+  );
 
   return { enabled, toggle, playCrunch };
 }

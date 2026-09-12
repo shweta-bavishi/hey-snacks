@@ -61,27 +61,6 @@
   gap: var(--s-4);
 }
 
-.fallbackCardItem {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity var(--dur-slow) var(--ease-out),
-    transform var(--dur-slow) var(--ease-out);
-}
-
-.fallbackCardItem.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fallbackCardItem {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
-
 .fallbackCardRow {
   display: flex;
   align-items: center;
@@ -134,8 +113,6 @@
   top: 0;
   height: 100vh;
   overflow: hidden;
-  display: grid;
-  place-items: center;
 }
 
 .skipLink {
@@ -180,11 +157,23 @@
 
 .introQuestion {
   position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-display);
   font-size: var(--fs-h1);
   text-align: center;
   max-width: 16ch;
   margin: 0 auto;
+}
+
+.jarCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .jarWrap {

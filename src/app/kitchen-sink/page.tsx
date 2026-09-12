@@ -23,6 +23,7 @@ import { NotifyFormStory } from "./notify-form-story";
 import { CommandPaletteStory } from "./command-palette-story";
 import { ScrollRevealStory } from "./scroll-reveal-story";
 import { FooterStory } from "./footer-story";
+import { JarStoryStory } from "./jar-story-story";
 
 export default function KitchenSinkPage() {
   return (
@@ -51,6 +52,7 @@ export default function KitchenSinkPage() {
       <NotifyFormStory />
       <CommandPaletteStory />
       <ScrollRevealStory />
+      <JarStoryStory />
       <FooterStory />
     </main>
   );

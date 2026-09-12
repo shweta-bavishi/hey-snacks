@@ -68,9 +68,16 @@ export function ScrollReveal({
       return;
     }
 
-    Array.from(node.children).forEach((child, i) => {
-      (child as HTMLElement).style.transitionDelay = `${delay + i * stagger}ms`;
+    const children = Array.from(node.children) as HTMLElement[];
+    children.forEach((child, i) => {
+      child.style.transitionDelay = `${delay + i * stagger}ms`;
     });
+
+    // `node` itself is display:contents and generates no box, so it has no
+    // geometry for IntersectionObserver to measure — observe its first real
+    // child instead.
+    const target = children[0];
+    if (!target) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -83,7 +90,7 @@ export function ScrollReveal({
       },
       { threshold }
     );
-    observer.observe(node);
+    observer.observe(target);
     return () => observer.disconnect();
   }, [reducedMotion, delay, stagger, threshold, once]);
 

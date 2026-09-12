@@ -73,8 +73,11 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
           scrub: 1,
           onUpdate: (self) => {
             const p = self.progress;
+            // -1 once scroll has moved past the last ingredient beat (into
+            // the shake/finale) — the label card should disappear then, not
+            // freeze on whichever beat was last active.
             const idx = RAIL_BEATS.findIndex((b) => p >= b.progress[0] && p < b.progress[1]);
-            setActiveBeatIndex(idx === -1 ? RAIL_BEATS.length - 1 : idx);
+            setActiveBeatIndex(idx);
             if (p >= SHAKE_PROGRESS[0] && !hasShaken.current) {
               hasShaken.current = true;
               playCrunch();
@@ -85,10 +88,11 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
         defaults: { ease: "none" },
       });
 
-      // Intro question fades in then out over the first beat.
+      // Intro question is visible the moment the stage pins, then fades out
+      // as the jar arrives — not faded in from zero, or it's invisible at
+      // scroll progress exactly 0.
       if (introRef.current) {
-        tl.fromTo(introRef.current, { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0)
-          .to(introRef.current, { opacity: 0, duration: 0.05 }, 0.08);
+        tl.set(introRef.current, { opacity: 1 }, 0).to(introRef.current, { opacity: 0, duration: 0.05 }, 0.08);
       }
 
       // Jar scales/fades in over the intro beat.
@@ -114,23 +118,31 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
       });
 
       // The shake: rotate + translate the whole jar, oscillating, transform-only.
+      // Added directly onto the master timeline (not a nested sub-timeline)
+      // with durations expressed as fractions of the 0-1 scroll range, the
+      // same unit every other tween on `tl` uses — a nested timeline added
+      // via tl.add() carries its own real-second duration, which silently
+      // stretches the master timeline's total length and desyncs every
+      // tween positioned after it from the scrollbar.
       const [shakeStart, shakeEnd] = SHAKE_PROGRESS;
       const shakeSpan = shakeEnd - shakeStart;
       if (jarWrapRef.current) {
-        const shakeTl = gsap.timeline();
-        const steps = SHAKE.oscillations * 2;
+        const steps = SHAKE.oscillations * 2 + 1; // + 1 to return to rest
+        const stepSpan = shakeSpan / steps;
         for (let i = 0; i < steps; i++) {
           const dir = i % 2 === 0 ? 1 : -1;
-          shakeTl.to(jarWrapRef.current, {
-            rotate: dir * SHAKE.rotationDeg,
-            x: dir * SHAKE.translatePx,
-            duration: 1 / steps,
-            ease: "sine.inOut",
-          });
+          const atRest = i === steps - 1;
+          tl.to(
+            jarWrapRef.current,
+            {
+              rotate: atRest ? 0 : dir * SHAKE.rotationDeg,
+              x: atRest ? 0 : dir * SHAKE.translatePx,
+              duration: stepSpan,
+              ease: "sine.inOut",
+            },
+            shakeStart + i * stepSpan
+          );
         }
-        shakeTl.to(jarWrapRef.current, { rotate: 0, x: 0, duration: 1 / steps });
-        tl.add(shakeTl, shakeStart);
-        tl.to({}, { duration: shakeSpan }); // hold the section progress mapped to shakeTl's own relative time
       }
 
       // Finale: product pack + CTA fade in.
@@ -172,34 +184,34 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
           Curious what&apos;s actually inside?
         </p>
 
-        <div ref={jarWrapRef} className={styles.jarWrap}>
-          <JarIllustration fillLevel={activeBeat?.fillLevel ?? 0} tint={activeBeat?.tint} />
-          <div className={styles.particleField} aria-hidden="true">
-            {PARTICLES.map((p) => (
-              <div
-                key={p.key}
-                ref={(el) => {
-                  particleRefs.current[p.key] = el;
-                }}
-                className={[styles.particle, styles[`shape-${p.shape}`]].join(" ")}
-                style={{
-                  left: `${p.x}%`,
-                  top: `${p.y}%`,
-                  transform: `rotate(${p.rotation}deg) scale(${p.scale})`,
-                }}
-              />
-            ))}
+        <div className={styles.jarCenter}>
+          <div ref={jarWrapRef} className={styles.jarWrap}>
+            <JarIllustration fillLevel={activeBeat?.fillLevel ?? 0} tint={activeBeat?.tint} />
+            <div className={styles.particleField} aria-hidden="true">
+              {PARTICLES.map((p) => (
+                <div
+                  key={p.key}
+                  ref={(el) => {
+                    particleRefs.current[p.key] = el;
+                  }}
+                  className={[styles.particle, styles[`shape-${p.shape}`]].join(" ")}
+                  style={{
+                    left: `${p.x}%`,
+                    top: `${p.y}%`,
+                    transform: `rotate(${p.rotation}deg) scale(${p.scale})`,
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
-        <div ref={labelRef} className={styles.labelCard} aria-hidden="true">
-          {activeBeat?.label ? (
-            <>
-              <p className={styles.labelTitle}>{activeBeat.label}</p>
-              <p className={styles.labelCopy}>{activeBeat.copy}</p>
-            </>
-          ) : null}
-        </div>
+        {activeBeat?.label ? (
+          <div ref={labelRef} className={styles.labelCard} aria-hidden="true">
+            <p className={styles.labelTitle}>{activeBeat.label}</p>
+            <p className={styles.labelCopy}>{activeBeat.copy}</p>
+          </div>
+        ) : null}
 
         <div className={styles.rail} aria-hidden="true">
           {RAIL_BEATS.map((beat, i) => (
