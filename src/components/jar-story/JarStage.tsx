@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { BEATS, FINALE_PROGRESS, SHAKE, SHAKE_PROGRESS, type JarBeat } from "@/data/jarStoryBeats";
+import { SPRITE_MASKS, type SpriteKind } from "./ingredientSprites";
 import { JarIllustration } from "./JarIllustration";
 import { useJarSound } from "./useJarSound";
 import styles from "./jar-story.module.css";
@@ -13,6 +14,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const RAIL_BEATS = BEATS; // 7 notches, one per beat (intro + 6 ingredient stops)
 
+// Below this the pinned stage can't hold a jar and a column of copy side by
+// side. Kept in sync with the matching breakpoint in jar-story.module.css.
+const TWO_COLUMN_MIN_WIDTH = 860;
+
 interface Particle {
   key: string;
   beat: JarBeat;
@@ -20,7 +25,7 @@ interface Particle {
   y: number;
   rotation: number;
   scale: number;
-  shape: "a" | "b" | "c" | "dust";
+  shape: SpriteKind;
 }
 
 const PARTICLES: Particle[] = BEATS.flatMap((beat) =>
@@ -32,7 +37,7 @@ const PARTICLES: Particle[] = BEATS.flatMap((beat) =>
         y: spot.y,
         rotation: spot.rotation,
         scale: spot.scale,
-        shape: beat.particleShape as "a" | "b" | "c" | "dust",
+        shape: beat.particleShape as SpriteKind,
       }))
     : []
 );
@@ -81,6 +86,7 @@ interface JarStageProps {
 export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const jarWrapRef = useRef<HTMLDivElement>(null);
+  const jarCenterRef = useRef<HTMLDivElement>(null);
   const particleRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const labelRef = useRef<HTMLDivElement>(null);
   const introRef = useRef<HTMLParagraphElement>(null);
@@ -118,17 +124,26 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
         defaults: { ease: "none" },
       });
 
-      // Intro question is visible the moment the stage pins, then fades out
-      // as the jar arrives — not faded in from zero, or it's invisible at
-      // scroll progress exactly 0.
+      // Intro question is visible the moment the stage pins, then clears out
+      // *before* the jar fades up — the two used to overlap, so the headline
+      // sat on top of the jar outline for a chunk of the intro beat.
       if (introRef.current) {
-        tl.set(introRef.current, { opacity: 1 }, 0).to(introRef.current, { opacity: 0, duration: 0.05 }, 0.08);
+        tl.set(introRef.current, { opacity: 1 }, 0).to(introRef.current, { opacity: 0, duration: 0.035 }, 0.02);
       }
 
-      // Jar scales/fades in over the intro beat.
+      // Jar scales/fades in only once the question has gone.
       if (jarWrapRef.current) {
-        tl.fromTo(jarWrapRef.current, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.1 }, 0);
+        tl.fromTo(jarWrapRef.current, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.045 }, 0.055);
       }
+
+      // Centre every sprite on its settle point up front. Done through GSAP
+      // (not a CSS transform) so the drop-in tween below composes with it
+      // rather than clobbering it.
+      PARTICLES.forEach((particle) => {
+        const el = particleRefs.current[particle.key];
+        if (!el) return;
+        gsap.set(el, { xPercent: -50, yPercent: -50, rotation: particle.rotation, scale: particle.scale });
+      });
 
       // Each ingredient beat: particles drop in (transform + opacity only),
       // the label card swaps text via opacity crossfade.
@@ -175,9 +190,30 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
         }
       }
 
-      // Finale: product pack + CTA fade in.
+      // Finale: the copy fades in *next to* the jar, per the spec — so the
+      // jar has to get out of the way first. On a wide stage it slides into
+      // the left half and the copy takes the right; on a narrow one there's
+      // no room for two columns, so the jar drops back to a faint backdrop
+      // and the copy centres over it. Previously both were centred and the
+      // headline landed straight on top of the glass.
+      const finaleSpan = FINALE_PROGRESS[1] - FINALE_PROGRESS[0];
       if (finaleRef.current) {
-        tl.fromTo(finaleRef.current, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: FINALE_PROGRESS[1] - FINALE_PROGRESS[0] }, FINALE_PROGRESS[0]);
+        tl.fromTo(
+          finaleRef.current,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: finaleSpan },
+          FINALE_PROGRESS[0]
+        );
+      }
+
+      if (jarCenterRef.current) {
+        const mm = gsap.matchMedia();
+        mm.add(`(min-width: ${TWO_COLUMN_MIN_WIDTH}px)`, () => {
+          tl.to(jarCenterRef.current, { xPercent: -26, duration: finaleSpan }, FINALE_PROGRESS[0]);
+        });
+        mm.add(`(max-width: ${TWO_COLUMN_MIN_WIDTH - 1}px)`, () => {
+          tl.to(jarCenterRef.current, { opacity: 0.16, duration: finaleSpan }, FINALE_PROGRESS[0]);
+        });
       }
     }, section);
 
@@ -218,7 +254,7 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
           Curious what&apos;s actually inside?
         </p>
 
-        <div className={styles.jarCenter}>
+        <div ref={jarCenterRef} className={styles.jarCenter}>
           <div ref={jarWrapRef} className={styles.jarWrap}>
             <JarIllustration fillLevel={activeBeat?.fillLevel ?? 0} tint={activeBeat?.tint} />
             <div className={styles.particleField} aria-hidden="true">
@@ -228,11 +264,20 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
                   ref={(el) => {
                     particleRefs.current[p.key] = el;
                   }}
-                  className={[styles.particle, styles[`shape-${p.shape}`]].join(" ")}
+                  className={styles.particle}
+                  // left/top place the sprite's *centre* on its settle point
+                  // (the -50% shift is applied by GSAP as xPercent/yPercent,
+                  // so it composes with the drop-in tween instead of being
+                  // overwritten by it). Without that, a sprite at x:88% hung
+                  // its full width past the jar wall.
                   style={{
                     left: `${p.x}%`,
                     top: `${p.y}%`,
-                    transform: `rotate(${p.rotation}deg) scale(${p.scale})`,
+                    width: `${p.beat.particleSize}px`,
+                    height: `${p.beat.particleSize}px`,
+                    backgroundColor: p.beat.particleColor,
+                    maskImage: SPRITE_MASKS[p.shape],
+                    WebkitMaskImage: SPRITE_MASKS[p.shape],
                   }}
                 />
               ))}

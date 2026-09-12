@@ -37,19 +37,24 @@
   align-items: start;
 }
 
+.fallbackJar {
+  position: sticky;
+  top: var(--s-6);
+}
+
+/* Must stay below the base .fallbackJar rule — same specificity, so source
+   order decides which `position` wins. */
 @media (max-width: 720px) {
   .fallback {
     grid-template-columns: 1fr;
   }
+  /* Stacked, the jar sits in its own row above the cards. Leaving it sticky
+     would park it over the heading and the cards as they scroll past. */
   .fallbackJar {
+    position: static;
     max-width: 200px;
     margin: 0 auto;
   }
-}
-
-.fallbackJar {
-  position: sticky;
-  top: var(--s-6);
 }
 
 .fallbackCards {
@@ -67,13 +72,15 @@
   gap: var(--s-4);
 }
 
-.dustSwatch {
-  width: 40px;
-  height: 40px;
+.glyph {
+  display: block;
   flex: none;
-  border-radius: var(--radius-pill);
-  background: var(--accent-tint);
-  border: 2px solid var(--ink);
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
 }
 
 .fallbackLabel {
@@ -176,32 +183,36 @@
   justify-content: center;
 }
 
+/* Must match .jarSvg's max-width. The particle field is positioned as a
+   percentage of this box, so if the wrapper is wider than the drawing
+   inside it the whole field slides right and particles settle outside the
+   jar's right wall. */
 .jarWrap {
   position: relative;
-  width: min(40vw, 320px);
+  width: min(40vw, 260px);
   will-change: transform, opacity;
 }
 
+/* Maps onto the glass interior of the jar drawing, not the SVG's bounding
+   box. The illustration's viewBox is 160x200 with walls at x 30..130 and a
+   usable body from y 44..176, which is where these percentages come from —
+   particles settling outside that range visibly sat next to the jar rather
+   than in it. Keep in sync with JarIllustration's path. */
 .particleField {
   position: absolute;
-  inset: 8% 12%;
+  inset: 22% 20% 12% 20%;
 }
 
 .particle {
   position: absolute;
-  width: 14px;
-  height: 14px;
-  border-radius: var(--radius-pill);
-  background: var(--paper-2);
-  border: 1.5px solid var(--ink);
+  /* size, colour and silhouette are set per-particle from the beat data */
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
   will-change: transform, opacity;
-}
-
-.shape-dust {
-  background: var(--accent-tint);
-  border-color: var(--accent-sh);
-  width: 20px;
-  height: 20px;
 }
 
 .labelCard {
@@ -215,6 +226,31 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: var(--s-4);
+}
+
+/* Same two-column problem as the finale: on a narrow stage there's no room
+   beside the jar, so the label drops to the bottom of the frame instead of
+   being printed over the glass. */
+@media (max-width: 859px) {
+  .labelCard {
+    top: auto;
+    bottom: var(--s-8);
+    left: var(--s-5);
+    right: var(--s-5);
+    max-width: none;
+    transform: none;
+  }
+
+  .jarCenter {
+    align-items: flex-start;
+    padding-top: var(--s-7);
+  }
+
+  /* 40vw is only ~150px on a phone. With the label card moved out from
+     beside the jar there's room to draw it properly. */
+  .jarWrap {
+    width: min(62vw, 260px);
+  }
 }
 
 .labelTitle {
@@ -252,14 +288,33 @@
   background: var(--accent);
 }
 
+/* The right-hand column of the finale beat. The jar slides into the left
+   half at the same moment (see JarStage), so the two sit side by side
+   instead of stacking on top of each other. */
 .finale {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 52%;
+  right: 0;
   display: grid;
-  place-items: center;
-  text-align: center;
-  padding: var(--s-6);
+  place-content: center;
+  align-items: center;
+  justify-items: start;
+  text-align: left;
+  padding: var(--s-6) var(--s-7) var(--s-6) 0;
   pointer-events: none;
+}
+
+/* No room for two columns — the jar fades back to a wash instead of moving
+   aside, and the copy centres over it. */
+@media (max-width: 859px) {
+  .finale {
+    left: 0;
+    justify-items: center;
+    text-align: center;
+    padding: var(--s-6);
+  }
 }
 
 .finale > * {

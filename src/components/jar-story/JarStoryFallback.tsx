@@ -2,9 +2,9 @@
 
 import { Card } from "@/components/card/Card";
 import { SectionHeading } from "@/components/section-heading/SectionHeading";
-import { MakhanaPuff } from "@/components/makhana-puff/MakhanaPuff";
 import { ScrollReveal } from "@/components/scroll-reveal/ScrollReveal";
 import { BEATS } from "@/data/jarStoryBeats";
+import { IngredientGlyph } from "./IngredientGlyph";
 import { JarIllustration } from "./JarIllustration";
 import styles from "./jar-story.module.css";
 
@@ -34,11 +34,9 @@ export function JarStoryFallback() {
               <li key={beat.id} className={styles.fallbackCardItem}>
                 <Card padding="md" elevation="raised">
                   <div className={styles.fallbackCardRow}>
-                    {beat.particleShape && beat.particleShape !== "dust" ? (
-                      <MakhanaPuff shape={beat.particleShape} size={40} />
-                    ) : (
-                      <span className={styles.dustSwatch} aria-hidden="true" />
-                    )}
+                    {beat.particleShape ? (
+                      <IngredientGlyph kind={beat.particleShape} color={beat.particleColor} size={40} />
+                    ) : null}
                     <div>
                       <p className={styles.fallbackLabel}>{beat.label}</p>
                       <p className={styles.fallbackCopy}>{beat.copy}</p>

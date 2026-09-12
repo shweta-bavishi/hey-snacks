@@ -4,6 +4,8 @@
 // scroll-driven stage (each beat's `progress` range drives GSAP ScrollTrigger).
 // No component should hardcode an ingredient — read from BEATS instead.
 
+import type { SpriteKind } from "@/components/jar-story/ingredientSprites";
+
 export type JarBeatId =
   | "intro"
   | "makhana"
@@ -33,8 +35,12 @@ export interface JarBeat {
   copy: string;
   /** Fill level of the jar contents at the end of this beat, 0-1. */
   fillLevel: number;
-  /** Particle sprite shape reused from MakhanaPuff, or "dust" for the spice cloud. */
-  particleShape: "a" | "b" | "c" | "dust" | null;
+  /** Which silhouette this beat's particles wear. Null for the intro (no particles). */
+  particleShape: SpriteKind | null;
+  /** Rendered sprite size in px, before per-particle scale. Nuts are bigger than seeds. */
+  particleSize: number;
+  /** Token the sprite is tinted with, e.g. "var(--malai)". Never a raw colour. */
+  particleColor: string;
   /** How many particle sprites this beat adds. Spice cloud uses a handful of soft dust sprites, not one per percent. */
   particleCount: number;
   /** Tint applied to the jar contents once this beat has fully played. */
@@ -67,6 +73,8 @@ export const BEATS: JarBeat[] = [
     copy: "Curious what's actually inside?",
     fillLevel: 0,
     particleShape: null,
+    particleSize: 0,
+    particleColor: "transparent",
     particleCount: 0,
     tint: "transparent",
     settlePositions: [],
@@ -77,7 +85,12 @@ export const BEATS: JarBeat[] = [
     label: "MAKHANA ✱ 60%",
     copy: "Hand-popped lotus seeds from Mithila, Bihar.",
     fillLevel: 0.35,
-    particleShape: "a",
+    particleShape: "makhana",
+    particleSize: 17,
+    // The same toasted mix MakhanaPuff uses for its 'toasted' variant. Plain
+    // --paper-2 would be the exact colour of the jar's contents fill behind
+    // it, so the puffs disappeared into the tint.
+    particleColor: "color-mix(in srgb, var(--paper-2) 62%, var(--malai-sh) 38%)",
     particleCount: 40,
     tint: "var(--paper-2)",
     settlePositions: spread(40, 11, 66, 96),
@@ -88,7 +101,9 @@ export const BEATS: JarBeat[] = [
     label: "ALMONDS ✱ 12%",
     copy: "For the crunch that fights back.",
     fillLevel: 0.5,
-    particleShape: "b",
+    particleShape: "almond",
+    particleSize: 15,
+    particleColor: "var(--malai-sh)",
     particleCount: 12,
     tint: "var(--paper-2)",
     settlePositions: spread(12, 23, 50, 68),
@@ -99,7 +114,9 @@ export const BEATS: JarBeat[] = [
     label: "CASHEWS ✱ 10%",
     copy: "Because we're not monsters.",
     fillLevel: 0.62,
-    particleShape: "c",
+    particleShape: "cashew",
+    particleSize: 16,
+    particleColor: "var(--malai)",
     particleCount: 10,
     tint: "var(--paper-2)",
     settlePositions: spread(10, 37, 38, 54),
@@ -110,7 +127,9 @@ export const BEATS: JarBeat[] = [
     label: "PEANUTS ✱ 8%",
     copy: "The reliable one.",
     fillLevel: 0.72,
-    particleShape: "a",
+    particleShape: "peanut",
+    particleSize: 16,
+    particleColor: "var(--marigold)",
     particleCount: 14,
     tint: "var(--paper-2)",
     settlePositions: spread(14, 41, 28, 42),
@@ -121,7 +140,9 @@ export const BEATS: JarBeat[] = [
     label: "SEEDS ✱ 6%",
     copy: "Pumpkin, sunflower, flax. Tiny but loud.",
     fillLevel: 0.82,
-    particleShape: "b",
+    particleShape: "seed",
+    particleSize: 9,
+    particleColor: "var(--pehelwan-sh)",
     particleCount: 16,
     tint: "var(--paper-2)",
     settlePositions: spread(16, 53, 16, 32),
@@ -133,6 +154,8 @@ export const BEATS: JarBeat[] = [
     copy: "The part we won't explain.",
     fillLevel: 0.86,
     particleShape: "dust",
+    particleSize: 22,
+    particleColor: "var(--accent)",
     particleCount: 8,
     tint: "var(--accent-tint)",
     settlePositions: spread(8, 67, 6, 20),
