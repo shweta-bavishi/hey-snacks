@@ -6,7 +6,7 @@ import { FLAVOUR_THEMES, FlavourTheme } from "@/components/theme/theme-script";
 const LABEL: Record<FlavourTheme, string> = {
   pataka: "Pataka",
   malai: "Malai",
-  jaadu: "Jaadu",
+  dadi: "Dadi",
   pehelwan: "Pehelwan",
 };
 
@@ -97,7 +97,7 @@ export function ThemeStory() {
       </div>
       <FlavourSection theme="pataka" line="Pataka aa gaya. Sambhal ke." />
       <FlavourSection theme="malai" line="soooo creamy... anyway." />
-      <FlavourSection theme="jaadu" line="Ek chutki masala ka mol." />
+      <FlavourSection theme="dadi" line="Ek chutki masala ka mol." />
       <FlavourSection theme="pehelwan" line="Taazgi ka dangal. Aa jao." />
     </div>
   );

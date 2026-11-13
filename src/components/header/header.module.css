@@ -28,7 +28,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--s-4);
-  height: 72px;
+  height: var(--header-h);
   padding-inline: var(--s-5);
   background: var(--paper);
   border-bottom: var(--stroke) solid var(--ink);
@@ -38,7 +38,7 @@
 }
 
 .header[data-shrunk="true"] {
-  height: 56px;
+  height: var(--header-h-shrunk);
   background: var(--accent-tint);
   box-shadow: var(--shadow);
 }
@@ -120,31 +120,13 @@
     transition: none;
   }
 }
-
-/* ---- cart / palette trigger ---- */
-.cartLink {
-  font-family: var(--font-mono);
-  font-weight: 700;
-  font-size: var(--fs-label);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink);
-  text-decoration: none;
-}
-.cartLink:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
-  border-radius: var(--radius);
-}
-
-/* CommandPaletteTrigger already swaps pill/icon at 640px on its own. */
-.paletteTrigger {
+/* ThemeSwitcher hides its own label under 640px, staying icon-only next to the hamburger. */
+.themeSwitcher {
 }
 
 @media (max-width: 640px) {
   .navLeft,
-  .navRightLinks,
-  .cartLink {
+  .navRightLinks {
     display: none;
   }
 }

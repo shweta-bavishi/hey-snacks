@@ -1,0 +1,50 @@
+.stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 300 / 420;
+  height: 52vh;
+  max-height: 480px;
+}
+
+.pack {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(var(--shadow-lg));
+}
+
+.scrubHint {
+  position: absolute;
+  bottom: var(--s-2);
+  right: calc(-1 * var(--s-6));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-1);
+}
+
+.arc {
+  width: 40px;
+  height: 40px;
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-pill);
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 768px) {
+  .stage {
+    height: 40svh;
+  }
+  .scrubHint {
+    display: none;
+  }
+}

@@ -1,0 +1,116 @@
+/*
+ * Split into .wrap (the interactive, measured, filtered element) and
+ * .stage (the perspective container) on purpose, not merged into one.
+ * Some browsers will flatten 3D children into 2D when `filter` and
+ * `perspective` land on the same element, or on an element sharing an
+ * ancestor chain with `transform-style: preserve-3d` in the wrong order —
+ * a real, inconsistently-triggered WebKit/Chromium quirk, not a
+ * theoretical one. Keeping the filtered element completely outside the
+ * 3D-transform chain removes that whole failure mode rather than hoping
+ * a particular browser version doesn't hit it.
+ */
+.wrap {
+  /* Flat shade the pouch steps through as a tile turns away from the light.
+     Levels are hard steps of --pouch-tone-sh (set inline per flavour), never
+     a ramp. */
+  --pouch-shade-step: 0.18;
+  --pouch-shade-levels: 3;
+  --pouch-light-yaw: 35deg;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Must match POUCH_ASPECT in Pack3D.tsx: 900/1260 panel art, which is the whole bag. */
+  aspect-ratio: 0.714 / 1;
+  height: 52vh;
+  max-height: 480px;
+  /* The bag's 3px ink outline is its silhouette, dilated by four zero-blur
+     drop-shadows (right, left, down, up), then the usual hard offset shadow.
+     It tracks the real outline at every angle: bowed sides, serrated crimps,
+     the thin lens profile mid-turn. */
+  filter: drop-shadow(var(--stroke) 0 0 var(--ink))
+    drop-shadow(calc(var(--stroke) * -1) 0 0 var(--ink))
+    drop-shadow(0 var(--stroke) 0 var(--ink))
+    drop-shadow(0 calc(var(--stroke) * -1) 0 var(--ink))
+    drop-shadow(var(--shadow-lg));
+  cursor: default;
+  touch-action: pan-y;
+  outline: none;
+}
+
+.wrap[data-draggable] {
+  cursor: grab;
+}
+
+.wrap[data-dragging] {
+  cursor: grabbing;
+}
+
+.wrap:focus-visible {
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
+  border-radius: var(--radius);
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* perspective is set inline from JS at 3× the bag's rendered height, so
+     the distortion looks the same at any viewport. */
+}
+
+/*
+ * Absolutely positioned and sized in px from JS (Pack3D measures the stage).
+ * Out of flow on purpose: in flow, its width would feed back into the
+ * stage's measured size.
+ */
+.cube {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%) rotateY(var(--pack-rotation, 0deg));
+}
+
+/* Every tile is placed by its own matrix from the cube's top-left corner,
+   so they all share that origin. */
+.tile {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  backface-visibility: hidden;
+}
+
+.tile {
+  background-repeat: no-repeat;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: var(--pouch-tone-sh);
+  opacity: 0;
+}
+
+/* cos() of the tile's world-facing angle against the light, quantised to
+   whole levels with round(down). Browsers without CSS trig/round just get
+   the unshaded bag. */
+@supports (opacity: calc(round(down, cos(10deg) * 2, 1) * 0.1)) {
+  .shade {
+    opacity: calc(
+      min(
+          var(--pouch-shade-levels),
+          round(down, (1 - cos(var(--pack-rotation, 0deg) + var(--tile-yaw) + var(--pouch-light-yaw))) * 2.2, 1)
+        ) *
+        var(--pouch-shade-step)
+    );
+  }
+}
+
+@media (max-width: 768px) {
+  .wrap {
+    height: 40svh;
+  }
+}

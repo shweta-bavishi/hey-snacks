@@ -28,6 +28,9 @@ interface ModalProps {
    * modal's accessible content.
    */
   decoration?: ReactNode;
+  /** Flavour theme to scope --accent/--accent-tint/etc to (see tokens.css [data-theme]).
+   *  Omit for the brand-neutral default. */
+  theme?: string;
   className?: string;
 }
 
@@ -68,6 +71,7 @@ export function Modal({
   size = "md",
   children,
   decoration,
+  theme,
   className,
 }: ModalProps) {
   const headingId = useId();
@@ -181,6 +185,7 @@ export function Modal({
         aria-modal="true"
         aria-labelledby={headingId}
         tabIndex={-1}
+        data-theme={theme}
         onKeyDown={handleKeyDown}
         className={[styles.panel, styles[size], className].filter(Boolean).join(" ")}
       >
@@ -189,6 +194,9 @@ export function Modal({
             {decoration}
           </div>
         )}
+        <button type="button" className={styles.close} aria-label="Close" onClick={onClose}>
+          ✕
+        </button>
         <div className={styles.scroll}>
           <h2 id={headingId} className={styles.heading}>
             {title}

@@ -56,7 +56,7 @@ export function SpeechBubbleStory() {
           Hi
         </SpeechBubble>
         <SpeechBubble tail="bottom-right" tone="speech">
-          Roasted in Bihar, ruined for anything else, no palm oil, cent percent makhana, seriously.
+          Roasted right, snacked light, no palm oil, cent percent makhana, seriously.
         </SpeechBubble>
       </Row>
     </div>

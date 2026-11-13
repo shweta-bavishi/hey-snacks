@@ -3,7 +3,7 @@ import { Grain, GrainIntensity } from "@/components/grain/Grain";
 const SWATCHES: { theme: string; label: string }[] = [
   { theme: "pataka", label: "Pataka" },
   { theme: "malai", label: "Malai" },
-  { theme: "jaadu", label: "Jaadu" },
+  { theme: "dadi", label: "Dadi" },
   { theme: "pehelwan", label: "Pehelwan" },
 ];
 

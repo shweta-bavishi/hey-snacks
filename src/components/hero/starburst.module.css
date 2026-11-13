@@ -1,0 +1,28 @@
+.starburst {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Six flat steps from the flavour colour out to paper. Every fill is a
+   token or a color-mix of tokens: hard edges between bands, no blend
+   inside any band. Follows --accent, so the burst wears the colour of the
+   product it sits behind. */
+.band[data-band="0"] {
+  fill: var(--accent);
+}
+.band[data-band="1"] {
+  fill: color-mix(in srgb, var(--accent) 72%, var(--paper));
+}
+.band[data-band="2"] {
+  fill: color-mix(in srgb, var(--accent) 46%, var(--paper));
+}
+.band[data-band="3"] {
+  fill: var(--accent-tint);
+}
+.band[data-band="4"] {
+  fill: color-mix(in srgb, var(--accent-tint) 50%, var(--paper));
+}
+.band[data-band="5"] {
+  fill: var(--paper);
+}

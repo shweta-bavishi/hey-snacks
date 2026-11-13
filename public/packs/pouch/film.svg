@@ -1,0 +1,27 @@
+<svg width="900" height="1260" viewBox="0 0 900 1260" xmlns="http://www.w3.org/2000/svg">
+  <!--
+    Pillow-pouch film layer, laid over every front/back panel by Pack3D
+    (docs/packaging-pouch-prompt.md §3-4). Same 900x1260 space as the panel
+    art so it registers 1:1. Flat light only: hard-edged cream streaks at low
+    opacity for the air-filled puff, short ink wrinkle strokes fanning in
+    from each corner where the film pinches into the crimp. No gradient, no
+    blur. Kept inside the outer 60px and clear of every content zone.
+  -->
+  <g fill="#FFF8EE" opacity="0.34">
+    <!-- long streak down the upper-left bulge -->
+    <path d="M58 178 C 40 300, 40 440, 66 590 L 86 586 C 62 440, 62 304, 80 182 Z"/>
+    <path d="M96 196 C 88 236, 86 270, 88 306 L 98 305 C 97 270, 99 238, 106 198 Z"/>
+    <!-- smaller streak on the lower-right -->
+    <path d="M842 760 C 862 850, 862 930, 842 1010 L 824 1005 C 842 930, 842 852, 824 765 Z"/>
+  </g>
+  <g fill="none" stroke="#14110F" stroke-width="3" stroke-linecap="round" opacity="0.55">
+    <!-- top-left -->
+    <path d="M4 70 L 34 98"/><path d="M4 96 L 24 112"/><path d="M22 66 L 50 86"/>
+    <!-- top-right -->
+    <path d="M896 70 L 866 98"/><path d="M896 96 L 876 112"/><path d="M878 66 L 850 86"/>
+    <!-- bottom-left -->
+    <path d="M4 1174 L 30 1150"/><path d="M4 1150 L 20 1138"/><path d="M20 1176 L 46 1158"/>
+    <!-- bottom-right -->
+    <path d="M896 1174 L 870 1150"/><path d="M896 1150 L 880 1138"/><path d="M880 1176 L 854 1158"/>
+  </g>
+</svg>

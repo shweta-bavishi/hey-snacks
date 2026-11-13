@@ -7,7 +7,7 @@ import { MascotAvatar } from "@/components/mascot-avatar/MascotAvatar";
 const PANELS = [
   { flavour: "pataka" as const, line: "Ekdum pataka, first bite se hi." },
   { flavour: "malai" as const, line: "Malai jaisa smooth, dil jaisa soft." },
-  { flavour: "jaadu" as const, line: "Jaadu chal gaya, wapas nahi aana." },
+  { flavour: "dadi" as const, line: "Dadi ka nuskha chal gaya, hosh udd gaye." },
   { flavour: "pehelwan" as const, line: "Pehelwan ki khurak, tera snack." },
 ];
 

@@ -1,0 +1,391 @@
+/* ---- section: fills the first screen under the marquee + header ---- */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  padding: var(--s-5) var(--s-4);
+}
+
+/* Two classes beat .snap-section's one, so the hero (the only section that
+   also has the marquee above it) fills exactly the first screen. */
+.hero:global(.snap-section) {
+  min-height: var(--hero-min-h);
+}
+
+/* ---- the poster box: one bordered panel, text + pack ---- */
+.poster {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  background: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.grain {
+  z-index: var(--z-grain);
+}
+
+.copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-5) var(--s-5) var(--s-6);
+}
+
+.eyebrow {
+  font-size: var(--fs-label);
+  white-space: normal;
+  max-width: 100%;
+}
+
+/* The hero line. Hind, not Rozha One: Rozha is display-only above 32px
+   (spec §4.2) and this line has to work at phone sizes too. */
+.tagline {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--fs-h2);
+  line-height: 1.05;
+  margin: 0;
+  color: var(--ink);
+}
+
+.taglineEmphasis {
+  color: var(--accent-sh);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  font-weight: 400;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-shadow: 3px 3px 0 var(--rani);
+  margin: 0;
+}
+
+/* One flavour word per line, like the pack, without a <br> that screen
+   readers would read as a pause in the middle of the name. */
+.titleLine {
+  display: block;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+}
+
+.heatLabel {
+  letter-spacing: 0.08em;
+}
+
+.mrp {
+  text-decoration: line-through;
+  opacity: var(--opacity-tertiary);
+}
+
+.price {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  color: var(--accent-sh);
+}
+
+/* ---- Batch 01 drop: date + the one primary action ---- */
+.drop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-4);
+  margin-top: var(--s-2);
+  width: 100%;
+}
+
+.dropText {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2);
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dropBatch {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius);
+  padding: var(--s-1) var(--s-2);
+}
+
+.cta {
+  flex: 0 0 auto;
+}
+
+/* ---- pack stage: starburst, scattered ingredients, the pack ---- */
+.stage {
+  position: relative;
+  justify-self: center;
+  width: 72%;
+  aspect-ratio: 1 / 1;
+  margin-top: var(--s-5);
+}
+
+.starburst {
+  position: absolute;
+  inset: 0;
+}
+
+.pack {
+  position: absolute;
+  z-index: 2;
+  top: 4%;
+  left: 14%;
+  height: 80%;
+  width: auto;
+  transform: rotate(-4deg);
+  transform-origin: 50% 100%;
+}
+
+.bowl {
+  position: absolute;
+  z-index: 3;
+  bottom: 2%;
+  right: -6%;
+  width: 52%;
+  height: auto;
+}
+
+.chillies {
+  position: absolute;
+  z-index: 3;
+  bottom: 0;
+  left: 0;
+  width: 30%;
+  height: auto;
+  transform: rotate(-6deg);
+}
+
+.flakes {
+  position: absolute;
+  z-index: 3;
+  bottom: 4%;
+  left: 44%;
+  width: 11%;
+  height: auto;
+  transform: rotate(-8deg);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Phone: pack first (the visual hook), then the line, name and Join
+   button, all inside the first screen. */
+@media (max-width: 899px) {
+  .hero {
+    padding: var(--s-4);
+  }
+  .copy {
+    padding: var(--s-3) var(--s-4) var(--s-5);
+  }
+  .stage {
+    order: -1;
+    width: 58%;
+    margin-top: var(--s-4);
+  }
+  .cta {
+    width: 100%;
+  }
+}
+
+/* Laptop and up: the banner layout, text left, pack right. */
+@media (min-width: 900px) {
+  .hero {
+    padding: var(--s-6) var(--s-7);
+  }
+  .poster {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--s-5);
+    padding: var(--s-6) var(--s-7);
+  }
+  .copy {
+    padding: 0;
+    gap: var(--s-4);
+  }
+  .stage {
+    width: 100%;
+    max-width: 560px;
+    margin-top: 0;
+  }
+}
+
+/*
+ * PARKED with the animated hero extras at the bottom of Hero.tsx (mascot
+ * peek, cursor puffs, Pack3D). Some class names below were reused by the
+ * live hero above; rename on restore.
+ *
+ * Disabled alongside the interactive hero in Hero.tsx — Starburst, mascot
+ * peek, cursor-reactive puffs, rotating Pack3D and the two-column text/pack
+ * layout. Restore by deleting .srOnly/.bannerImage above and uncommenting
+ * everything below (plus the matching JSX/state in Hero.tsx).
+ *
+ * .hero originally had min-height: 100svh and a grid layout here — dropped
+ * because the static banner sizes to its own aspect ratio instead of filling
+ * the viewport; not re-included below since it belongs on the live .hero
+ * rule above, not in this disabled block.
+
+.grain {
+  position: absolute;
+  inset: 0;
+}
+
+.starburstWrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90vmin;
+  height: 90vmin;
+  margin: auto;
+  z-index: 0;
+}
+
+.mascotPeek {
+  position: absolute;
+  bottom: 0;
+  right: calc(-1 * var(--s-6));
+  z-index: 1;
+  opacity: var(--opacity-strong);
+}
+
+.puff {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.packStage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--s-6);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-3);
+  max-width: 560px;
+  margin: 0 auto;
+  padding: var(--s-5);
+}
+
+.eyebrow {
+  font-size: var(--fs-label);
+}
+
+@media (max-width: 899px) {
+  .eyebrow {
+    white-space: normal;
+    max-width: 100%;
+  }
+}
+
+.tagline {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-l);
+  color: var(--ink);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--fs-mega);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  text-shadow: 3px 3px 0 var(--rani);
+  margin: 0;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  font-family: var(--font-mono);
+}
+
+.mrp {
+  text-decoration: line-through;
+  opacity: var(--opacity-tertiary);
+  font-size: var(--fs-body);
+}
+
+.price {
+  font-size: var(--fs-h3);
+  font-weight: 700;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--s-7);
+    padding: var(--s-8) var(--s-7);
+  }
+  .content {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    padding: 0;
+    justify-self: end;
+  }
+  .packStage {
+    grid-column: 2;
+    grid-row: 1;
+    margin-bottom: 0;
+  }
+  .starburstWrap {
+    left: 50%;
+    right: 0;
+    width: min(50vw, 90vmin);
+    height: min(50vw, 90vmin);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .puff {
+    transition: none;
+  }
+}
+
+*/

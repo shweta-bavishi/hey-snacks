@@ -22,7 +22,7 @@ import { useRecentCommands } from "./useRecentCommands";
 import { useSoundToggle } from "./useSoundToggle";
 import styles from "./command-palette.module.css";
 
-type Tone = "pataka" | "malai" | "jaadu" | "pehelwan" | "marigold" | "rani" | "peacock" | "indigo" | "accent" | "night";
+type Tone = "pataka" | "malai" | "dadi" | "pehelwan" | "marigold" | "rani" | "peacock" | "indigo" | "accent" | "night";
 
 interface CommandDef {
   id: string;
@@ -188,7 +188,7 @@ export function CommandPalette({
         description: "The four faces of hey.",
         keywords: ["mascots", "characters", "meet"],
         group: "Jump to",
-        tone: "jaadu",
+        tone: "dadi",
         icon: "✱",
         closesOnSelect: true,
         onSelect: () => runNav("mascots"),

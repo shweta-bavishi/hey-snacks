@@ -1,0 +1,65 @@
+<svg viewBox="0 0 1200 1600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="mx-ht-red-a" width="17" height="17" patternUnits="userSpaceOnUse"><circle cx="8.5" cy="8.5" r="6.2" fill="#8C1A12"></circle></pattern>
+    <pattern id="mx-ht-red-b" width="17" height="17" patternUnits="userSpaceOnUse"><circle cx="8.5" cy="8.5" r="3" fill="#8C1A12"></circle></pattern>
+    <clipPath id="mx-clip-pataka"><path d="M256 360 L384 360 L392 960 L248 960 Z"></path></clipPath>
+    <g id="pk-leg">
+        <path d="M268 930 L308 930 L304 1030 L272 1030 Z" fill="#EF3E2F"></path>
+        <path d="M246 1030 L318 1030 L318 1058 L246 1058 Z" fill="#8C1A12"></path>
+      </g>
+    <g id="pk-arm">
+        <path d="M258 478 L174 344 L214 318 L294 452 Z" fill="#EF3E2F"></path>
+        <path d="M148 278 L214 300 L194 350 L132 326 Z" fill="#EF3E2F"></path>
+      </g>
+    <g id="pk-base">
+        <path d="M310 312 L332 312 L330 272 L308 240 L286 216 L270 238 L292 258 L308 286 Z" fill="#8C1A12"></path>
+        <path d="M256 360 L384 360 L392 960 L248 960 Z" fill="#EF3E2F"></path>
+        <g clip-path="url(#mx-clip-pataka)" stroke="none">
+          <path d="M344 360 L392 360 L392 960 L340 960 Z" fill="url(#mx-ht-red-b)"></path>
+          <path d="M364 360 L392 360 L392 960 L362 960 Z" fill="url(#mx-ht-red-a)"></path>
+        </g>
+        <path d="M248 560 L392 566 L392 610 L248 604 Z" fill="#8C1A12"></path>
+        <path d="M248 664 L392 670 L392 714 L248 708 Z" fill="#FFF8EE"></path>
+        <path d="M248 812 L392 818 L392 862 L248 856 Z" fill="#8C1A12"></path>
+        <path d="M256 360 L384 360 L370 320 L270 320 Z" fill="#8C1A12"></path>
+      </g>
+    <g id="pk-shades">
+        <path d="M252 396 L312 392 L310 446 L254 442 Z" fill="#14110F"></path>
+        <path d="M328 392 L388 396 L386 442 L330 446 Z" fill="#14110F"></path>
+        <path d="M310 404 L330 402 L330 418 L310 420 Z" fill="#14110F"></path>
+        <path d="M264 404 L288 402 L264 430 Z" fill="#FFF8EE" stroke="none"></path>
+        <path d="M352 402 L376 404 L376 430 Z" fill="#FFF8EE" stroke="none"></path>
+      </g>
+    <g id="pk-mouth-happy">
+        <path d="M262 478 L378 478 C 372 582 296 598 272 546 Z" fill="#14110F"></path>
+        <path d="M262 478 L378 478 L374 506 L266 506 Z" fill="#FFF8EE"></path>
+      </g>
+    <g id="pk-burst">
+        <path d="M320 30 L340 95 L407 80 L360 130 L407 180 L340 165 L320 230 L300 165 L233 180 L280 130 L233 80 L300 95 Z" fill="#EF3E2F"></path>
+        <path d="M320 68 L332 109 L374 99 L344 130 L374 161 L332 151 L320 192 L308 151 L266 161 L296 130 L266 99 L308 109 Z" fill="#FFF8EE"></path>
+      </g>
+    <g id="pk-sparks" fill="#EF3E2F">
+        <path d="M462 96 L490 108 L462 120 L474 108 Z"></path>
+        <path d="M150 42 L178 54 L150 66 L162 54 Z"></path>
+        <path d="M440 214 L464 234 L434 240 L450 228 Z"></path>
+      </g>
+    <g id="pk-sparks-extra" fill="#EF3E2F">
+        <path d="M188 150 L216 162 L188 174 L200 162 Z"></path>
+        <path d="M502 172 L530 184 L502 196 L514 184 Z"></path>
+        <path d="M126 210 L154 222 L126 234 L138 222 Z"></path>
+        <path d="M398 22 L426 34 L398 46 L410 34 Z"></path>
+      </g>
+  </defs>
+  <g id="cut-pataka-happy" stroke="#14110F" stroke-width="2.069" stroke-linejoin="miter" fill="none" transform="translate(136,66) scale(1.45)">
+        <use href="#pk-leg"></use>
+        <use href="#pk-leg" transform="translate(640,0) scale(-1,1)"></use>
+        <use href="#pk-base"></use>
+        <use href="#pk-arm" transform="rotate(-18 258 478)"></use>
+        <use href="#pk-arm" transform="translate(640,0) scale(-1,1) rotate(-18 258 478)"></use>
+        <use href="#pk-mouth-happy"></use>
+        <use href="#pk-shades"></use>
+        <use href="#pk-burst"></use>
+        <use href="#pk-sparks"></use>
+        <use href="#pk-sparks-extra"></use>
+      </g>
+</svg>

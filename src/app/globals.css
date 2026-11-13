@@ -14,3 +14,19 @@ body {
   color: var(--ink);
   font-family: var(--font-body);
 }
+
+/* Anchor jumps (#shop, #faq, footer flavour links) land below the sticky
+   header instead of underneath it. */
+html {
+  scroll-padding-top: var(--header-h-shrunk);
+}
+
+/* Each main section is at least one full screen tall on whatever device
+   opens it (phone, tablet, laptop), measured below the sticky header, and
+   simply grows when its content needs more room. A min-height, never a
+   fixed height, so nothing is ever clipped or trapped in an inner
+   scrollbar. Each section centres its own content inside that height. No
+   scroll-snap: free scroll only. */
+.snap-section {
+  min-height: var(--section-min-h);
+}

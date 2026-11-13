@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "capture:pack3d": "node scripts/capture-pack-3d.mjs",
+    "remotion": "remotion studio --port 3001",
+    "render:hero": "remotion render HeroLightRake out/hero-light-rake.mp4 --codec=h264 --crf=26",
+    "render:hero:webm": "remotion render HeroLightRake out/hero-light-rake.webm --codec=vp9 --crf=34",
+    "render:hero:poster": "remotion still HeroLightRake out/hero-light-rake-poster.png --frame=250",
+    "render:banner": "remotion still HeroBanner out/banner-night.png",
+    "render:banner:paper": "remotion still HeroBannerPaper out/banner-paper.png"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -18,6 +25,10 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
+    "@remotion/bundler": "^4.0.529",
+    "@remotion/cli": "^4.0.529",
+    "@remotion/google-fonts": "^4.0.529",
+    "@remotion/renderer": "^4.0.529",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -27,6 +38,7 @@
     "playwright": "^1.63.0",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "remotion": "^4.0.529",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

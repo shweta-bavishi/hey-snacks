@@ -16,6 +16,7 @@ const DEMO_FLAVOURS: Flavour[] = [
     inStock: false,
     line: "Aankh se paani, mooh se maza.",
     desc: "Fiery peri peri, hand-tossed.",
+    tasteNote: "Sharp, smoky heat that builds fast. Chilli first, roasted crunch right behind it.",
     keywords: ["peri peri", "spicy", "पटाका"],
   },
   {
@@ -30,21 +31,23 @@ const DEMO_FLAVOURS: Flavour[] = [
     inStock: false,
     line: "Thanda thanda, cool cool.",
     desc: "Rich cream cheese, mellow.",
+    tasteNote: "Mild and rich, with zero heat. Tastes buttery without a drop of dairy.",
     keywords: ["cream cheese", "malai"],
   },
   {
-    slug: "jaadu-masala",
-    name: "Jaadu Masala",
-    short: "Jaadu",
-    flavour: "Masala Magic",
-    theme: "jaadu",
+    slug: "dadi-masala",
+    name: "Dadi Masala",
+    short: "Dadi",
+    flavour: "Desi Masala",
+    theme: "dadi",
     heat: 3,
     price: 99,
     mrp: 129,
     inStock: false,
-    line: "Ek chutki jaadu.",
+    line: "Ek chutki dadi ka nuskha.",
     desc: "Classic masala, no gimmicks.",
-    keywords: ["masala", "jaadu"],
+    tasteNote: "Layered chaat-style spice: tangy, salty, with a warmth that builds slowly.",
+    keywords: ["masala", "dadi"],
   },
   {
     slug: "pudina-pehelwan",
@@ -58,6 +61,7 @@ const DEMO_FLAVOURS: Flavour[] = [
     inStock: false,
     line: "Dum hai toh aage aa.",
     desc: "Tangy mint, refreshing punch.",
+    tasteNote: "Cool, herby and tangy, with a light citrus edge. Refreshing, not sharp.",
     keywords: ["mint", "tangy", "pehelwan"],
   },
 ];
@@ -89,7 +93,7 @@ export function FlavourColumnStory() {
             flavour={flavour}
             index={i}
             total={DEMO_FLAVOURS.length}
-            onNotify={(slug) => console.log("notify", slug)}
+            onConnect={(slug) => console.log("connect", slug)}
           />
         ))}
       </div>

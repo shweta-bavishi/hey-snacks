@@ -1,0 +1,19 @@
+.stageWrap {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+}
+
+/*
+ * Overrides Pack3D's live-site sizing (height: 52vh, capped at 480px) —
+ * that cap exists so the hero pack never crowds out the hero copy next to
+ * it, which has nothing to do with what a standalone capture wants. The
+ * art is vector, so rendering it bigger costs nothing in quality.
+ */
+.large {
+  height: 86vh;
+  max-height: none;
+}

@@ -55,7 +55,7 @@
 /* ---- unselected: theme tint ---- */
 .chip[data-theme="pataka"] { background: var(--pataka-tint); }
 .chip[data-theme="malai"] { background: var(--malai-tint); }
-.chip[data-theme="jaadu"] { background: var(--jaadu-tint); }
+.chip[data-theme="dadi"] { background: var(--dadi-tint); }
 .chip[data-theme="pehelwan"] { background: var(--pehelwan-tint); }
 
 /* ---- selected: theme fill + hard shadow + lift ---- */
@@ -65,7 +65,7 @@
 }
 .chip[aria-pressed="true"][data-theme="pataka"] { background: var(--pataka); color: var(--pataka-on); }
 .chip[aria-pressed="true"][data-theme="malai"] { background: var(--malai); color: var(--malai-on); }
-.chip[aria-pressed="true"][data-theme="jaadu"] { background: var(--jaadu); color: var(--jaadu-on); }
+.chip[aria-pressed="true"][data-theme="dadi"] { background: var(--dadi); color: var(--dadi-on); }
 .chip[aria-pressed="true"][data-theme="pehelwan"] { background: var(--pehelwan); color: var(--pehelwan-on); }
 
 .chip:hover:not(:disabled) {

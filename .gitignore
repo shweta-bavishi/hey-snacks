@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scripts/capture-pack-3d.mjs output — regenerable from the real site
+# any time, not a build artifact worth committing
+/capture-output/

@@ -3,19 +3,43 @@
 import { useId, useRef, useState } from "react";
 import Link from "next/link";
 import { useTheme } from "@/components/theme/ThemeProvider";
+import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { MascotAvatar } from "@/components/mascot-avatar/MascotAvatar";
 import mascotStyles from "@/components/mascot-avatar/mascot-avatar.module.css";
-import { CommandPaletteTrigger } from "@/components/command-palette/CommandPaletteTrigger";
 import { useHeaderShrink } from "./useHeaderShrink";
 import { useFocusTrap } from "./useFocusTrap";
 import styles from "./header.module.css";
 
-const NAV_LEFT = [
+interface NavItem {
+  label: string;
+  /** "#id" jumps within the landing page; "/path" is its own route. */
+  href: string;
+}
+
+// Each link goes where its label says. Shop is a section on this page;
+// Store Locator and About Us have their own pages (src/app/(stubs)), so
+// they no longer land on an unrelated card in the proof band.
+const NAV_LEFT: NavItem[] = [
   { label: "Shop", href: "#shop" },
-  { label: "Store Locator", href: "#store-locator" },
+  { label: "Store Locator", href: "/store-locator" },
 ];
 
-const NAV_RIGHT = [{ label: "About Us", href: "#about" }];
+const NAV_RIGHT: NavItem[] = [{ label: "About Us", href: "/about" }];
+
+function NavLink({ item, className, onClick }: { item: NavItem; className: string; onClick?: () => void }) {
+  if (item.href.startsWith("/")) {
+    return (
+      <Link href={item.href} className={className} onClick={onClick}>
+        {item.label}
+      </Link>
+    );
+  }
+  return (
+    <a href={item.href} className={className} onClick={onClick}>
+      {item.label}
+    </a>
+  );
+}
 
 /**
  * The full-stop dot reads `background: var(--accent)`, not a JS-computed
@@ -45,9 +69,7 @@ export function Header() {
       <header className={styles.header} data-shrunk={shrunk}>
         <nav className={styles.navLeft} aria-label="Shop">
           {NAV_LEFT.map((item) => (
-            <a key={item.href} href={item.href} className={styles.navLink}>
-              {item.label}
-            </a>
+            <NavLink key={item.href} item={item} className={styles.navLink} />
           ))}
         </nav>
 
@@ -59,15 +81,10 @@ export function Header() {
         <div className={styles.navRight}>
           <nav aria-label="About" className={styles.navRightLinks}>
             {NAV_RIGHT.map((item) => (
-              <a key={item.href} href={item.href} className={styles.navLink}>
-                {item.label}
-              </a>
+              <NavLink key={item.href} item={item} className={styles.navLink} />
             ))}
           </nav>
-          <CommandPaletteTrigger className={styles.paletteTrigger} />
-          <a href="#cart" className={styles.cartLink}>
-            Cart<span aria-hidden="true">(0)</span>
-          </a>
+          <ThemeSwitcher className={styles.themeSwitcher} />
           <button
             type="button"
             className={styles.hamburger}
@@ -102,15 +119,13 @@ export function Header() {
             ✱
           </button>
           <nav className={styles.takeoverNav} aria-label="Main">
-            {[...NAV_LEFT, ...NAV_RIGHT, { label: "Cart (0)", href: "#cart" }].map((item) => (
-              <a
+            {[...NAV_LEFT, ...NAV_RIGHT].map((item) => (
+              <NavLink
                 key={item.href}
-                href={item.href}
+                item={item}
                 className={styles.takeoverLink}
                 onClick={() => setMenuOpen(false)}
-              >
-                {item.label}
-              </a>
+              />
             ))}
           </nav>
           <MascotAvatar flavour={activeTheme} size={88} animateIdle className={styles.takeoverMascot} />

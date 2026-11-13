@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useId, useState } from "react";
+import Link from "next/link";
 import type { Flavour } from "@/data/flavours";
 import { Input } from "@/components/input/Input";
 import { Button } from "@/components/button/Button";
@@ -10,27 +11,62 @@ import { validateEmail } from "@/components/notify-form/validation";
 import { useToast } from "@/components/toast/ToastProvider";
 import styles from "./footer.module.css";
 
-const INFO_LINKS = [
-  { label: "About", href: "#about" },
-  { label: "Store Locator", href: "#store-locator" },
-  { label: "Wholesale", href: "#wholesale" },
+interface FooterLinkItem {
+  label: string;
+  /**
+   * "#id" jumps within the page, "/path" is a route. Leave it out while a
+   * destination doesn't exist yet: the label still shows, but as plain text
+   * that goes nowhere, instead of a link that dead-ends or 404s.
+   */
+  href?: string;
+}
+
+const INFO_LINKS: FooterLinkItem[] = [
+  { label: "About", href: "/about" },
+  { label: "Store Locator", href: "/store-locator" },
   { label: "FAQ", href: "#faq" },
 ];
 
-const SUPPORT_LINKS = [
-  { label: "Contact", href: "#contact" },
-  { label: "Shipping", href: "#shipping" },
-  { label: "Returns", href: "#returns" },
-  { label: "Privacy", href: "/privacy" },
-  { label: "Terms", href: "/terms" },
+// No pages behind these yet. Add an href the day each one exists.
+const SUPPORT_LINKS: FooterLinkItem[] = [
+  { label: "Contact" },
+  { label: "Shipping" },
+  { label: "Returns" },
+  { label: "Privacy" },
+  { label: "Terms" },
 ];
 
-const SOCIALS = [
-  { name: "Instagram", glyph: "IG", href: "#instagram" },
-  { name: "TikTok", glyph: "TT", href: "#tiktok" },
-  { name: "YouTube", glyph: "YT", href: "#youtube" },
-  { name: "WhatsApp", glyph: "WA", href: "#whatsapp" },
+interface SocialItem {
+  name: string;
+  glyph: string;
+  /** Profile URL. Leave it out until the account is live. */
+  href?: string;
+}
+
+// TikTok is deliberately absent: it has been banned in India since 2020.
+const SOCIALS: SocialItem[] = [
+  { name: "Instagram", glyph: "IG" },
+  { name: "YouTube", glyph: "YT" },
+  { name: "WhatsApp", glyph: "WA" },
 ];
+
+function FooterLink({ item }: { item: FooterLinkItem }) {
+  if (!item.href) {
+    return <span className={styles.linkInert}>{item.label}</span>;
+  }
+  if (item.href.startsWith("/")) {
+    return (
+      <Link className={styles.link} href={item.href}>
+        {item.label}
+      </Link>
+    );
+  }
+  return (
+    <a className={styles.link} href={item.href}>
+      {item.label}
+    </a>
+  );
+}
 
 export interface FooterProps {
   /** Never hardcoded — comes from src/data/flavours.ts. */
@@ -63,7 +99,10 @@ export function Footer({ flavours, onSubscribe, className }: FooterProps) {
       setEmail("");
       toast({ message: "You're on the list.", tone: "success" });
     } catch {
-      toast({ message: "Us tak nahi pahunch paaya. Try again?", tone: "error" });
+      toast({
+        message: "Us tak nahi pahunch paaya. Try again?",
+        tone: "error",
+      });
     } finally {
       setPhase("idle");
     }
@@ -94,10 +133,8 @@ export function Footer({ flavours, onSubscribe, className }: FooterProps) {
             <h2 className={styles.columnHeading}>Info</h2>
             <ul className={styles.linkList}>
               {INFO_LINKS.map((item) => (
-                <li key={item.href}>
-                  <a className={styles.link} href={item.href}>
-                    {item.label}
-                  </a>
+                <li key={item.label}>
+                  <FooterLink item={item} />
                 </li>
               ))}
             </ul>
@@ -107,10 +144,8 @@ export function Footer({ flavours, onSubscribe, className }: FooterProps) {
             <h2 className={styles.columnHeading}>Support</h2>
             <ul className={styles.linkList}>
               {SUPPORT_LINKS.map((item) => (
-                <li key={item.href}>
-                  <a className={styles.link} href={item.href}>
-                    {item.label}
-                  </a>
+                <li key={item.label}>
+                  <FooterLink item={item} />
                 </li>
               ))}
             </ul>
@@ -118,8 +153,14 @@ export function Footer({ flavours, onSubscribe, className }: FooterProps) {
 
           <div className={styles.column}>
             <h2 className={styles.columnHeading}>Newsletter</h2>
-            <p className={styles.newsletterCopy}>Get the drop before everyone else.</p>
-            <form className={styles.newsletterForm} onSubmit={handleSubmit} noValidate>
+            <p className={styles.newsletterCopy}>
+              Get the drop before everyone else.
+            </p>
+            <form
+              className={styles.newsletterForm}
+              onSubmit={handleSubmit}
+              noValidate
+            >
               <Input
                 id={`${formId}-newsletter-email`}
                 type="email"
@@ -148,23 +189,44 @@ export function Footer({ flavours, onSubscribe, className }: FooterProps) {
 
         <ul className={styles.socialRow} aria-label="Follow hey.">
           {SOCIALS.map((social) => (
-            <li key={social.href}>
-              <a className={styles.socialSticker} href={social.href} aria-label={social.name}>
-                <span aria-hidden="true">{social.glyph}</span>
-              </a>
+            <li key={social.name}>
+              {social.href ? (
+                <a
+                  className={styles.socialSticker}
+                  href={social.href}
+                  aria-label={social.name}
+                >
+                  <span aria-hidden="true">{social.glyph}</span>
+                </a>
+              ) : (
+                <span className={styles.socialSticker} data-inert="true">
+                  <span aria-hidden="true">{social.glyph}</span>
+                  <span className={styles.srOnly}>{social.name}, coming soon</span>
+                </span>
+              )}
             </li>
           ))}
         </ul>
       </div>
 
-      <div className={[styles.mascotRow, mascotStyles.mascotHoverScope].join(" ")} aria-hidden="true">
+      <div
+        className={[styles.mascotRow, mascotStyles.mascotHoverScope].join(" ")}
+        aria-hidden="true"
+      >
         {flavours.map((flavour) => (
-          <MascotAvatar key={flavour.slug} flavour={flavour.theme} size={88} animateIdle />
+          <MascotAvatar
+            key={flavour.slug}
+            flavour={flavour.theme}
+            size={88}
+            animateIdle
+          />
         ))}
       </div>
 
       <div className={styles.bottomBar}>
-        <p className={styles.bottomBarText}>© hey. 2026 ✱ MADE WITH GHEE-LEVEL LOVE ✱ BIHAR → YOUR FACE</p>
+        <p className={styles.bottomBarText}>
+          © hey. 2026 ✱ MADE WITH DIL SE LOVE ✱ BIHAR → YOUR FACE
+        </p>
       </div>
     </footer>
   );

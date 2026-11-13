@@ -1,0 +1,39 @@
+.cutout {
+  display: block;
+  width: auto;
+  /* Full-body art already sits on its own baseline within the artboard —
+     no border, no background fill, no radius. It stands in the scene
+     rather than sitting in a chip. */
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ---- idle loop ----
+   Same gating contract as MascotAvatar: opt in with animateIdle, but it
+   only plays while an ancestor carrying `.mascotHoverScope` (defined in
+   mascot-avatar.module.css) is hovered or focus-within. */
+.mascotHoverScope:hover .cutout[data-idle="true"],
+.mascotHoverScope:focus-within .cutout[data-idle="true"] {
+  animation: cutoutIdle 1.8s var(--ease-spring) infinite;
+}
+
+@keyframes cutoutIdle {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  40% {
+    transform: translateY(-3px) scale(1.02);
+  }
+  60% {
+    transform: translateY(0) scale(0.99);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascotHoverScope:hover .cutout[data-idle="true"],
+  .mascotHoverScope:focus-within .cutout[data-idle="true"] {
+    animation: none;
+  }
+}

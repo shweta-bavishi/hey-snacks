@@ -11,7 +11,7 @@
 
 .avatar[data-flavour="pataka"] { background: var(--pataka-tint); }
 .avatar[data-flavour="malai"] { background: var(--malai-tint); }
-.avatar[data-flavour="jaadu"] { background: var(--jaadu-tint); }
+.avatar[data-flavour="dadi"] { background: var(--dadi-tint); }
 .avatar[data-flavour="pehelwan"] { background: var(--pehelwan-tint); }
 
 .art {

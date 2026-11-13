@@ -1,0 +1,176 @@
+.section {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-6);
+  background: var(--paper-2);
+  padding: var(--s-8) var(--s-4);
+  overflow: hidden;
+}
+
+.grain {
+  z-index: var(--z-grain);
+}
+
+.left {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.eyebrow {
+  align-self: flex-start;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-l);
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.tabList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+
+.tab {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+  text-align: left;
+  background: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  padding: var(--s-3) var(--s-4);
+  cursor: pointer;
+  font-family: var(--font-body);
+  box-shadow: none;
+  transition:
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.tab:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab[data-active] {
+  background: var(--accent);
+  color: var(--accent-on);
+  transform: translate(-3px, -3px);
+  box-shadow: var(--shadow);
+}
+
+.tab:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
+}
+
+.tabIndex {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  opacity: var(--opacity-tertiary);
+}
+
+.tab[data-active] .tabIndex {
+  opacity: var(--opacity-strong);
+}
+
+.tabName {
+  font-size: var(--fs-body-l);
+  font-weight: 700;
+}
+
+.panel {
+  margin-top: var(--s-4);
+  padding-top: var(--s-4);
+  border-top: var(--stroke) solid var(--ink);
+}
+
+.tasteNote {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-l);
+  line-height: 1.6;
+  max-width: 62ch;
+  margin: 0 0 var(--s-3);
+}
+
+.ingredients {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  line-height: 1.5;
+  max-width: 62ch;
+  opacity: var(--opacity-strong);
+  margin: 0 0 var(--s-4);
+}
+
+.ingredientsLabel {
+  font-weight: 700;
+  opacity: 1;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.mrp {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  text-decoration: line-through;
+  opacity: var(--opacity-secondary);
+}
+
+.price {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+}
+
+.right {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* No width override here on purpose — Pack3D sizes itself from its own
+   aspect-ratio + height (see pack3d.module.css), the same as Hero's
+   .packStage. Forcing width:100% stretched the box wider than its
+   height implied, so the JS-measured --pack-w/--pack-h stopped matching
+   the 300:420 art and the faces no longer closed at the corners. */
+.pack {
+  max-width: 100%;
+}
+
+@media (min-width: 900px) {
+  .section {
+    grid-template-columns: 55fr 45fr;
+    align-items: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition: none;
+  }
+  .tab:hover,
+  .tab[data-active] {
+    transform: none;
+  }
+}

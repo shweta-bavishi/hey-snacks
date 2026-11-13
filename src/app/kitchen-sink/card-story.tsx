@@ -27,9 +27,9 @@ export function CardStory() {
           <strong>Pataka shadow, tilted -2deg</strong>
           <p>A product card casting its own flavour shadow instead of ink.</p>
         </Card>
-        <Card elevation="raised" shadowColor="jaadu">
-          <strong>Jaadu shadow</strong>
-          <p>Comic panel or proof card in the jaadu section.</p>
+        <Card elevation="raised" shadowColor="dadi">
+          <strong>Dadi shadow</strong>
+          <p>Comic panel or proof card in the dadi section.</p>
         </Card>
       </div>
 

@@ -5,7 +5,6 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { DEFAULT_THEME, themeInitScript } from "@/components/theme/theme-script";
 import { Grain } from "@/components/grain/Grain";
 import { ToastProvider } from "@/components/toast/ToastProvider";
-import { CommandPaletteProvider } from "@/components/command-palette/CommandPaletteProvider";
 
 // Variable names are distinct from the --font-* tokens in tokens.css
 // (which layer in the fallback stacks) so cascade order between the
@@ -36,13 +35,17 @@ const fontMono = Space_Mono({
 
 export const metadata: Metadata = {
   title: "hey.",
-  description: "Roasted in Bihar. Ruined for anything else.",
+  description: "Hawa nahi, protein hai. Roasted makhana with almonds, cashews, peanuts and seeds.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    // suppressHydrationWarning: themeInitScript below sets data-theme from
+    // the visitor's saved pick before React hydrates, so <html> legitimately
+    // differs from the server render. Applies to this element only.
     <html
       lang="en"
+      suppressHydrationWarning
       data-theme={DEFAULT_THEME}
       data-night="false"
       className={`${fontBody.variable} ${fontDisplay.variable} ${fontChunky.variable} ${fontMono.variable} h-full antialiased`}
@@ -57,9 +60,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <div id="app-root" className="min-h-full flex flex-col">
           <Grain />
           <ThemeProvider>
-            <ToastProvider>
-              <CommandPaletteProvider>{children}</CommandPaletteProvider>
-            </ToastProvider>
+            <ToastProvider>{children}</ToastProvider>
           </ThemeProvider>
         </div>
       </body>

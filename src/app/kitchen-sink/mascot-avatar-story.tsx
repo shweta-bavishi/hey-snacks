@@ -1,7 +1,7 @@
 import { MascotAvatar, MascotFlavour, MascotSize } from "@/components/mascot-avatar/MascotAvatar";
 import styles from "@/components/mascot-avatar/mascot-avatar.module.css";
 
-const FLAVOURS: MascotFlavour[] = ["pataka", "malai", "jaadu", "pehelwan"];
+const FLAVOURS: MascotFlavour[] = ["pataka", "malai", "dadi", "pehelwan"];
 const SIZES: MascotSize[] = [20, 32, 56, 88];
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -31,8 +31,9 @@ export function MascotAvatarStory() {
           Mascot Avatar
         </p>
         <p style={{ fontFamily: "var(--font-body)", fontSize: "var(--fs-body)", color: "var(--ink)", maxWidth: "62ch" }}>
-          Circular cropped mascot. One master illustration per flavour, reframed per size (head-only at 20/32px,
-          head-and-shoulders at 56/88px) via CSS zoom + pan, not four separate exports.
+          Circular cropped mascot. A purpose-drawn bust per flavour/expression, already framed head-and-shoulders,
+          with a light near-1:1 crop trimming its own margin per size — see MascotCutout for the full-body
+          counterpart used when a mascot stands in a scene instead of a chip.
         </p>
       </div>
 
@@ -52,7 +53,7 @@ export function MascotAvatarStory() {
       </Row>
 
       <Row label="Meaningful alt — sole identifier, e.g. notify-modal corner">
-        <MascotAvatar flavour="jaadu" size={88} alt="Jaadu, the Masala Magic mascot" />
+        <MascotAvatar flavour="dadi" size={88} alt="Dadi, the Desi Masala mascot" />
       </Row>
 
       <Row label="Idle loop, armed but only plays on ancestor hover/focus (hover this row)">

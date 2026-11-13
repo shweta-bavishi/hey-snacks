@@ -6,7 +6,7 @@ import { Chip, ChipGroup, ChipTheme } from "@/components/chip/Chip";
 const FLAVOURS: { theme: ChipTheme; short: string }[] = [
   { theme: "pataka", short: "Pataka" },
   { theme: "malai", short: "Malai" },
-  { theme: "jaadu", short: "Jaadu" },
+  { theme: "dadi", short: "Dadi" },
   { theme: "pehelwan", short: "Pehelwan" },
 ];
 
@@ -55,8 +55,8 @@ function NotifyFormDemo() {
 }
 
 function PollDemo() {
-  const [selected, setSelected] = useState<ChipTheme | null>("jaadu");
-  const votes: Record<ChipTheme, number> = { pataka: 41, malai: 18, jaadu: 27, pehelwan: 14 };
+  const [selected, setSelected] = useState<ChipTheme | null>("dadi");
+  const votes: Record<ChipTheme, number> = { pataka: 41, malai: 18, dadi: 27, pehelwan: 14 };
 
   return (
     <ChipGroup label="Design our next flavour poll">
@@ -106,8 +106,8 @@ export function ChipStory() {
         <Chip theme="pataka" selected={false} disabled>
           pataka
         </Chip>
-        <Chip theme="jaadu" selected disabled>
-          jaadu
+        <Chip theme="dadi" selected disabled>
+          dadi
         </Chip>
       </Row>
 

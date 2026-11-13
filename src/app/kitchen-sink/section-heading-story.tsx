@@ -46,7 +46,7 @@ export function SectionHeadingStory() {
 
       <Row label="Misregister (default --rani offset)">
         <SectionHeading align="center" level={2} misregister swoosh>
-          Roasted in Bihar
+          Roasted right, snacked light
         </SectionHeading>
       </Row>
 

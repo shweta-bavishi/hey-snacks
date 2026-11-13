@@ -13,7 +13,7 @@ import {
 import { Grain } from "@/components/grain/Grain";
 import styles from "./chip.module.css";
 
-export type ChipTheme = "pataka" | "malai" | "jaadu" | "pehelwan";
+export type ChipTheme = "pataka" | "malai" | "dadi" | "pehelwan";
 
 type BaseProps = {
   /** Flavour identity. Colours the chip regardless of the page's active --accent. */

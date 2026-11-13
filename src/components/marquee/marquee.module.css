@@ -3,7 +3,7 @@
   overflow: hidden;
   display: flex;
   align-items: center;
-  height: 44px;
+  height: var(--marquee-h);
   border-bottom: var(--stroke) solid var(--ink);
   color: var(--ink);
   font-family: var(--font-chunky);

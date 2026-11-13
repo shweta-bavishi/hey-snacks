@@ -66,8 +66,8 @@ export function PillStory() {
         <div data-theme="pataka" style={{ padding: "var(--s-4)", background: "var(--accent)" }}>
           <Pill variant="action">Pataka</Pill>
         </div>
-        <div data-theme="jaadu" style={{ padding: "var(--s-4)", background: "var(--accent)" }}>
-          <Pill variant="action">Jaadu</Pill>
+        <div data-theme="dadi" style={{ padding: "var(--s-4)", background: "var(--accent)" }}>
+          <Pill variant="action">Dadi</Pill>
         </div>
       </Row>
     </div>

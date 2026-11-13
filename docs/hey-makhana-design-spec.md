@@ -42,7 +42,7 @@ The equivalent cultural well for an Indian makhana brand is deep and almost unto
   - Devanagari used as *graphic texture* alongside Latin, not as translation. e.g. a ribbon reading `कुरकुरा` behind an English headline.
   - Punctuation as personality: `✱`, `→`, `//`, `!!`
 - **Sample lines:**
-  - Hero tagline: `Roasted in Bihar. Ruined for anything else.`
+  - Hero tagline: `Roasted right, snacked light.`
   - Ingredient section: `Nothing you can't pronounce. Everything you can't stop eating.`
   - Sold-out state: `Sab khatam. Line mein lag jao.`
   - Footer signoff: `made with ghee-level love ✱ hey. 2026`
@@ -69,7 +69,7 @@ Each flavour owns a **primary**, a **shadow** (used for the hard offset drop-sha
 |---|---|---|---|---|
 | **Pataka** — Peri Peri | `#EF3E2F` Chilli Red | `#8C1A12` | `#FFE3DE` | `--ink` (4.84:1 ✓ AA) |
 | **Malai** — Cream Cheese | `#FFC93C` Butter Yellow | `#C4820A` | `#FFF3D6` | `--ink` (12.24:1 ✓ AAA) |
-| **Jaadu** — Masala Magic | `#6B2FD6` Jamun Purple | `#3D137F` | `#EBE1FF` | `--paper` (6.63:1 ✓ AA) |
+| **Jaadu** — Desi Masala | `#B84A1F` Kulhad Terracotta | `#6E2A0E` | `#FBE0D2` | `--paper` (~4.9:1 ✓ AA) |
 | **Pehelwan** — Tangy Mint | `#3FBF6F` Pudina Green | `#1B7442` | `#DDF6E6` | `--ink` (7.96:1 ✓ AAA) |
 
 ### 3.3 Supporting accents (used sparingly, for stickers, ribbons, marquees)
@@ -134,7 +134,7 @@ Character-led, like OffLimits, but rooted in Indian archetypes. Each mascot is d
 |---|---|---|---|---|---|
 | 1 | **Pataka Peri Peri** | **Pataka** | A lit firecracker wearing sunglasses | Loud, hype-man, permanently mid-explosion. Speaks in caps. `"AAG LAGA DI!"` | Fuse burning, arms up, sparks flying |
 | 2 | **Malai Mood** (Cream Cheese) | **Malai** | A sleepy buffalo in a shawl | Soft, unbothered, comfort-core. Speaks in lowercase, drags vowels. `"soooo creamy... anyway."` | Reclining, eyes half-shut, chai in hand |
-| 3 | **Jaadu Masala** (Masala Magic) | **Jaadu** | A street magician / madari with a purple turban | Theatrical, cryptic, over-promises. `"Ek chutki masala ka mol tum kya jaano..."` | Mid-flourish, spices swirling from a cupped hand |
+| 3 | **Jaadu Masala** (Desi Masala) | **Jaadu** | A street magician / madari with a purple turban | Theatrical, cryptic, over-promises. `"Ek chutki masala ka mol tum kya jaano..."` | Mid-flourish, spices swirling from a cupped hand |
 | 4 | **Pudina Pehelwan** (Tangy Mint) | **Pehelwan** | A moustachioed akhara wrestler made of mint | Cocky, fresh, challenges you constantly. `"Taazgi ka dangal. Aa jao."` | Flexing, mint leaves for biceps |
 
 **Consistency rules for the illustrator / Claude Design:**
@@ -189,7 +189,7 @@ This is the money shot. Reference: OffLimits' looping product video, but done as
 - Pack sits centre, occupying ~52vh height.
 - Bottom-left overlay block:
   - Eyebrow: `VEGAN ✱ GLUTEN-FREE ✱ ROASTED, NOT FRIED` (Space Mono label)
-  - Tagline: `Roasted in Bihar. Ruined for anything else.` (Hind, `--fs-body-l`)
+  - Tagline: `Roasted right, snacked light.` (Hind, `--fs-body-l`)
   - Flavour name: `PATAKA PERI PERI` (Rozha One, `--fs-mega`, 2-line break, tight leading, 3px `--rani` mis-registration shadow)
   - CTA: **Notify Me** button (see 7.8)
 - Bottom-right: rotation scrub indicator — a thin arc with a dot, Space Mono `360°` label.

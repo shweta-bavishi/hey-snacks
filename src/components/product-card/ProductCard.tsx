@@ -38,13 +38,32 @@ function makeTicketNumber() {
 export interface ProductCardProps {
   flavour: Flavour;
   packImageSrc: string;
+  /** DOM id for the card, so a link elsewhere (footer, flavour columns) can jump straight to it. */
+  id?: string;
+  /**
+   * Pre-launch availability, e.g. "Drops 15 DEC". When set, an out-of-stock
+   * card wears a "coming soon" stamp with this text instead of SOLD OUT,
+   * because a product that has never been sold hasn't sold out.
+   */
+  dropLabel?: string;
+  /** Primary button text. Defaults to "Notify Me". */
+  ctaLabel?: string;
   onNotify?: (flavour: Flavour) => Promise<void> | void;
   /** Skeleton state, matching the card's exact footprint so there's no layout shift. */
   loading?: boolean;
   className?: string;
 }
 
-export function ProductCard({ flavour, packImageSrc, onNotify, loading = false, className }: ProductCardProps) {
+export function ProductCard({
+  flavour,
+  packImageSrc,
+  id,
+  dropLabel,
+  ctaLabel = "Notify Me",
+  onNotify,
+  loading = false,
+  className,
+}: ProductCardProps) {
   const [stored, setStored] = useState<StoredNotifyState | null>(() => readStored(flavour.slug));
   const [pending, setPending] = useState(false);
   // Flipped on load if persisted — set inside the same lazy initializer pass
@@ -79,6 +98,7 @@ export function ProductCard({ flavour, packImageSrc, onNotify, loading = false, 
 
   return (
     <div
+      id={id}
       className={[styles.root, stampHoverGroup, className].filter(Boolean).join(" ")}
       data-theme={flavour.theme}
       data-ready={ready ? "true" : undefined}
@@ -88,7 +108,14 @@ export function ProductCard({ flavour, packImageSrc, onNotify, loading = false, 
           <div className={styles.face} aria-hidden={isFlipped || undefined}>
             <div className={styles.imageArea} style={{ background: `var(--${flavour.theme}-tint)` }}>
               <img src={packImageSrc} alt="" className={styles.pack} />
-              {!flavour.inStock && <Stamp variant="sold-out" className={styles.stamp} />}
+              {!flavour.inStock &&
+                (dropLabel ? (
+                  <Stamp variant="coming-soon" className={styles.stamp}>
+                    {dropLabel}
+                  </Stamp>
+                ) : (
+                  <Stamp variant="sold-out" className={styles.stamp} />
+                ))}
               <MascotAvatar flavour={flavour.theme} expression="happy" size={56} className={styles.mascotPeek} />
             </div>
             <div className={styles.body}>
@@ -106,7 +133,7 @@ export function ProductCard({ flavour, packImageSrc, onNotify, loading = false, 
                 tabIndex={isFlipped ? -1 : undefined}
                 aria-hidden={isFlipped || undefined}
               >
-                Notify Me
+                {ctaLabel}
               </Button>
             </div>
           </div>

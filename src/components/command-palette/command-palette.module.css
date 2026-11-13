@@ -169,7 +169,7 @@
 
 .row[data-tone="pataka"] { --tone: var(--pataka); --tone-on: var(--pataka-on); }
 .row[data-tone="malai"] { --tone: var(--malai); --tone-on: var(--malai-on); }
-.row[data-tone="jaadu"] { --tone: var(--jaadu); --tone-on: var(--jaadu-on); }
+.row[data-tone="dadi"] { --tone: var(--dadi); --tone-on: var(--dadi-on); }
 .row[data-tone="pehelwan"] { --tone: var(--pehelwan); --tone-on: var(--pehelwan-on); }
 .row[data-tone="marigold"] { --tone: var(--marigold); --tone-on: var(--marigold-on); }
 .row[data-tone="rani"] { --tone: var(--rani); --tone-on: var(--rani-on); }
@@ -255,7 +255,7 @@
 
 .successPanel[data-tone="pataka"] { --tone: var(--pataka); --tone-on: var(--pataka-on); }
 .successPanel[data-tone="malai"] { --tone: var(--malai); --tone-on: var(--malai-on); }
-.successPanel[data-tone="jaadu"] { --tone: var(--jaadu); --tone-on: var(--jaadu-on); }
+.successPanel[data-tone="dadi"] { --tone: var(--dadi); --tone-on: var(--dadi-on); }
 .successPanel[data-tone="pehelwan"] { --tone: var(--pehelwan); --tone-on: var(--pehelwan-on); }
 
 .successGlyph {

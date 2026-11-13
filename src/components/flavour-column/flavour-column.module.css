@@ -5,7 +5,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  height: 78vh;
+  /* No fixed height: the column stretches to the row FlavourGrid gives it,
+     which fills the rest of the screen under the section heading. */
   min-width: 0;
   overflow: hidden;
   background: var(--accent);
@@ -16,7 +17,9 @@
   border-right: none;
 }
 .column.expanded {
-  flex: 1.7 1 0;
+  flex-grow: calc(var(--total, 4) - 1);
+  flex-shrink: 1;
+  flex-basis: 0;
   border-left: var(--stroke-heavy) solid var(--ink);
   border-right: var(--stroke-heavy) solid var(--ink);
   z-index: 1;
@@ -48,10 +51,11 @@
 
 .mascotWrap {
   margin-top: auto;
-  transition: transform var(--dur-flex) var(--ease-spring);
+  transition: transform var(--dur-flex) var(--ease-spring), opacity var(--dur-base) var(--ease-out);
 }
 .expanded .mascotWrap {
   transform: scale(1.1);
+  opacity: 0;
 }
 
 .name {
@@ -59,6 +63,10 @@
   font-size: var(--fs-h2);
   transform: rotate(-4deg);
   line-height: 1;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.expanded .name {
+  opacity: 0;
 }
 
 .descriptor {
@@ -67,10 +75,18 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   opacity: 0.85;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.expanded .descriptor {
+  opacity: 0;
 }
 
 .heat {
   margin-top: var(--s-1);
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.expanded .heat {
+  opacity: 0;
 }
 
 .notify {
@@ -123,6 +139,34 @@
   box-shadow: var(--shadow), 0 0 0 4px var(--accent), 0 0 0 8px var(--indigo);
 }
 
+.comicWrap {
+  position: absolute;
+  inset: var(--s-3) var(--s-2) var(--s-7);
+  z-index: 3;
+  /* Size container, so the panel below can fit whichever runs out first,
+     the column's width or its height, on short laptop screens too. */
+  container-type: size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(var(--s-3));
+  pointer-events: none;
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-spring);
+}
+.expanded .comicWrap {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Largest 4:3 panel that fits the wrap in both directions. width:100% alone
+   overflowed (and got clipped) whenever the column was wide but short. */
+.comicPanel {
+  width: min(100cqw, 100cqh * 4 / 3);
+  max-width: none;
+}
+
 .grain {
   border-radius: inherit;
 }
@@ -159,24 +203,45 @@
   }
 }
 
-@media (max-width: 900px) {
-  .column {
-    flex: 0 0 88%;
-    scroll-snap-align: start;
-    height: 70vh;
-  }
+/* Phone / small tablet: FlavourGrid lays the columns out as a 2 x 2 grid of
+   tiles. No hover-expand here: a touch has no hover, and the comic panel
+   doesn't fit a half-width tile, so a tile always shows its mascot, name,
+   heat and button. Tapping the tile jumps to the flavour's shop card. */
+@media (max-width: 899px) {
+  .column,
   .column.expanded {
-    flex: 0 0 88%;
-    border-width: var(--stroke);
+    flex: none;
+    border-left: none;
+    border-right: var(--stroke) solid var(--ink);
+    border-bottom: var(--stroke) solid var(--ink);
   }
-  .expanded .mascotWrap {
+  .column:nth-child(2n),
+  .column:nth-child(2n).expanded {
+    border-right: none;
+  }
+  .column:nth-last-child(-n + 2) {
+    border-bottom: none;
+  }
+  .hit {
+    padding-bottom: var(--s-9);
+  }
+  .expanded .mascotWrap,
+  .expanded .name,
+  .expanded .descriptor,
+  .expanded .heat {
     transform: none;
+    opacity: 1;
+  }
+  .comicWrap {
+    display: none;
   }
   .notify,
   .expanded .notify {
     transform: translateY(0);
     opacity: 1;
     pointer-events: auto;
+    font-size: var(--fs-label);
+    padding: var(--s-2) var(--s-3);
   }
 }
 
@@ -205,5 +270,12 @@
   }
   .puffSlot {
     display: none;
+  }
+  .comicWrap {
+    transition: opacity var(--dur-fast) var(--ease-out);
+    transform: none;
+  }
+  .expanded .comicWrap {
+    transform: none;
   }
 }

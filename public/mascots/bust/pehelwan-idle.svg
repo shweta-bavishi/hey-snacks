@@ -1,0 +1,51 @@
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="mx-ht-grn-a" width="17" height="17" patternUnits="userSpaceOnUse"><circle cx="8.5" cy="8.5" r="6.2" fill="#1B7442"></circle></pattern>
+    <pattern id="mx-ht-grn-b" width="17" height="17" patternUnits="userSpaceOnUse"><circle cx="8.5" cy="8.5" r="3" fill="#1B7442"></circle></pattern>
+    <clipPath id="mx-clip-pehelwan"><path d="M2020 520 L2140 520 L2156 700 L2148 800 L2012 800 L2004 700 Z"></path></clipPath>
+    <g id="pw-leg">
+        <path d="M2078 752 L1996 752 L1934 1030 L2022 1030 Z" fill="#3FBF6F"></path>
+        <path d="M1918 1030 L2026 1030 L2026 1058 L1910 1058 Z" fill="#1B7442"></path>
+      </g>
+    <g id="pw-torso">
+        <path d="M2020 520 L2140 520 L2156 700 L2148 800 L2012 800 L2004 700 Z" fill="#3FBF6F"></path>
+        <g clip-path="url(#mx-clip-pehelwan)" stroke="none">
+          <path d="M2092 520 L2156 520 L2156 800 L2088 800 Z" fill="url(#mx-ht-grn-b)"></path>
+          <path d="M2118 520 L2156 520 L2156 800 L2114 800 Z" fill="url(#mx-ht-grn-a)"></path>
+        </g>
+        <g stroke="#14110F" fill="none">
+          <path d="M2020 556 C 2046 600 2070 602 2078 568"></path>
+          <path d="M2140 556 C 2114 600 2090 602 2082 568"></path>
+          <path d="M2034 660 L2062 660"></path>
+          <path d="M2098 660 L2126 660"></path>
+          <path d="M2034 702 L2062 702"></path>
+          <path d="M2098 702 L2126 702"></path>
+        </g>
+        <path d="M2026 762 L2134 762 L2116 828 L2080 806 L2044 828 Z" fill="#FFF8EE"></path>
+      </g>
+    <g id="pw-head">
+        <path d="M2048 506 L2112 506 L2116 562 L2044 562 Z" fill="#FFF8EE"></path>
+        <path d="M2038 370 L2122 370 L2130 450 L2104 508 L2056 508 L2030 450 Z" fill="#FFF8EE"></path>
+        <path d="M2030 378 L2034 340 L2080 322 L2126 340 L2130 378 Z" fill="#14110F"></path>
+      </g>
+    <g id="pw-eyes-blink" fill="#14110F" stroke="none">
+        <path d="M2042 386 L2078 396 L2074 408 L2040 400 Z"></path>
+        <path d="M2118 392 L2086 400 L2090 412 L2120 404 Z"></path>
+        <path d="M2042 416 L2072 416 L2072 428 L2042 428 Z"></path>
+        <path d="M2090 416 L2120 416 L2120 428 L2090 428 Z"></path>
+      </g>
+    <g id="pw-stache">
+        <path d="M2016 452 C 2032 492 2058 498 2080 482 C 2102 498 2128 492 2144 452 C 2158 490 2122 528 2080 510 C 2038 528 2002 490 2016 452 Z" fill="#14110F"></path>
+      </g>
+  </defs>
+  <g id="bust-pehelwan-idle" stroke="#14110F" stroke-width="0.9375" stroke-linejoin="miter" fill="none" transform="translate(-6144,-930) scale(3.2)">
+        <g transform="rotate(1.6 2080 900)">
+          <use href="#pw-leg"></use>
+          <use href="#pw-leg" transform="translate(4160,0) scale(-1,1)"></use>
+          <use href="#pw-torso"></use>
+          <use href="#pw-head"></use>
+          <use href="#pw-eyes-blink"></use>
+          <use href="#pw-stache"></use>
+        </g>
+      </g>
+</svg>

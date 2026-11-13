@@ -95,6 +95,18 @@
   border-radius: var(--radius);
 }
 
+/* A footer item with no destination yet: same type, dimmed, not a link,
+   no hover underline, nothing to click. */
+.linkInert {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--paper);
+  opacity: var(--opacity-secondary);
+  border-bottom: var(--stroke) solid transparent;
+  width: fit-content;
+  cursor: default;
+}
+
 /* ---- newsletter ---- */
 .newsletterCopy {
   font-family: var(--font-body);
@@ -160,6 +172,27 @@
 .socialSticker:focus-visible {
   outline: none;
   box-shadow: 0 0 0 4px var(--ink), 0 0 0 8px var(--paper);
+}
+.socialSticker[data-inert="true"] {
+  opacity: var(--opacity-secondary);
+  cursor: default;
+}
+.socialSticker[data-inert="true"]:hover {
+  background: transparent;
+  border-color: var(--paper);
+  color: var(--paper);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ---- mascots, half-cropped along the bottom edge ---- */

@@ -1,0 +1,101 @@
+.root {
+  position: relative;
+  display: inline-flex;
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-1) var(--s-3);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.trigger:hover {
+  background: var(--accent-tint);
+}
+
+.trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
+}
+
+.triggerLabel {
+  line-height: 1;
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  border: 2px solid var(--ink);
+  border-radius: var(--radius-pill);
+}
+
+.swatch[data-tone="pataka"] { background: var(--pataka); }
+.swatch[data-tone="malai"] { background: var(--malai); }
+.swatch[data-tone="dadi"] { background: var(--dadi); }
+.swatch[data-tone="pehelwan"] { background: var(--pehelwan); }
+
+.menu {
+  position: absolute;
+  top: calc(100% + var(--s-2));
+  right: 0;
+  z-index: var(--z-header);
+  display: flex;
+  flex-direction: column;
+  min-width: 168px;
+  margin: 0;
+  padding: var(--s-2);
+  list-style: none;
+  background: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  width: 100%;
+  padding: var(--s-2) var(--s-2);
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--fs-body);
+  text-align: left;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--accent-tint);
+}
+
+.option[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--accent-on);
+}
+
+.option:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 6px var(--indigo);
+}
+
+@media (max-width: 640px) {
+  .triggerLabel {
+    display: none;
+  }
+}

@@ -12,6 +12,7 @@ import { MarqueeStory } from "./marquee-story";
 import { CardStory } from "./card-story";
 import { SectionHeadingStory } from "./section-heading-story";
 import { MascotAvatarStory } from "./mascot-avatar-story";
+import { MascotCutoutStory } from "./mascot-cutout-story";
 import { SpeechBubbleStory } from "./speech-bubble-story";
 import { HeatMeterStory } from "./heat-meter-story";
 import { ModalStory } from "./modal-story";
@@ -24,6 +25,14 @@ import { CommandPaletteStory } from "./command-palette-story";
 import { ScrollRevealStory } from "./scroll-reveal-story";
 import { FooterStory } from "./footer-story";
 import { JarStoryStory } from "./jar-story-story";
+import { HeroStory } from "./hero-story";
+import { ComicIntroStory } from "./comic-intro-story";
+import { FlavourGridStory } from "./flavour-grid-story";
+import { ProofBandStory } from "./proof-band-story";
+import { ShopStory } from "./shop-story";
+import { FaqStory } from "./faq-story";
+import { NotifyModalProvider } from "@/components/notify-form/NotifyModalProvider";
+import { ConnectModalProvider } from "@/components/connect-form/ConnectModalProvider";
 
 export default function KitchenSinkPage() {
   return (
@@ -42,6 +51,7 @@ export default function KitchenSinkPage() {
       <CardStory />
       <SectionHeadingStory />
       <MascotAvatarStory />
+      <MascotCutoutStory />
       <SpeechBubbleStory />
       <ComicPanelStory />
       <HeatMeterStory />
@@ -53,6 +63,18 @@ export default function KitchenSinkPage() {
       <CommandPaletteStory />
       <ScrollRevealStory />
       <JarStoryStory />
+      {/* New Phase 2-5 landing-page sections all resolve Notify Me through
+          the shared modal, so they need a provider in scope here too. */}
+      <NotifyModalProvider>
+        <ConnectModalProvider>
+          <HeroStory />
+          <ComicIntroStory />
+          <FlavourGridStory />
+          <ProofBandStory />
+          <ShopStory />
+        </ConnectModalProvider>
+      </NotifyModalProvider>
+      <FaqStory />
       <FooterStory />
     </main>
   );

@@ -6,11 +6,39 @@
     --pataka:#EF3E2F; --pataka-sh:#8C1A12; --pataka-tint:#FFE3DE; --pataka-on:var(--ink);
     /* ---- flavour: malai (cream cheese) ---- */
     --malai:#FFC93C;  --malai-sh:#C4820A;  --malai-tint:#FFF3D6; --malai-on:var(--ink);
-    /* ---- flavour: jaadu (masala magic) ---- */
-    --jaadu:#6B2FD6;  --jaadu-sh:#3D137F;  --jaadu-tint:#EBE1FF; --jaadu-on:var(--paper);
+    /* ---- flavour: dadi (desi masala) ---- */
+    --dadi:#B84A1F;  --dadi-sh:#6E2A0E;  --dadi-tint:#FBE0D2; --dadi-on:var(--paper);
     /* ---- flavour: pehelwan (tangy mint) ---- */
     --pehelwan:#3FBF6F; --pehelwan-sh:#1B7442; --pehelwan-tint:#DDF6E6; --pehelwan-on:var(--ink);
   
+    /* ---- pantry: the ingredient inks used by the jar-story illustrations ----
+       Every one is mixed from the flavour palette above, so the jar never
+       introduces a hue the rest of the page doesn't already own. Two tones
+       per ingredient (flat base + flat shade plane) is what lets a nut read
+       as a drawn object instead of a silhouette — there is still no gradient
+       anywhere, just hard-edged colour planes. */
+    --nut-almond:color-mix(in srgb, var(--malai-sh) 55%, var(--pataka-sh) 45%);
+    --nut-almond-sh:color-mix(in srgb, var(--pataka-sh) 65%, var(--ink) 35%);
+    --nut-almond-hi:color-mix(in srgb, var(--marigold) 60%, var(--paper) 40%);
+    --nut-cashew:color-mix(in srgb, var(--paper-2) 62%, var(--malai-sh) 38%);
+    --nut-cashew-sh:color-mix(in srgb, var(--malai-sh) 72%, var(--pataka-sh) 28%);
+    --nut-peanut:color-mix(in srgb, color-mix(in srgb, var(--paper-2) 60%, var(--malai-sh) 40%) 86%, var(--ink) 14%);
+    --nut-peanut-sh:color-mix(in srgb, var(--nut-peanut) 66%, var(--ink) 34%);
+    --seed-makhana:color-mix(in srgb, var(--paper) 82%, var(--malai-sh) 18%);
+    --seed-makhana-sh:color-mix(in srgb, var(--paper-2) 62%, var(--malai-sh) 38%);
+    --seed-makhana-hilum:var(--malai-sh);
+    --seed-pumpkin:color-mix(in srgb, var(--pehelwan-sh) 48%, var(--malai) 52%);
+    --seed-pumpkin-sh:color-mix(in srgb, var(--pehelwan-sh) 70%, var(--ink) 30%);
+    --seed-sunflower:color-mix(in srgb, var(--ink) 72%, var(--paper-2) 28%);
+    --seed-sunflower-hi:var(--paper-2);
+    --masala-turmeric:var(--malai-sh);
+    --masala-chilli:var(--pataka-sh);
+    --masala-mirch:var(--marigold);
+    /* Deliberately pinned to pataka rather than --accent: the jar's *tint*
+       follows the active flavour, but a chilli flake that turns terracotta on
+       the dadi theme stops reading as a chilli flake. */
+    --masala-lal:var(--pataka);
+
     /* ---- accents ---- */
     --marigold:#FF9F1C; --rani:#FF2E88; --peacock:#0FA3A3; --indigo:#2D3EA8;
     /* readable text colour when one of the accents above is used as a fill
@@ -32,6 +60,18 @@
     --shadow-lg:9px 9px 0 var(--ink);
     --shadow-xl:12px 12px 0 var(--ink);
   
+    /* ---- layout: chrome heights + full-screen sections ----
+       The header rests at --header-h and shrinks to --header-h-shrunk once
+       the page is scrolled; the announcement marquee sits above it only at
+       the very top. A section fills the screen *below* the shrunk header
+       and grows past it when its content is taller. Never a fixed height,
+       never an inner scrollbar. svh (small viewport) instead of dvh so a
+       phone's URL bar showing/hiding never reflows the page mid-scroll;
+       the vh line before it is the fallback for browsers without svh. */
+    --header-h:72px; --header-h-shrunk:56px; --marquee-h:44px;
+    --section-min-h:calc(100vh - var(--header-h-shrunk));
+    --hero-min-h:calc(100vh - var(--header-h) - var(--marquee-h));
+
     /* ---- space (4px base) ---- */
     --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px;
     --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px; --s-10:128px;
@@ -70,8 +110,25 @@
     /* ---- scrim (dark overlay for modals/palettes) ---- */
     --scrim: 20 17 15; --scrim-opacity-default:0.6; --scrim-opacity-dark:0.7;
   }
+  @supports (height: 100svh){
+    :root{
+      --section-min-h:calc(100svh - var(--header-h-shrunk));
+      --hero-min-h:calc(100svh - var(--header-h) - var(--marquee-h));
+    }
+  }
+
+  /* ---- flavour themes ----
+     Two jobs, one mechanism. On <html>, data-theme is the *site* colour the
+     visitor picks in the header (logo dot, header pill, generic buttons).
+     On a product surface (hero, range, flavour column, shop card) data-theme
+     pins that product to its *own* flavour colour, so picking Dadi in the
+     header never repaints the Pataka pack terracotta. That only works if every
+     flavour has an explicit rule, including the default one: without the
+     pataka block below, a nested data-theme="pataka" matched nothing and
+     silently inherited whatever the site theme was. */
+  [data-theme="pataka"]{--accent:var(--pataka);--accent-sh:var(--pataka-sh);--accent-tint:var(--pataka-tint);--accent-on:var(--pataka-on)}
   [data-theme="malai"]{--accent:var(--malai);--accent-sh:var(--malai-sh);--accent-tint:var(--malai-tint);--accent-on:var(--malai-on)}
-  [data-theme="jaadu"]{--accent:var(--jaadu);--accent-sh:var(--jaadu-sh);--accent-tint:var(--jaadu-tint);--accent-on:var(--jaadu-on)}
+  [data-theme="dadi"]{--accent:var(--dadi);--accent-sh:var(--dadi-sh);--accent-tint:var(--dadi-tint);--accent-on:var(--dadi-on)}
   [data-theme="pehelwan"]{--accent:var(--pehelwan);--accent-sh:var(--pehelwan-sh);--accent-tint:var(--pehelwan-tint);--accent-on:var(--pehelwan-on)}
 
   /* ---- night mode: inverts ink/paper only, flavour colours untouched ---- */

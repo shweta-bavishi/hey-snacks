@@ -1,6 +1,6 @@
 export const THEME_STORAGE_KEY = "hey-theme";
 export const NIGHT_STORAGE_KEY = "hey-night";
-export const FLAVOUR_THEMES = ["pataka", "malai", "jaadu", "pehelwan"] as const;
+export const FLAVOUR_THEMES = ["pataka", "malai", "dadi", "pehelwan"] as const;
 export type FlavourTheme = (typeof FLAVOUR_THEMES)[number];
 export const DEFAULT_THEME: FlavourTheme = "pataka";
 

@@ -1,0 +1,78 @@
+<svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="mx-ht-yel-a" width="17" height="17" patternUnits="userSpaceOnUse"><circle cx="8.5" cy="8.5" r="6.2" fill="#C4820A"></circle></pattern>
+    <pattern id="mx-ht-yel-b" width="17" height="17" patternUnits="userSpaceOnUse"><circle cx="8.5" cy="8.5" r="3" fill="#C4820A"></circle></pattern>
+    <clipPath id="mx-clip-malai">
+        <path d="M614 1058 L648 880 L704 724 L800 600 L1000 600 L1096 724 L1152 880 L1186 1058 Z"></path>
+        <path d="M588 1058 L620 968 L1180 968 L1212 1058 Z"></path>
+        <path d="M762 724 L800 566 L854 502 L946 502 L1000 566 L1038 724 Z"></path>
+      </clipPath>
+    <g id="ml-horns">
+        <path d="M812 366 C 782 338 764 300 776 268 C 800 292 806 330 828 354 Z" fill="#FFC93C"></path>
+        <path d="M988 366 C 1018 338 1036 300 1024 268 C 1000 292 994 330 972 354 Z" fill="#FFC93C"></path>
+      </g>
+    <g id="ml-body">
+        <path d="M588 1058 L620 968 L1180 968 L1212 1058 Z" fill="#FFC93C"></path>
+        <path d="M614 1058 L648 880 L704 724 L800 600 L1000 600 L1096 724 L1152 880 L1186 1058 Z" fill="#FFC93C"></path>
+        <path d="M762 724 L800 566 L854 502 L946 502 L1000 566 L1038 724 Z" fill="#FFC93C"></path>
+        <g clip-path="url(#mx-clip-malai)" stroke="none">
+          <path d="M952 448 L1016 524 L1048 724 L1096 724 L1152 880 L1186 1058 L1212 1058 L940 1058 Z" fill="url(#mx-ht-yel-b)"></path>
+          <path d="M1004 500 L1048 724 L1096 724 L1152 880 L1186 1058 L1060 1058 Z" fill="url(#mx-ht-yel-a)"></path>
+          <path d="M588 1014 L1212 1014 L1212 1058 L588 1058 Z" fill="#C4820A"></path>
+          <path d="M704 724 L1096 724 L1108 768 L692 768 Z" fill="#FFF8EE"></path>
+        </g>
+        <g clip-path="url(#mx-clip-malai)">
+          <path d="M766 744 L792 580 L858 538 L900 626 L942 538 L1008 580 L1034 744 Z" fill="#FFF8EE"></path>
+        </g>
+        <g stroke="#14110F" fill="none">
+          <path d="M858 538 L900 626 L942 538"></path>
+          <path d="M792 580 L766 744"></path>
+          <path d="M1008 580 L1034 744"></path>
+          <path d="M800 600 L744 968"></path>
+          <path d="M880 600 L868 968"></path>
+          <path d="M1000 600 L1050 968"></path>
+          <path d="M800 566 L798 600"></path>
+          <path d="M1000 566 L1002 600"></path>
+          <path d="M588 1014 L1212 1014"></path>
+        </g>
+      </g>
+    <g id="ml-arm">
+        <path d="M1010 700 L1078 730 L1060 788 L994 756 Z" fill="#FFC93C"></path>
+        <path d="M1076 688 L1140 688 L1132 772 L1088 772 Z" fill="#FFF8EE"></path>
+        <path d="M1076 704 L1140 704" stroke="#14110F" fill="none"></path>
+        <path d="M1052 744 L1100 736 L1110 792 L1056 798 Z" fill="#C4820A"></path>
+        <g stroke="#14110F" fill="none">
+          <path d="M1078 740 L1084 794"></path>
+          <path d="M1088 772 L1132 772"></path>
+        </g>
+      </g>
+    <g id="ml-head">
+        <path d="M812 356 L988 356 L1004 452 L964 522 L836 522 L796 452 Z" fill="#FFC93C"></path>
+        <path d="M846 488 L954 488 L966 552 L834 552 Z" fill="#FFF8EE"></path>
+        <g fill="#14110F" stroke="none">
+          <path d="M864 508 L886 508 L886 528 L864 528 Z"></path>
+          <path d="M914 508 L936 508 L936 528 L914 528 Z"></path>
+        </g>
+      </g>
+    <g id="ml-ears">
+        <path d="M796 452 L762 462 L782 496 L806 480 Z" fill="#C4820A"></path>
+        <path d="M1004 452 L1038 462 L1018 496 L994 480 Z" fill="#C4820A"></path>
+      </g>
+    <g id="ml-eyes-happy" fill="#14110F" stroke="none">
+        <path d="M818 434 C 838 390 886 390 906 434 L886 440 C 872 414 852 414 838 440 Z"></path>
+        <path d="M894 434 C 914 390 962 390 982 434 L962 440 C 948 414 928 414 914 440 Z"></path>
+      </g>
+    <g id="ml-mouth-happy">
+        <path d="M852 524 L948 524 C 938 556 862 556 852 524 Z" fill="#14110F"></path>
+      </g>
+  </defs>
+  <g id="bust-malai-happy" stroke="#14110F" stroke-width="1.111" stroke-linejoin="miter" fill="none" transform="translate(-1918,-714) scale(2.7)">
+        <use href="#ml-horns"></use>
+        <use href="#ml-body"></use>
+        <use href="#ml-arm" transform="rotate(-26 1010 748)"></use>
+        <use href="#ml-head"></use>
+        <use href="#ml-eyes-happy"></use>
+        <use href="#ml-mouth-happy"></use>
+        <use href="#ml-ears"></use>
+      </g>
+</svg>

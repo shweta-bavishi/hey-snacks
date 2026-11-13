@@ -77,8 +77,8 @@ export function ButtonStory() {
         <div data-theme="malai" style={{ padding: "var(--s-4)", background: "var(--accent)" }}>
           <Button variant="secondary">Malai</Button>
         </div>
-        <div data-theme="jaadu" style={{ padding: "var(--s-4)", background: "var(--accent)" }}>
-          <Button variant="secondary">Jaadu</Button>
+        <div data-theme="dadi" style={{ padding: "var(--s-4)", background: "var(--accent)" }}>
+          <Button variant="secondary">Dadi</Button>
         </div>
         <div data-theme="pehelwan" style={{ padding: "var(--s-4)", background: "var(--accent)" }}>
           <Button variant="secondary">Pehelwan</Button>

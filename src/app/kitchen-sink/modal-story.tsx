@@ -35,7 +35,7 @@ function NotifyModalDemo() {
         onClose={() => setOpen(false)}
         title="Batayenge jab aayega"
         size="sm"
-        decoration={<MascotAvatar flavour="jaadu" size={56} />}
+        decoration={<MascotAvatar flavour="dadi" size={56} />}
       >
         <p>Apna email daalo, stock aate hi sabse pehle tumhe pata chalega.</p>
         <div style={{ display: "flex", gap: "var(--s-3)", marginTop: "var(--s-4)" }}>

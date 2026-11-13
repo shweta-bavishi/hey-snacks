@@ -1,9 +1,9 @@
 import { HeatMeter } from "@/components/heat-meter/HeatMeter";
 
-const THEMES: { theme: "pataka" | "malai" | "jaadu" | "pehelwan"; tint: string }[] = [
+const THEMES: { theme: "pataka" | "malai" | "dadi" | "pehelwan"; tint: string }[] = [
   { theme: "pataka", tint: "var(--pataka-tint)" },
   { theme: "malai", tint: "var(--malai-tint)" },
-  { theme: "jaadu", tint: "var(--jaadu-tint)" },
+  { theme: "dadi", tint: "var(--dadi-tint)" },
   { theme: "pehelwan", tint: "var(--pehelwan-tint)" },
 ];
 

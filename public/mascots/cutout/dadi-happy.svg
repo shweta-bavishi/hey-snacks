@@ -1,0 +1,163 @@
+<svg viewBox="0 0 1200 1600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="mx-ht-pur-a" width="17" height="17" patternUnits="userSpaceOnUse"><circle cx="8.5" cy="8.5" r="6.2" fill="#6E2A0E" /></pattern>
+      
+    <pattern id="mx-ht-pur-b" width="17" height="17" patternUnits="userSpaceOnUse"><circle cx="8.5" cy="8.5" r="3" fill="#6E2A0E" /></pattern>
+      
+    <pattern id="mx-kt-1" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="1" fill="#6E2A0E" /></pattern>
+      
+    <pattern id="mx-kt-2" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="1.6" fill="#6E2A0E" /></pattern>
+      
+    <pattern id="mx-kt-3" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2.1" fill="#6E2A0E" /></pattern>
+      
+    <pattern id="mx-kt-4" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2.6" fill="#6E2A0E" /></pattern>
+      
+    <pattern id="mx-kt-5" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="3.1" fill="#6E2A0E" /></pattern>
+      
+    <pattern id="mx-kt-6" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="3.6" fill="#6E2A0E" /></pattern>
+      
+    <pattern id="mx-kt-7" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="4" fill="#6E2A0E" /></pattern>
+      
+    <clipPath id="mx-clip-dadi"><path d="M1450 526 C 1470 510 1550 510 1570 526 L1584 600 C 1588 760 1596 900 1636 1008 L1646 1058 L1374 1058 L1384 1008 C 1424 900 1432 760 1436 600 Z" /></clipPath>
+      
+    <g id="dd-arm-hip">
+        <path d="M1414 562 L1446 570 L1440 664 L1408 656 Z" fill="#FFF8EE" />
+        <path d="M1408 656 L1440 664 L1414 742 L1384 732 Z" fill="#FFF8EE" />
+        <path d="M1424 528 L1462 522 L1450 578 L1412 566 Z" fill="#B84A1F" />
+      </g>
+      
+    <g id="dd-arm-bust-happy">
+        <path d="M1414 562 L1446 570 L1420 480 L1392 490 Z" fill="#FFF8EE" />
+        <path d="M1424 528 L1462 522 L1450 578 L1412 566 Z" fill="#B84A1F" />
+      </g>
+      
+    <g id="dd-arm-raise">
+        <path d="M1570 556 L1600 552 L1636 446 L1608 436 Z" fill="#FFF8EE" />
+        <path d="M1608 436 L1636 446 L1654 336 L1626 330 Z" fill="#FFF8EE" />
+        <path d="M1624 344 L1652 348 L1650 362 L1622 358 Z" fill="#6E2A0E" />
+        <path d="M1624 332 L1630 300 L1664 294 L1676 316 L1662 340 Z" fill="#FFF8EE" />
+        <path d="M1662 340 L1676 316 L1690 340 L1684 358 L1672 356 Z" fill="#FFF8EE" />
+        <path d="M1676 336 L1680 356" stroke="#14110F" fill="none" />
+        <path d="M1556 522 L1594 516 L1608 562 L1574 578 Z" fill="#B84A1F" />
+      </g>
+      
+    <g id="dd-arm-up">
+        <path d="M1426 540 L1454 546 L1462 432 L1434 428 Z" fill="#FFF8EE" />
+        <path d="M1434 428 L1462 432 L1458 300 L1430 298 Z" fill="#FFF8EE" />
+        <path d="M1431 314 L1459 316 L1459 330 L1431 328 Z" fill="#6E2A0E" />
+        <path d="M1424 528 L1462 522 L1458 572 L1420 566 Z" fill="#B84A1F" />
+      </g>
+      
+    <g id="dd-hand-up">
+        <path d="M1426 302 L1428 266 L1446 256 L1464 270 L1462 302 Z" fill="#FFF8EE" />
+        <g stroke="#14110F" fill="none"><path d="M1440 262 L1440 284" /><path d="M1452 262 L1452 284" /></g>
+      </g>
+      
+    <g id="dd-body">
+        <path d="M1450 526 C 1470 510 1550 510 1570 526 L1584 600 C 1588 760 1596 900 1636 1008 L1646 1058 L1374 1058 L1384 1008 C 1424 900 1432 760 1436 600 Z" fill="#B84A1F" />
+        <g clip-path="url(#mx-clip-dadi)" stroke="none">
+          <rect x="1548" y="500" width="110" height="560" fill="url(#mx-ht-pur-b)" />
+          <rect x="1592" y="500" width="70" height="560" fill="url(#mx-ht-pur-a)" />
+          <rect x="1360" y="1008" width="300" height="52" fill="#FFF8EE" />
+          <rect x="1360" y="1028" width="300" height="10" fill="#6E2A0E" />
+        </g>
+        <g stroke="#14110F" fill="none">
+          <path d="M1500 716 L1482 1008" />
+          <path d="M1518 716 L1522 1008" />
+          <path d="M1536 716 L1562 1008" />
+          <path d="M1384 1008 L1636 1008" />
+          <path d="M1438 700 C 1480 714 1540 714 1586 698" />
+        </g>
+        <path d="M1452 530 L1496 514 L1590 664 L1570 704 Z" fill="#B84A1F" />
+        <path d="M1452 530 L1470 530 L1578 690 L1570 704 Z" fill="#FFF8EE" />
+        <path d="M1570 704 L1590 664 L1602 694 L1584 716 Z" fill="#6E2A0E" />
+      </g>
+      
+    <g id="dd-head">
+        <path d="M1494 490 L1526 490 L1528 518 L1492 518 Z" fill="#FFF8EE" />
+        <circle cx="1510" cy="352" r="20" fill="#FFF8EE" />
+        <circle cx="1510" cy="352" r="20" fill="url(#mx-ht-pur-b)" stroke="none" />
+        <g stroke="#14110F" fill="none"><path d="M1496 346 C 1502 336 1518 336 1524 346" /><path d="M1494 358 C 1502 366 1518 366 1526 358" /></g>
+        <path d="M1466 388 L1554 388 L1564 448 L1540 494 L1480 494 L1456 448 Z" fill="#FFF8EE" />
+        <path d="M1454 428 L1456 396 C 1462 378 1486 368 1510 368 C 1534 368 1558 378 1564 396 L1566 428 L1556 408 C 1540 396 1524 392 1510 398 C 1496 392 1480 396 1464 408 Z" fill="#FFF8EE" />
+        <path d="M1454 428 L1456 396 C 1462 378 1486 368 1510 368 C 1534 368 1558 378 1564 396 L1566 428 L1556 408 C 1540 396 1524 392 1510 398 C 1496 392 1480 396 1464 408 Z" fill="url(#mx-ht-pur-b)" stroke="none" />
+        <g stroke="#14110F" fill="none">
+          <path d="M1510 370 C 1494 376 1474 386 1462 406" />
+          <path d="M1510 370 C 1526 376 1546 386 1558 406" />
+          <path d="M1498 372 C 1482 382 1466 398 1458 420" />
+          <path d="M1522 372 C 1538 382 1554 398 1562 420" />
+          <path d="M1510 440 L1504 460 L1514 462" />
+        </g>
+        <circle cx="1510" cy="410" r="4" fill="#B84A1F" stroke="none" />
+      </g>
+      
+    <g id="dd-eyes" fill="#14110F" stroke="none">
+        <circle cx="1487" cy="419" r="10" />
+        <circle cx="1533" cy="419" r="10" />
+        <path d="M1470 400 L1502 402 L1502 412 L1470 410 Z" />
+        <path d="M1516 400 C 1526 380 1548 378 1558 392 L1552 402 C 1544 392 1530 392 1524 406 Z" />
+      </g>
+      
+    <g id="dd-eyes-happy" fill="#14110F" stroke="none">
+        <path d="M1476 424 C 1482 408 1496 408 1502 424 L1496 426 C 1492 418 1486 418 1482 426 Z" />
+        <path d="M1520 424 C 1526 408 1540 408 1546 424 L1540 426 C 1536 418 1530 418 1526 426 Z" />
+        <path d="M1474 398 L1500 394 L1500 400 L1474 404 Z" />
+        <path d="M1546 398 L1520 394 L1520 400 L1546 404 Z" />
+      </g>
+      
+    <g id="dd-specs" fill="#14110F" stroke="none">
+        <path fill-rule="evenodd" d="M1469 440 A18 18 0 1 0 1505 440 A18 18 0 1 0 1469 440 Z M1476 440 A11 11 0 1 1 1498 440 A11 11 0 1 1 1476 440 Z M1515 440 A18 18 0 1 0 1551 440 A18 18 0 1 0 1515 440 Z M1522 440 A11 11 0 1 1 1544 440 A11 11 0 1 1 1522 440 Z" />
+        <path d="M1504 436 L1516 436 L1516 443 L1504 443 Z" />
+        <path d="M1470 434 L1456 426 L1458 420 L1472 428 Z" />
+        <path d="M1550 434 L1564 426 L1562 420 L1548 428 Z" />
+      </g>
+      
+    <g id="dd-mouth" stroke="#14110F" fill="none">
+        <path d="M1492 472 C 1502 482 1520 482 1530 468 L1534 472 C 1522 490 1500 490 1490 476 Z" fill="#14110F" stroke="none" />
+      </g>
+      
+    <g id="dd-mouth-happy">
+        <path d="M1488 466 L1532 466 C 1528 492 1492 492 1488 466 Z" fill="#14110F" />
+        <path d="M1490 466 L1530 466 L1528 474 L1492 474 Z" fill="#FFF8EE" />
+      </g>
+      
+    <g id="dd-dabba">
+        <ellipse cx="-6" cy="-82" rx="68" ry="22" fill="#FFF8EE" />
+        <ellipse cx="-6" cy="-82" rx="52" ry="13" fill="none" stroke="#14110F" />
+        <circle cx="0" cy="0" r="72" fill="#FFF8EE" />
+        <path d="M51 -51 A72 72 0 0 1 -51 51 L-42 42 A60 60 0 0 0 42 -42 Z" fill="url(#mx-ht-pur-b)" stroke="none" />
+        <circle cx="0" cy="0" r="60" fill="none" stroke="#14110F" />
+        <circle cx="0" cy="0" r="17" fill="#FFF8EE" /><circle cx="0" cy="0" r="13" fill="url(#mx-kt-1)" stroke="none" /><circle cx="38" cy="0" r="16" fill="#FFF8EE" /><circle cx="38" cy="0" r="12" fill="url(#mx-kt-2)" stroke="none" /><circle cx="19" cy="33" r="16" fill="#FFF8EE" /><circle cx="19" cy="33" r="12" fill="url(#mx-kt-3)" stroke="none" /><circle cx="-19" cy="33" r="16" fill="#FFF8EE" /><circle cx="-19" cy="33" r="12" fill="url(#mx-kt-4)" stroke="none" /><circle cx="-38" cy="0" r="16" fill="#FFF8EE" /><circle cx="-38" cy="0" r="12" fill="url(#mx-kt-5)" stroke="none" /><circle cx="-19" cy="-33" r="16" fill="#FFF8EE" /><circle cx="-19" cy="-33" r="12" fill="url(#mx-kt-6)" stroke="none" /><circle cx="19" cy="-33" r="16" fill="#FFF8EE" /><circle cx="19" cy="-33" r="12" fill="url(#mx-kt-7)" stroke="none" />
+      </g>
+      
+    <g id="dd-fingers">
+        <path d="M-64 36 L-44 28 L-30 60 L-50 70 Z" fill="#FFF8EE" />
+        <path d="M-52 40 L-40 66" stroke="#14110F" fill="none" />
+      </g>
+      
+    <g id="dd-masala" stroke="none">
+        <circle cx="1684" cy="378" r="6" fill="#6E2A0E" /><circle cx="1678" cy="400" r="4" fill="#B84A1F" /><circle cx="1690" cy="422" r="7" fill="#6E2A0E" /><circle cx="1680" cy="450" r="4" fill="#B84A1F" /><circle cx="1692" cy="476" r="5" fill="#6E2A0E" /><circle cx="1684" cy="502" r="3" fill="#6E2A0E" />
+      </g>
+      
+    <g id="dd-masala-burst" stroke="none">
+        <circle cx="1410" cy="150" r="8" fill="#6E2A0E" /><circle cx="1452" cy="112" r="6" fill="#B84A1F" /><circle cx="1500" cy="92" r="9" fill="#6E2A0E" /><circle cx="1552" cy="108" r="5" fill="#B84A1F" /><circle cx="1600" cy="132" r="8" fill="#6E2A0E" /><circle cx="1636" cy="180" r="5" fill="#B84A1F" /><circle cx="1380" cy="196" r="5" fill="#B84A1F" /><circle cx="1476" cy="64" r="4" fill="#6E2A0E" /><circle cx="1580" cy="70" r="6" fill="#6E2A0E" />
+      </g>
+
+      
+  </defs>
+  <g stroke="#14110F" stroke-width="2.069" stroke-linejoin="miter" fill="none" transform="translate(-1590,66) scale(1.45)">
+        <use href="#dd-arm-up" />
+        <use href="#dd-arm-up" transform="translate(3020,0) scale(-1,1)" />
+        <use href="#dd-body" />
+        <use href="#dd-head" />
+        <use href="#dd-eyes-happy" />
+        <use href="#dd-specs" />
+        <use href="#dd-mouth-happy" />
+        <use href="#dd-dabba" transform="translate(1510,236)" />
+        <use href="#dd-hand-up" />
+        <use href="#dd-hand-up" transform="translate(3020,0) scale(-1,1)" />
+        <use href="#dd-masala-burst" />
+      </g>
+      
+      
+</svg>

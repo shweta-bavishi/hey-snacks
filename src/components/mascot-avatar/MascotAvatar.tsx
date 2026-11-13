@@ -1,6 +1,6 @@
 import styles from "./mascot-avatar.module.css";
 
-export type MascotFlavour = "pataka" | "malai" | "jaadu" | "pehelwan";
+export type MascotFlavour = "pataka" | "malai" | "dadi" | "pehelwan";
 export type MascotSize = 20 | 32 | 56 | 88;
 export type MascotExpression = "default" | "happy" | "idle";
 
@@ -29,23 +29,20 @@ interface MascotAvatarProps {
 }
 
 /**
- * One master illustration per flavour/expression, authored at a single
- * fixed frame (a 1:1 square, mascot centred, head at the top third). Each
- * size then crops into *that same bitmap* with a different background-size
- * (zoom) and background-position (pan) — no per-size export, no four SVGs.
- * SIZE_FRAMES below is the crop table; see the CSS file for how it's
- * applied. Swap in real per-mascot values once the illustrator delivers
- * final art — these are tuned for a mascot whose head occupies roughly the
- * top 40% of the master frame.
+ * One master illustration per flavour/expression — a purpose-drawn bust
+ * (head + shoulders, 1:1 viewBox, art already fills the frame edge to
+ * edge) rather than a crop of the full-body art. Each size still renders
+ * through the same background-size (zoom) / background-position (pan)
+ * mechanism so a mascot can be nudged per size without a fifth export, but
+ * because the source is already correctly framed, every size shares one
+ * light, near-1:1 crop — just enough to trim the source's own margin,
+ * nowhere near the aggressive zoom a rescue-crop of full-body art needed.
  */
 const SIZE_FRAMES: Record<MascotSize, { zoom: number; panY: number }> = {
-  // Illegible at this size if we show anything below the neck — zoom in
-  // tight on the head only.
-  20: { zoom: 260, panY: 12 },
-  32: { zoom: 220, panY: 15 },
-  // Wider frame starts including shoulders as the canvas grows.
-  56: { zoom: 165, panY: 22 },
-  88: { zoom: 130, panY: 28 },
+  20: { zoom: 112, panY: 46 },
+  32: { zoom: 110, panY: 46 },
+  56: { zoom: 108, panY: 47 },
+  88: { zoom: 106, panY: 48 },
 };
 
 export function MascotAvatar({
@@ -57,7 +54,7 @@ export function MascotAvatar({
   className,
 }: MascotAvatarProps) {
   const frame = SIZE_FRAMES[size];
-  const src = `/mascots/${flavour}-${expression}.png`;
+  const src = `/mascots/bust/${flavour}-${expression}.svg`;
 
   return (
     <span

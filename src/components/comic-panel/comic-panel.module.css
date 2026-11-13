@@ -38,8 +38,8 @@
 .panel[data-flavour="malai"] .border {
   box-shadow: 6px 6px 0 var(--malai-sh);
 }
-.panel[data-flavour="jaadu"] .border {
-  box-shadow: 6px 6px 0 var(--jaadu-sh);
+.panel[data-flavour="dadi"] .border {
+  box-shadow: 6px 6px 0 var(--dadi-sh);
 }
 .panel[data-flavour="pehelwan"] .border {
   box-shadow: 6px 6px 0 var(--pehelwan-sh);
@@ -50,8 +50,8 @@
 .panel[data-layout="solo"][data-flavour="malai"] .border {
   box-shadow: 9px 9px 0 var(--malai-sh);
 }
-.panel[data-layout="solo"][data-flavour="jaadu"] .border {
-  box-shadow: 9px 9px 0 var(--jaadu-sh);
+.panel[data-layout="solo"][data-flavour="dadi"] .border {
+  box-shadow: 9px 9px 0 var(--dadi-sh);
 }
 .panel[data-layout="solo"][data-flavour="pehelwan"] .border {
   box-shadow: 9px 9px 0 var(--pehelwan-sh);
@@ -81,8 +81,8 @@
 .panel[data-flavour="malai"] .fill {
   background: var(--malai-tint);
 }
-.panel[data-flavour="jaadu"] .fill {
-  background: var(--jaadu-tint);
+.panel[data-flavour="dadi"] .fill {
+  background: var(--dadi-tint);
 }
 .panel[data-flavour="pehelwan"] .fill {
   background: var(--pehelwan-tint);

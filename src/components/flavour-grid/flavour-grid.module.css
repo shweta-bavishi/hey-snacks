@@ -1,0 +1,34 @@
+/* The section is at least one screen tall (.snap-section) and the column
+   row grows to fill whatever is left under the heading, on any screen
+   height, instead of a fixed 88vh that overflowed short laptops. */
+.section {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  padding: var(--s-7) 0 0;
+}
+
+.heading {
+  padding: 0 var(--s-4);
+  margin-bottom: var(--s-5);
+}
+
+.grid {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  border-top: var(--stroke) solid var(--ink);
+}
+
+/* Phone and small tablet: a 2 x 2 grid of flavour tiles that fills the
+   screen, every tile showing its mascot, name, heat and button at once.
+   Replaces the sideways carousel of 80vh colour slabs, where each flavour
+   was a near-empty block and three of the four were off screen. Rows are
+   minmax(…, auto) so they stretch to share the leftover height. */
+@media (max-width: 899px) {
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(calc(var(--s-10) * 2), auto);
+  }
+}

@@ -58,7 +58,33 @@
   font-family: var(--font-display);
   font-size: var(--fs-h3);
   line-height: 1.15;
-  padding-right: var(--s-5);
+  padding-right: var(--s-6);
+}
+
+.close {
+  position: absolute;
+  top: var(--s-3);
+  right: var(--s-3);
+  z-index: 2;
+  width: var(--s-6);
+  height: var(--s-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-pill);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: var(--fs-label);
+  line-height: 1;
+  cursor: pointer;
+}
+.close:hover {
+  background: var(--accent);
+}
+.close:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
 }
 
 .body {

@@ -22,16 +22,17 @@ const DEMO_FLAVOUR: Flavour = {
   inStock: false,
   line: "Aankh se paani, mooh se maza.",
   desc: "Fiery peri peri, hand-tossed.",
+  tasteNote: "Sharp, smoky heat that builds fast. Chilli first, roasted crunch right behind it.",
   keywords: ["peri peri", "spicy", "पटाका"],
 };
 
 const DEMO_FLAVOUR_2: Flavour = {
   ...DEMO_FLAVOUR,
-  slug: "jaadu-masala",
-  name: "Jaadu Masala",
-  short: "Jaadu",
-  flavour: "Masala Magic",
-  theme: "jaadu",
+  slug: "dadi-masala",
+  name: "Dadi Masala",
+  short: "Dadi",
+  flavour: "Desi Masala",
+  theme: "dadi",
   heat: 3,
 };
 
