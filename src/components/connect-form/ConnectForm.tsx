@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useId, useRef, useState } from "react";
+import posthog from "posthog-js";
 import type { FlavourSlug } from "@/data/flavours";
 import { Input } from "@/components/input/Input";
 import { Button } from "@/components/button/Button";
@@ -14,6 +15,8 @@ import {
   validateField,
 } from "./validation";
 import styles from "./connect-form.module.css";
+
+const posthogLogger = posthog.logger;
 
 export interface ConnectPayload {
   email: string;
@@ -90,6 +93,8 @@ export function ConnectForm({ sourceSlug, flavourName, onSubmit, onSuccess, clas
       });
 
       setPhase("idle");
+      posthog.capture("connect_request_sent", { flavour_slug: sourceSlug });
+      posthogLogger.info("connection request completed", { flavour_slug: sourceSlug });
       toast({ message: "We'll connect with you shortly.", tone: "success" });
       onSuccess?.();
     } catch {

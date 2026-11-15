@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useId, useState } from "react";
+import posthog from "posthog-js";
 import { Input } from "@/components/input/Input";
 import { Button } from "@/components/button/Button";
 import { validateEmail } from "@/components/notify-form/validation";
@@ -39,6 +40,7 @@ export function ContactForm() {
       setName("");
       setEmail("");
       setMessage("");
+      posthog.capture("contact_message_sent");
       toast({ message: "Message sent. We'll get back to you soon.", tone: "success" });
     } catch {
       toast({ message: "Could not send your message. Please try again.", tone: "error" });
