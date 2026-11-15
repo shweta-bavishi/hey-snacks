@@ -150,17 +150,6 @@ export function CommandPalette({
         onSelect: () => runNav("shop"),
       },
       {
-        id: "jump-store-locator",
-        label: "Store Locator",
-        description: "Find a stockist near you",
-        keywords: ["store", "locator", "near me", "stockist"],
-        group: "Jump to",
-        tone: "peacock",
-        icon: "✱",
-        closesOnSelect: true,
-        onSelect: () => runRoute("/store-locator"),
-      },
-      {
         id: "jump-about",
         label: "About Us",
         description: "Who's behind hey.",

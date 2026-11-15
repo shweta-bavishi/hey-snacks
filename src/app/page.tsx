@@ -16,7 +16,6 @@ import { ProofBand } from "@/components/proof-band/ProofBand";
 import { Shop } from "@/components/shop/Shop";
 import { Faq } from "@/components/faq/Faq";
 import { FLAVOURS } from "@/data/flavours";
-import { subscribeNewsletter } from "@/lib/mock-api";
 import { BATCH } from "@/data/launch";
 
 const ANNOUNCEMENT_ITEMS = [
@@ -57,7 +56,7 @@ export default function Home() {
           <Shop />
           <Faq />
         </main>
-        <Footer flavours={FLAVOURS} onSubscribe={async (email) => void (await subscribeNewsletter(email))} />
+        <Footer flavours={FLAVOURS} />
       </ConnectModalProvider>
     </NotifyModalProvider>
   );

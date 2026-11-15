@@ -17,11 +17,9 @@ interface NavItem {
 }
 
 // Each link goes where its label says. Shop is a section on this page;
-// Store Locator and About Us have their own pages (src/app/(stubs)), so
-// they no longer land on an unrelated card in the proof band.
+// About Us has its own page (src/app/(stubs)).
 const NAV_LEFT: NavItem[] = [
   { label: "Shop", href: "#shop" },
-  { label: "Store Locator", href: "/store-locator" },
 ];
 
 const NAV_RIGHT: NavItem[] = [{ label: "About Us", href: "/about" }];

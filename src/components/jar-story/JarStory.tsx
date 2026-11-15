@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { IngredientSpriteSheet } from "./ingredientSprites";
 import { JarStoryFallback } from "./JarStoryFallback";
 import { JarStage } from "./JarStage";
 import styles from "./jar-story.module.css";
@@ -38,9 +37,6 @@ export function JarStory() {
 
   return (
     <section aria-label="Ingredients" className={styles.section}>
-      {/* One artwork sheet per document; every sprite in the stage and in the
-          fallback cards points at it by id. */}
-      <IngredientSpriteSheet />
       {showStage ? <JarStage onSkip={handleSkip} skipLinkRef={skipLinkRef} /> : null}
       <div className={[styles.fallbackWrap, showStage ? styles.srOnly : ""].join(" ")}>
         <JarStoryFallback />

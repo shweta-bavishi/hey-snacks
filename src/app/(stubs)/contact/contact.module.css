@@ -1,0 +1,159 @@
+.page {
+  min-height: 70svh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-6);
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: var(--s-8) var(--s-4);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-4);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius-pill);
+  padding: var(--s-1) var(--s-3);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--fs-h1);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  max-width: 20ch;
+}
+
+.intro {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-l);
+  max-width: 62ch;
+  opacity: var(--opacity-strong);
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--s-4);
+  width: 100%;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+  padding: var(--s-5);
+  background: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.cardHeading {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  line-height: 1;
+}
+
+.formCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  width: 100%;
+  padding: var(--s-5);
+  background: var(--paper);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-4);
+  max-width: 36rem;
+  width: 100%;
+}
+
+.textareaField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  width: 100%;
+  font-family: var(--font-body);
+}
+
+.textareaLabel {
+  font-size: var(--fs-label);
+  font-weight: 700;
+}
+
+.textarea {
+  width: 100%;
+  resize: vertical;
+  padding: var(--s-3);
+  border: var(--stroke) solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+}
+
+.textarea:hover {
+  border-width: var(--stroke-heavy);
+}
+
+.textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
+}
+
+.textarea:disabled {
+  cursor: not-allowed;
+  opacity: var(--opacity-disabled);
+}
+
+.textarea[aria-invalid="true"] {
+  border-color: var(--chilli);
+}
+
+.textareaError {
+  font-size: var(--fs-label);
+  color: var(--chilli);
+}
+
+.cardBody {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  max-width: 68ch;
+}
+
+.back {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.back:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--indigo);
+  border-radius: var(--radius);
+}

@@ -1,5 +1,5 @@
 // The one place the launch batch lives. Hero, marquee, shop stamps, the
-// notify modal and the store-locator page all read from here, so moving
+// notify modal all read from here, so moving
 // the drop date is a one-line change.
 //
 // Batch 01 drop date, confirmed: 15 December 2026.

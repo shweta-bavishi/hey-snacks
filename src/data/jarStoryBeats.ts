@@ -23,8 +23,6 @@ export interface JarParticleSpot {
   rotation: number;
   /** 0-1, scales the particle sprite. */
   scale: number;
-  /** Flip the silhouette so a beat's pieces don't read as one stamp repeated. */
-  mirror: boolean;
   /** Which sprite this piece wears. Beats with a mixed shape list cycle through them. */
   shape: SpriteKind;
 }
@@ -59,47 +57,84 @@ export interface JarBeat {
   tint: string;
   /** Pre-computed settle positions, one per particle. Deterministic — no runtime physics. */
   settlePositions: JarParticleSpot[];
+  /**
+   * The dense, shaded pile baked *behind* this beat's pieces (see
+   * scripts/build-jar-assets.py). The animated pieces are the ones pressed
+   * against the glass; this is everything further back, darker because less
+   * light reaches it. Null when the beat adds no layer.
+   */
+  backFill: string | null;
 }
 
-interface SpreadOptions {
+// The glass interior (the particle field) is 411 x 542 in jar-glass.webp.
+// Distances are measured in that real aspect, or the packing would pull
+// pieces closer together vertically than across.
+const FIELD_ASPECT = 542 / 411;
+
+// How much higher a poured pile sits in the middle than against the glass,
+// in percent of the field height. A dead-flat top reads as a cut-away.
+const MOUND_RISE = 6;
+
+interface PackOptions {
   count: number;
   seed: number;
   /**
-   * Vertical band this ingredient settles into, percent of the jar interior
-   * measured from the top. Each band has to sit *below* its beat's
-   * `fillLevel` surface line, or the pieces float above the contents like
-   * they're still in mid-air. The masala cloud is the deliberate exception.
+   * Vertical band the *centres* of this ingredient settle into, percent of
+   * the field from the top. Mirrors BANDS in scripts/build-jar-assets.py,
+   * which bakes the shaded pile behind these pieces: change one, change both.
    */
   yMin: number;
   yMax: number;
-  /** Horizontal band. Narrower near the top, where the glass pulls in to the neck. */
-  xMin: number;
-  xMax: number;
+  xMin?: number;
+  xMax?: number;
   /** One entry means every piece wears the same sprite; more than one cycles. */
   shapes: SpriteKind[];
 }
 
-// Deterministic pseudo-random spread so particles don't look hand-placed in
-// a grid, but never move at runtime — this array IS the physics.
-//
-// The horizontal axis is *stratified*, not random: each piece gets its own
-// slice of the band and jitters inside it. Pure random x clumped every beat
-// into a narrow column down the middle of the glass with bare walls either
-// side, which looks like a spill, not a jar someone filled.
-function spread({ count, seed, yMin, yMax, xMin, xMax, shapes }: SpreadOptions): JarParticleSpot[] {
+/** Seeded LCG. The jar must look identical on every render and every machine. */
+function seeded(seed: number) {
   let s = seed;
-  const rand = () => {
+  return () => {
     s = (s * 9301 + 49297) % 233280;
     return s / 233280;
   };
-  return Array.from({ length: count }, (_, i) => ({
-    x: xMin + ((i + 0.2 + rand() * 0.6) / count) * (xMax - xMin),
-    y: yMin + rand() * (yMax - yMin),
-    // Nuts lie every which way in a jar, but a *fully* random spin makes the
-    // almonds read as an explosion. ±52° off upright keeps the pile legible.
-    rotation: Math.round(-52 + rand() * 104),
-    scale: 0.82 + rand() * 0.34,
-    mirror: rand() < 0.5,
+}
+
+const surface = (yMin: number, x: number) => yMin + MOUND_RISE * ((x - 50) / 50) ** 2;
+
+// Mitchell's best-candidate scatter: each new piece tries a dozen spots and
+// keeps the one furthest from everything already placed. Pure random clumped
+// into piles with bare glass between them; a stratified grid looked
+// hand-placed. This gives even cover with no visible pattern, and it is still
+// a fixed array, never physics at runtime.
+function pack({ count, seed, yMin, yMax, xMin = 12, xMax = 88, shapes }: PackOptions): JarParticleSpot[] {
+  const rand = seeded(seed);
+  const placed: { x: number; y: number }[] = [];
+  for (let i = 0; i < count; i++) {
+    let best = { x: 50, y: yMax };
+    let bestDistance = -1;
+    for (let c = 0; c < (placed.length ? 12 : 1); c++) {
+      const x = xMin + rand() * (xMax - xMin);
+      const top = surface(yMin, x);
+      const y = top + rand() * (yMax - top);
+      const distance = placed.reduce(
+        (min, p) => Math.min(min, (x - p.x) ** 2 + ((y - p.y) * FIELD_ASPECT) ** 2),
+        Infinity
+      );
+      if (distance > bestDistance) {
+        best = { x, y };
+        bestDistance = distance;
+      }
+    }
+    placed.push(best);
+  }
+  return placed.map(({ x, y }, i) => ({
+    x: Math.round(x * 10) / 10,
+    y: Math.round(y * 10) / 10,
+    // Nuts lie every which way in a jar, so the photographs spin through the
+    // full circle rather than sitting near upright like drawn icons did.
+    rotation: Math.round(-180 + rand() * 360),
+    scale: Math.round((0.86 + rand() * 0.26) * 100) / 100,
     shape: shapes[i % shapes.length],
   }));
 }
@@ -113,6 +148,12 @@ type BeatSeed = Omit<JarBeat, "label">;
 // works out closer to 18/19/18/28/13/4. The two aren't required to match to
 // the decimal, but if that gap ever looks like a real discrepancy rather
 // than rounding, it's because it is one — flag it rather than assume.
+//
+// Each band sits just under its beat's `fillLevel` surface (surface y =
+// 100 - fillLevel * 100), so a beat's pieces land *on* the pile below them
+// rather than hanging above it. Particle counts are the pieces pressed
+// against the glass; the baked `backFill` supplies the density behind them,
+// which is what keeps the DOM inside the spec's ~140 node budget.
 //
 // Beats are declared without `label` and it is composed below, so the stamp
 // line can never disagree with the name and share it is built from.
@@ -130,6 +171,7 @@ const SEEDS: BeatSeed[] = [
     particleCount: 0,
     tint: "transparent",
     settlePositions: [],
+    backFill: null,
   },
   {
     id: "makhana",
@@ -139,11 +181,12 @@ const SEEDS: BeatSeed[] = [
     copy: "Popped lotus seeds. The crunch everything else sits on.",
     fillLevel: 0.35,
     particleShape: "makhana",
-    particleSize: 20,
+    particleSize: 24,
     particleColor: "var(--seed-makhana-sh)",
-    particleCount: 20,
+    particleCount: 10,
     tint: "var(--paper-2)",
-    settlePositions: spread({ count: 20, seed: 11, yMin: 66, yMax: 98, xMin: 14, xMax: 86, shapes: ["makhana"] }),
+    settlePositions: pack({ count: 10, seed: 11, yMin: 70, yMax: 96, shapes: ["makhana", "makhanaB", "makhanaC"] }),
+    backFill: "/jar/fill/makhana.webp",
   },
   {
     id: "almonds",
@@ -153,11 +196,12 @@ const SEEDS: BeatSeed[] = [
     copy: "For the crunch that fights back.",
     fillLevel: 0.5,
     particleShape: "almond",
-    particleSize: 22,
+    particleSize: 25,
     particleColor: "var(--nut-almond)",
-    particleCount: 9,
+    particleCount: 7,
     tint: "var(--paper-2)",
-    settlePositions: spread({ count: 9, seed: 23, yMin: 52, yMax: 72, xMin: 14, xMax: 86, shapes: ["almond"] }),
+    settlePositions: pack({ count: 7, seed: 23, yMin: 55, yMax: 70, shapes: ["almond", "almondB"] }),
+    backFill: "/jar/fill/almond.webp",
   },
   {
     id: "cashews",
@@ -167,11 +211,12 @@ const SEEDS: BeatSeed[] = [
     copy: "Because we're not monsters.",
     fillLevel: 0.62,
     particleShape: "cashew",
-    particleSize: 23,
+    particleSize: 25,
     particleColor: "var(--nut-cashew-sh)",
-    particleCount: 8,
+    particleCount: 7,
     tint: "var(--paper-2)",
-    settlePositions: spread({ count: 8, seed: 37, yMin: 40, yMax: 58, xMin: 14, xMax: 86, shapes: ["cashew"] }),
+    settlePositions: pack({ count: 7, seed: 37, yMin: 43, yMax: 56, shapes: ["cashew", "cashewB"] }),
+    backFill: "/jar/fill/cashew.webp",
   },
   {
     id: "peanuts",
@@ -181,11 +226,12 @@ const SEEDS: BeatSeed[] = [
     copy: "The reliable one.",
     fillLevel: 0.72,
     particleShape: "peanut",
-    particleSize: 22,
+    particleSize: 21,
     particleColor: "var(--nut-peanut-sh)",
-    particleCount: 10,
+    particleCount: 9,
     tint: "var(--paper-2)",
-    settlePositions: spread({ count: 10, seed: 41, yMin: 30, yMax: 46, xMin: 16, xMax: 84, shapes: ["peanut"] }),
+    settlePositions: pack({ count: 9, seed: 41, yMin: 32, yMax: 45, shapes: ["peanut"] }),
+    backFill: "/jar/fill/peanut.webp",
   },
   {
     id: "seeds",
@@ -195,14 +241,15 @@ const SEEDS: BeatSeed[] = [
     copy: "Pumpkin, sunflower, flax. Tiny but loud.",
     fillLevel: 0.82,
     particleShape: "seed",
-    particleSize: 13,
+    particleSize: 15,
     particleColor: "var(--seed-pumpkin-sh)",
-    particleCount: 14,
+    particleCount: 12,
     tint: "var(--paper-2)",
     // Alternating the two husks is what stops this beat reading as one shape
-    // stamped fourteen times — the copy says "pumpkin, sunflower", so the
+    // stamped over and over — the copy says "pumpkin, sunflower", so the
     // picture had better show both.
-    settlePositions: spread({ count: 14, seed: 53, yMin: 20, yMax: 34, xMin: 18, xMax: 82, shapes: ["seed", "seedStripe"] }),
+    settlePositions: pack({ count: 12, seed: 53, yMin: 22, yMax: 33, shapes: ["seed", "seedStripe"] }),
+    backFill: "/jar/fill/seed.webp",
   },
   {
     id: "spice",
@@ -212,11 +259,15 @@ const SEEDS: BeatSeed[] = [
     copy: "The part we won't explain.",
     fillLevel: 0.86,
     particleShape: "dust",
-    particleSize: 18,
+    particleSize: 16,
     particleColor: "var(--accent)",
-    particleCount: 9,
+    particleCount: 6,
     tint: "var(--accent-tint)",
-    settlePositions: spread({ count: 9, seed: 67, yMin: 2, yMax: 20, xMin: 20, xMax: 80, shapes: ["dust"] }),
+    // A few flakes land on top of the pile; the rest of the beat is the
+    // powder cloud (MASALA_CLOUD). The shake then works all of it into the
+    // coating, so these pieces dissolve rather than getting mixed in.
+    settlePositions: pack({ count: 6, seed: 67, yMin: 16, yMax: 22, xMin: 20, xMax: 80, shapes: ["dust"] }),
+    backFill: null,
   },
 ];
 
@@ -233,9 +284,58 @@ export const FINALE_PROGRESS: [number, number] = [0.95, 1];
 export const SHAKE = {
   rotationDeg: 8,
   translatePx: 14,
+  /** How far the jar comes up off the counter while it is being shaken. */
+  liftPx: 12,
   oscillations: 6,
   durationMs: 900,
 };
+
+/** The whole pile after the shake: every kind shuffled together and coated. */
+export const MIXED_BACK_FILL = "/jar/fill/mixed.webp";
+
+/** Loose powder that drifts into the jar during the masala beat. */
+export const MASALA_CLOUD = "/jar/masala-cloud.webp";
+
+/** Sprite kinds the shake turns into coating instead of mixing in. */
+const DISSOLVES_IN_MIX: ReadonlySet<SpriteKind> = new Set<SpriteKind>(["dust"]);
+
+export interface JarParticle {
+  key: string;
+  beat: JarBeat;
+  /** Where the piece lands when its beat pours in (layered, pre-shake). */
+  spot: JarParticleSpot;
+  /** Where the shake leaves it. Null for masala flakes, which dissolve into the coating. */
+  mixed: JarParticleSpot | null;
+}
+
+// After the shake every piece gets a fresh slot from one even scatter across
+// the whole fill, handed out in shuffled order, so makhana from the bottom can
+// surface at the top and seeds sink to the base: a mix, not the old layers
+// nudged about. Fixed seed, so the static fallback shows the same final jar.
+function buildParticles(): JarParticle[] {
+  const layered = BEATS.flatMap((beat) =>
+    beat.settlePositions.map((spot, i) => ({ key: `${beat.id}-${i}`, beat, spot }))
+  );
+  const mixers = layered.filter((p) => !DISSOLVES_IN_MIX.has(p.spot.shape));
+  const slots = pack({ count: mixers.length, seed: 89, yMin: 17, yMax: 96, shapes: ["makhana"] });
+
+  const rand = seeded(97);
+  const order = mixers.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  const mixedByKey = new Map(
+    mixers.map((p, i) => {
+      const slot = slots[order[i]];
+      return [p.key, { ...slot, shape: p.spot.shape }] as const;
+    })
+  );
+
+  return layered.map((p) => ({ ...p, mixed: mixedByKey.get(p.key) ?? null }));
+}
+
+export const JAR_PARTICLES: JarParticle[] = buildParticles();
 
 // Sanity check the timeline is contiguous and covers 0-1 — run at import
 // time so a bad edit to the beat table fails loudly in dev, not in a demo.
@@ -255,9 +355,8 @@ if (process.env.NODE_ENV !== "production") {
 
 /**
  * Total animated particle elements across the whole sequence. The spec caps
- * the stage at ~140 DOM nodes; the count below is what actually gets
- * transformed on scroll, and the artwork behind each one is shared through a
- * single <use> reference rather than inlined per particle (see
- * ingredientSprites.tsx), so drawn detail costs one extra node, not seven.
+ * the stage at ~140 DOM nodes; each particle is a wrapper plus one <img>
+ * (its masala coat is a pseudo-element, not a node), plus one image per
+ * baked back layer and the powder cloud.
  */
 export const TOTAL_PARTICLE_COUNT = BEATS.reduce((sum, b) => sum + b.particleCount, 0);

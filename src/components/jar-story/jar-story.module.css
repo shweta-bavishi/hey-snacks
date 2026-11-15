@@ -3,26 +3,123 @@
   background: var(--paper);
 }
 
-/* The hidden <defs> sheet every ingredient sprite points at. Zero-size and
-   out of flow so it never affects layout, but *not* display:none — Safari
-   drops <use> references into a display:none subtree. */
-.spriteSheet {
+/* ---- shared jar illustration ---- */
+/* The glass photograph is the in-flow child that gives .jarWrap its height.
+   It paints above the particle field so the nuts sit behind the wall and
+   under the reflections, and never takes a click. */
+.jarGlass {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Covers the threads on the neck of the jar photo. Sized and placed as a
+   share of the jar so it scales with it. The cap is parked above and beside
+   this box for the whole pour and only drops back inside it at the shake,
+   so it must be allowed to paint outside its own bounds. */
+.jarLidSvg {
   position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
+  z-index: 3;
+  left: 7.5%;
+  top: 0.6%;
+  width: 85%;
+  height: auto;
+  overflow: visible;
   pointer-events: none;
 }
 
-/* ---- shared jar illustration ---- */
-.jarSvg {
+/* The cap's outlines stay the house 3px however large the jar is drawn:
+   non-scaling strokes, so the drawing's own scale never fattens them. */
+.capBase {
+  fill: var(--accent);
+}
+
+.capHighlight {
+  fill: color-mix(in srgb, var(--accent) 52%, var(--paper));
+}
+
+.capSheen {
+  fill: color-mix(in srgb, var(--accent) 78%, var(--paper));
+}
+
+.capShade {
+  fill: color-mix(in srgb, var(--accent) 82%, var(--ink));
+}
+
+.capShadeDeep {
+  fill: color-mix(in srgb, var(--accent) 66%, var(--ink));
+}
+
+.capKnurl {
+  stroke: color-mix(in srgb, var(--ink) 32%, transparent);
+  stroke-width: calc(var(--stroke) / 3);
+  vector-effect: non-scaling-stroke;
+}
+
+.capLip {
+  fill: color-mix(in srgb, var(--accent) 70%, var(--ink));
+}
+
+.capOutline {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: var(--stroke);
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.capTop {
+  fill: color-mix(in srgb, var(--accent) 84%, var(--paper));
+  stroke: var(--ink);
+  stroke-width: var(--stroke);
+  vector-effect: non-scaling-stroke;
+}
+
+/* The pressed centre panel of the cap's top face. */
+.capPanel {
+  fill: color-mix(in srgb, var(--accent) 92%, var(--ink));
+  stroke: color-mix(in srgb, var(--ink) 40%, transparent);
+  stroke-width: calc(var(--stroke) / 2);
+  vector-effect: non-scaling-stroke;
+}
+
+.capGlint {
+  fill: none;
+  stroke: color-mix(in srgb, var(--paper) 80%, transparent);
+  stroke-width: var(--stroke);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Positioning context shared by the jar and its shadow. The stage scales
+   and fades this as one; the shake only moves the jar inside it. */
+.jarStand {
+  position: relative;
   width: 100%;
+}
+
+/* Centred on the jar's base so the glass foot sits in the dark core. */
+.jarShadow {
+  position: absolute;
+  z-index: 0;
+  left: 2%;
+  bottom: -3.2%;
+  width: 96%;
   height: auto;
-  display: block;
-  /* The lid is lifted above the top of the viewBox for the whole pour and
-     only drops back inside it at the shake, so it must be allowed to paint
-     outside the SVG's own box. */
-  overflow: visible;
+  transform-origin: 50% 50%;
+  pointer-events: none;
+}
+
+.jarShadowOuter {
+  fill: color-mix(in srgb, var(--ink) 10%, transparent);
+}
+
+.jarShadowCore {
+  fill: color-mix(in srgb, var(--ink) 20%, transparent);
 }
 
 /* ---- accessible content that is always present ---- */
@@ -264,24 +361,45 @@
    than it is wide, so a width-only cap pushed the base off the bottom of a
    short laptop window. */
 .stageJar {
-  width: min(40vw, 42vh, 440px);
+  width: min(33vw, 40vh, 380px);
   will-change: transform, opacity;
 }
 
-/* Maps onto the glass interior of the jar drawing, not the SVG's bounding
-   box. The illustration's viewBox is 240x320 with the interior spanning
-   x 52..188 and y 74..288 — but the viewBox itself starts at x 32 and is
-   176 x 306, so these percentages are measured against that box, not the
-   raw coordinates. This is where they come from —
-   particles settling outside that range visibly sat next to the jar rather
-   than in it. Keep in sync with FILL_TOP/FILL_BOTTOM and INNER in
-   JarIllustration. The clip-path is the same interior shape in normalised
-   units, so a piece that overlaps the wall is cut off by the glass instead
-   of hanging in mid-air. */
+/* Maps onto the glass interior of the jar photograph, as a share of the
+   image box: the straight-walled body, below the neck. The clip trims a
+   piece that overlaps the wall, so it is cut off by the glass instead of
+   hanging in mid-air, and follows the rounded base. It is left open far
+   above the top so pieces can be seen entering through the mouth. */
 .particleField {
   position: absolute;
-  inset: 24.183% 11.364% 5.882% 11.364%;
-  clip-path: url(#hey-jar-field-clip);
+  z-index: 1;
+  inset: 24% 10% 7% 11%;
+  clip-path: inset(-60% 0 0 0 round 0 0 12% 12%);
+}
+
+/* The baked body of the pile, behind everything else in the glass. Each
+   layer is the field's own size, so it needs no positioning of its own. */
+.backFill,
+.backLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.backLayer {
+  display: block;
+  will-change: transform, opacity;
+}
+
+/* The pieces pressed against the glass. The hard offset shadow is applied
+   once to the whole layer rather than per piece, so scrolling re-rasterises
+   one filter, not fifty, and it lands on the pile behind as well as on the
+   other pieces, which is what separates the front row from the back. */
+.frontLayer {
+  position: absolute;
+  inset: 0;
+  filter: drop-shadow(var(--stroke) var(--stroke) 0 color-mix(in srgb, var(--ink) 35%, transparent));
 }
 
 .particle {
@@ -294,6 +412,32 @@
   display: block;
   width: 100%;
   height: 100%;
+}
+
+/* The masala-coated twin of the photo underneath, faded in by --coat
+   (0 = plain, 1 = fully coated). A pseudo-element, so coating every piece
+   adds no DOM nodes. Masala flakes set no --coat-src and draw nothing. */
+.particle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--coat-src, none) center / 100% 100% no-repeat;
+  opacity: var(--coat, 0);
+  pointer-events: none;
+}
+
+/* Loose powder drifting through the mouth. Stage only; GSAP owns its
+   position and opacity, and it starts invisible. */
+.masalaCloud {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 0;
+  width: 96%;
+  height: auto;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
 /* ---- ingredient label card ---- */

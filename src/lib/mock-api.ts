@@ -88,3 +88,14 @@ export async function sendConnectMessage(payload: ConnectPayload): Promise<{ ok:
 }
 
 export type { FlavourSlug };
+
+export interface ContactMessagePayload {
+  name: string;
+  email: string;
+  message: string;
+}
+
+export async function sendContactMessage(_payload: ContactMessagePayload): Promise<{ ok: true }> {
+  await wait(600);
+  return { ok: true };
+}

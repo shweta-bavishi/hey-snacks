@@ -39,7 +39,7 @@
 /* ---- columns ---- */
 .columns {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--s-6);
   padding-bottom: var(--s-7);
   border-bottom: var(--stroke) solid var(--paper);
@@ -105,94 +105,6 @@
   border-bottom: var(--stroke) solid transparent;
   width: fit-content;
   cursor: default;
-}
-
-/* ---- newsletter ---- */
-.newsletterCopy {
-  font-family: var(--font-body);
-  font-size: var(--fs-body);
-  color: var(--paper);
-  margin: 0;
-}
-
-.newsletterForm {
-  display: flex;
-  align-items: flex-end;
-  gap: var(--s-2);
-}
-
-.newsletterInput {
-  flex: 1;
-  min-width: 0;
-}
-.newsletterInput :global(.label) {
-  color: var(--paper);
-}
-.newsletterInput :global(.input) {
-  background: var(--ink);
-  color: var(--paper);
-  border-color: var(--paper);
-}
-.newsletterInput :global(.helperText) {
-  color: var(--footer-muted);
-}
-
-.newsletterSubmit {
-  flex-shrink: 0;
-}
-
-/* ---- social row ---- */
-.socialRow {
-  list-style: none;
-  margin: 0;
-  padding: var(--s-5) 0;
-  display: flex;
-  gap: var(--s-3);
-}
-
-.socialSticker {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-pill);
-  border: var(--stroke) solid var(--paper);
-  color: var(--paper);
-  font-family: var(--font-mono);
-  font-size: var(--fs-label);
-  font-weight: 700;
-  text-decoration: none;
-}
-.socialSticker:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-on);
-}
-.socialSticker:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 4px var(--ink), 0 0 0 8px var(--paper);
-}
-.socialSticker[data-inert="true"] {
-  opacity: var(--opacity-secondary);
-  cursor: default;
-}
-.socialSticker[data-inert="true"]:hover {
-  background: transparent;
-  border-color: var(--paper);
-  color: var(--paper);
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 
 /* ---- mascots, half-cropped along the bottom edge ---- */

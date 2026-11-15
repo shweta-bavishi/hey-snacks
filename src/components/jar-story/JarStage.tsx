@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { BEATS, FINALE_PROGRESS, SHAKE, SHAKE_PROGRESS } from "@/data/jarStoryBeats";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { BEATS, FINALE_PROGRESS, JAR_PARTICLES, SHAKE, SHAKE_PROGRESS } from "@/data/jarStoryBeats";
 import { FLAVOURS } from "@/data/flavours";
 import { JOIN_LABEL } from "@/data/launch";
 import { Grain } from "@/components/grain/Grain";
 import { useNotifyModal } from "@/components/notify-form/NotifyModalProvider";
 import { IngredientSprite } from "./ingredientSprites";
-import { JAR_PARTICLES, JarContents } from "./JarContents";
-import { JarIllustration } from "./JarIllustration";
+import { JarContents, type JarContentsTargets } from "./JarContents";
+import { JarIllustration, JarShadow } from "./JarIllustration";
 import { useJarSound } from "./useJarSound";
 import styles from "./jar-story.module.css";
 
@@ -23,10 +23,40 @@ const RAIL_BEATS = BEATS; // 7 notches, one per beat (intro + 6 ingredient stops
 // side. Kept in sync with the matching breakpoint in jar-story.module.css.
 const TWO_COLUMN_MIN_WIDTH = 900;
 
-// How far above the rim the lid waits before the shake slams it on. GSAP
-// transforms an inner SVG <g> in the drawing's own user units, not CSS px,
-// so this is measured against the 306-unit-tall viewBox.
-const LID_LIFT_UNITS = 16;
+// Where the cap waits during the pour: lifted clear of the rim, nudged to
+// one side and tipped, the way you'd hold it while someone fills the jar.
+// GSAP transforms an inner SVG <g> in the drawing's own user units, not CSS
+// px, so these are measured against the cap's 140 x 56 viewBox.
+const LID_PARKED = { x: 34, y: -62, rotate: 14 };
+
+// The mouth of the jar sits this far above the top of the particle field,
+// as a share of the field's height (the field starts at the jar's shoulder,
+// 24% down the photo; the rim is at about 2%). Pieces enter here.
+const MOUTH_ABOVE_FIELD = 0.32;
+
+// Shape of each beat's pour, as shares of the beat's scroll span.
+const POUR = {
+  /** One piece's fall from the mouth to its settle point. */
+  fallShare: 0.32,
+  /** Window over which the beat's pieces start, bottom-most first. */
+  staggerShare: 0.56,
+  /** Width of the pour stream at the mouth, percent of the field. */
+  streamWidth: 28,
+  /** Spin a piece sheds on the way down. */
+  tumbleDeg: 140,
+  /** Height of the landing bounce, share of the field height. */
+  bounce: 0.014,
+};
+
+// Pieces whose settle point is above this line (percent of the field from
+// the top) are the top of the pile, and catch the masala cloud before the
+// shake mixes it through.
+const DUSTED_ABOVE_Y = 46;
+
+// How far a beat's back pile drops as it settles in, as a share of the
+// field height. Small: it should read as the pile slumping into place, not
+// a slab sliding down.
+const BACK_SETTLE = 0.05;
 
 interface JarStageProps {
   onSkip: () => void;
@@ -39,16 +69,19 @@ interface JarStageProps {
  * **Implementation:**
  * - Built with GSAP ScrollTrigger (`scrub: 1` for smooth scrubbing)
  * - Scroll progress (0→1) drives all animations via `onUpdate` callback
- * - Particles are absolutely-positioned SVG sprites; all animation is transform-only (`will-change`)
+ * - Particles are absolutely-positioned photographed sprites; all animation is transform-only (`will-change`)
  * - Particle settle positions pre-computed (no live physics engine — prevents jank on Android)
- * - The drawn artwork behind every particle is shared through one `<use>` reference
- *   (see ingredientSprites.tsx), so the sprite count — not the linework — sets the DOM cost
+ * - Eleven small WebP cutouts are shared by every particle (see ingredientSprites.tsx)
  *
  * **Scroll map:**
- * - 0.00–0.10: Jar fades in + scales (0.9→1), lid hovering above the rim
- * - 0.10–0.95: Each ingredient pours in sequence, settles, then next ingredient starts
- * - 0.74–0.86: Masala beat also washes the stage background over to the flavour tint
- * - 0.86–0.95: THE SHAKE — lid slams on, jar rotates ±8° × 6 oscillations, stage shakes 4px
+ * - 0.00–0.10: Jar fades in + scales (0.9→1), cap parked up and to one side
+ * - 0.10–0.74: Each ingredient pours in through the mouth: pieces fall under
+ *   gravity, tumble, bounce once, bottom-most first, while the shaded back
+ *   pile rises behind them
+ * - 0.74–0.86: Masala: a powder cloud drifts in and dusts the top of the
+ *   pile; the stage washes over to the flavour tint
+ * - 0.86–0.95: THE SHAKE: cap slams on, jar lifts and rocks ±8° × 6, stage
+ *   shakes 4px. Every piece tumbles to a shuffled slot and comes out coated
  * - 0.95–1.00: Settles; finale copy fades in beside the jar
  *
  * **Label card management:**
@@ -107,10 +140,15 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const washRef = useRef<HTMLDivElement>(null);
+  const standRef = useRef<HTMLDivElement>(null);
   const jarWrapRef = useRef<HTMLDivElement>(null);
   const jarCenterRef = useRef<HTMLDivElement>(null);
+  const shadowRef = useRef<SVGSVGElement>(null);
   const lidRef = useRef<SVGGElement>(null);
   const particleRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const backFillRefs = useRef<Record<string, HTMLImageElement | null>>({});
+  const mixedFillRef = useRef<HTMLImageElement | null>(null);
+  const cloudRef = useRef<HTMLImageElement | null>(null);
   const introRef = useRef<HTMLParagraphElement>(null);
   const finaleRef = useRef<HTMLDivElement>(null);
   const [activeBeatIndex, setActiveBeatIndex] = useState(0);
@@ -118,10 +156,36 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
   const { openNotify } = useNotifyModal();
   const hasShaken = useRef(false);
 
+  // Stable across renders so React never detaches and re-attaches every
+  // particle ref (and GSAP never loses its targets) on a label change.
+  const contentTargets = useMemo<JarContentsTargets>(
+    () => ({
+      particle: (key, el) => {
+        particleRefs.current[key] = el;
+      },
+      backFill: (beatId, el) => {
+        backFillRefs.current[beatId] = el;
+      },
+      mixedFill: (el) => {
+        mixedFillRef.current = el;
+      },
+      cloud: (el) => {
+        cloudRef.current = el;
+      },
+    }),
+    []
+  );
+
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const section = sectionRef.current;
-    if (!section) return;
+    const field = cloudRef.current?.parentElement;
+    if (!section || !field) return;
+
+    // Pour and mix offsets are measured in the field's own size, read
+    // lazily so a resize (invalidateOnRefresh) recomputes them.
+    const fieldW = () => field.offsetWidth;
+    const fieldH = () => field.offsetHeight;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
@@ -130,6 +194,7 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
           start: "top top",
           end: "bottom bottom",
           scrub: 1,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
             const p = self.progress;
             // -1 once scroll has moved past the last ingredient beat (into
@@ -154,50 +219,102 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
         tl.set(introRef.current, { opacity: 1 }, 0).to(introRef.current, { opacity: 0, duration: 0.035 }, 0.02);
       }
 
-      // Jar scales/fades in only once the question has gone.
-      if (jarWrapRef.current) {
-        tl.fromTo(jarWrapRef.current, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.045 }, 0.055);
+      // Jar (and its shadow on the counter) scales/fades in once the question has gone.
+      if (standRef.current) {
+        tl.fromTo(standRef.current, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.045 }, 0.055);
       }
 
-      // Lid waits off the rim, tilted, for the whole pour. It is drawn closed
-      // in JarIllustration so the static fallback shows a sealed jar; the
-      // stage is the only thing that lifts it.
+      // The cap sits parked up and off to one side for the whole pour, so
+      // nothing falls *through* it. It is drawn closed in JarIllustration so
+      // the static fallback shows a sealed jar; the stage is the only thing
+      // that lifts it.
       if (lidRef.current) {
-        gsap.set(lidRef.current, { transformOrigin: "50% 50%", y: -LID_LIFT_UNITS, rotate: -5 });
+        gsap.set(lidRef.current, { transformOrigin: "50% 50%", ...LID_PARKED });
       }
 
       // Centre every sprite on its settle point up front. Done through GSAP
-      // (not a CSS transform) so the drop-in tween below composes with it
-      // rather than clobbering it.
+      // (not a CSS transform) so the pour and mix tweens below compose with
+      // it rather than clobbering it.
       JAR_PARTICLES.forEach(({ key, spot }) => {
         const el = particleRefs.current[key];
         if (!el) return;
-        gsap.set(el, { xPercent: -50, yPercent: -50, rotation: spot.rotation, scale: spot.scale });
+        gsap.set(el, { xPercent: -50, yPercent: -50, rotation: spot.rotation, scale: spot.scale, "--coat": 0 });
       });
 
-      // Each ingredient beat: particles drop in (transform + opacity only),
-      // the label card swaps text via opacity crossfade.
       BEATS.slice(1).forEach((beat) => {
         const [start, end] = beat.progress;
         const span = end - start;
-        JAR_PARTICLES.filter((p) => p.beat.id === beat.id).forEach(({ key }) => {
+
+        // The pour. Pieces enter at the mouth from a narrow stream, fall
+        // under gravity (accelerating, power2.in), tumbling, and land with
+        // one small bounce. Bottom-most pieces first, so the pile builds up
+        // from the base instead of things appearing mid-jar.
+        const pieces = JAR_PARTICLES.filter((p) => p.beat.id === beat.id).sort((a, b) => b.spot.y - a.spot.y);
+        const fall = span * POUR.fallShare;
+        pieces.forEach(({ key, spot }, k) => {
           const el = particleRefs.current[key];
           if (!el) return;
-          tl.fromTo(el, { opacity: 0, y: -34 }, { opacity: 1, y: 0, duration: span * 0.8 }, start);
+          const at = start + (pieces.length > 1 ? k / (pieces.length - 1) : 0) * span * POUR.staggerShare;
+          const streamX = 50 + (((k * 37) % 11) / 10 - 0.5) * POUR.streamWidth;
+          const spin = (k % 2 ? 1 : -1) * POUR.tumbleDeg;
+          tl.fromTo(
+            el,
+            {
+              x: () => ((streamX - spot.x) / 100) * fieldW(),
+              y: () => -(spot.y / 100 + MOUTH_ABOVE_FIELD) * fieldH(),
+              rotation: spot.rotation + spin,
+            },
+            { x: 0, y: 0, rotation: spot.rotation, duration: fall, ease: "power2.in" },
+            at
+          );
+          tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: fall * 0.15 }, at);
+          tl.to(el, { y: () => -POUR.bounce * fieldH(), duration: fall * 0.1, ease: "power1.out" }, at + fall);
+          tl.to(el, { y: 0, duration: fall * 0.1, ease: "power1.in" }, at + fall * 1.1);
         });
+
+        // The body of the pile settles in behind the falling pieces: it
+        // fades up and drops a touch as the front pieces land on it. Never
+        // clipped, so it has no cut edge; its outline is only ever the
+        // pieces themselves. (A clip-path reveal drew straight-edged spikes
+        // through the nuts.)
+        const back = backFillRefs.current[beat.id];
+        if (back) {
+          tl.fromTo(
+            back,
+            { opacity: 0, y: () => -BACK_SETTLE * fieldH() },
+            { opacity: 1, y: 0, duration: span * 0.6, ease: "power1.inOut" },
+            start + span * 0.3
+          );
+        }
       });
 
-      // The masala beat is where the spec turns the whole stage the flavour
-      // colour. A flat colour wash fading up over the paper, not a gradient.
+      // The masala beat. Per the spec it is a *cloud*, not particles: powder
+      // drifts in through the mouth, spreads, and settles onto the top of
+      // the pile, so the upper pieces pick up a first dusting before the
+      // shake works it all the way through.
       const spice = BEATS[BEATS.length - 1];
+      const [spiceStart, spiceEnd] = spice.progress;
+      const spiceSpan = spiceEnd - spiceStart;
       if (washRef.current) {
-        tl.fromTo(
-          washRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: spice.progress[1] - spice.progress[0] },
-          spice.progress[0]
-        );
+        tl.fromTo(washRef.current, { opacity: 0 }, { opacity: 1, duration: spiceSpan }, spiceStart);
       }
+      const cloud = cloudRef.current;
+      if (cloud) {
+        gsap.set(cloud, { xPercent: -50, yPercent: -50 });
+        tl.fromTo(
+          cloud,
+          { y: () => -MOUTH_ABOVE_FIELD * fieldH(), scale: 0.6 },
+          { y: () => 0.14 * fieldH(), scale: 1.2, duration: spiceSpan * 0.8, ease: "power1.out" },
+          spiceStart
+        );
+        tl.fromTo(cloud, { opacity: 0 }, { opacity: 0.9, duration: spiceSpan * 0.22 }, spiceStart);
+        tl.to(cloud, { opacity: 0, duration: spiceSpan * 0.4 }, spiceStart + spiceSpan * 0.5);
+      }
+      JAR_PARTICLES.forEach(({ key, spot }) => {
+        const el = particleRefs.current[key];
+        if (!el || spot.y > DUSTED_ABOVE_Y) return;
+        tl.to(el, { "--coat": 0.35, duration: spiceSpan * 0.45 }, spiceStart + spiceSpan * 0.45);
+      });
 
       // The shake: rotate + translate the whole jar, oscillating, transform-only.
       // Added directly onto the master timeline (not a nested sub-timeline)
@@ -215,10 +332,10 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
       // consequence of sealing the jar rather than something that happens
       // next to it.
       if (lidRef.current) {
-        tl.to(lidRef.current, { y: 0, rotate: 0, duration: stepSpan * 0.8, ease: "power3.in" }, shakeStart);
+        tl.to(lidRef.current, { x: 0, y: 0, rotate: 0, duration: stepSpan * 0.8, ease: "power3.in" }, shakeStart);
       }
 
-      for (let i = 0; i < steps; i++) {
+      for (let i = 1; i < steps; i++) {
         const dir = i % 2 === 0 ? 1 : -1;
         const atRest = i === steps - 1;
         const at = shakeStart + i * stepSpan;
@@ -228,6 +345,7 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
             {
               rotate: atRest ? 0 : dir * SHAKE.rotationDeg,
               x: atRest ? 0 : dir * SHAKE.translatePx,
+              y: atRest ? 0 : -SHAKE.liftPx,
               duration: stepSpan,
               ease: "sine.inOut",
             },
@@ -237,12 +355,75 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
         // Screen shake, per the spec: a quarter of the jar's throw, on the
         // stage itself, so the copy and the rail feel the hit too.
         if (stickyRef.current) {
-          tl.to(
-            stickyRef.current,
-            { x: atRest ? 0 : -dir * 4, duration: stepSpan, ease: "sine.inOut" },
-            at
-          );
+          tl.to(stickyRef.current, { x: atRest ? 0 : -dir * 4, duration: stepSpan, ease: "sine.inOut" }, at);
         }
+      }
+
+      // Lifted off the counter, the jar's shadow shrinks and fades, then
+      // comes back as it is set down.
+      if (shadowRef.current) {
+        tl.to(shadowRef.current, { scaleX: 0.84, opacity: 0.5, duration: stepSpan }, shakeStart + stepSpan);
+        tl.to(shadowRef.current, { scaleX: 1, opacity: 1, duration: stepSpan }, shakeEnd - stepSpan);
+      }
+
+      // The mix. Every piece tumbles through a jittered midpoint to its slot
+      // in the shuffled final arrangement while the coating comes up, so by
+      // the time the jar is set down the layers are gone and every piece is
+      // dusted. The masala flakes dissolve into that coating, and the baked
+      // back pile crossfades from layers to the mixed, coated blend.
+      const mixStart = shakeStart + stepSpan;
+      const mixSpan = shakeSpan - stepSpan * 1.5;
+      JAR_PARTICLES.forEach(({ key, spot, mixed }, i) => {
+        const el = particleRefs.current[key];
+        if (!el) return;
+        const lag = (i % 5) * stepSpan * 0.12;
+        if (!mixed) {
+          tl.to(el, { opacity: 0, scale: spot.scale * 0.4, duration: mixSpan * 0.45 }, mixStart + lag);
+          return;
+        }
+        const dx = () => ((mixed.x - spot.x) / 100) * fieldW();
+        const dy = () => ((mixed.y - spot.y) / 100) * fieldH();
+        const jitter = (((i * 53) % 17) / 16 - 0.5) * 0.12;
+        tl.to(
+          el,
+          {
+            x: () => dx() * 0.5 + jitter * fieldW(),
+            y: () => dy() * 0.5 - Math.abs(jitter) * fieldH(),
+            rotation: (spot.rotation + mixed.rotation) / 2 + (i % 2 ? 50 : -50),
+            duration: mixSpan * 0.45,
+            ease: "sine.inOut",
+          },
+          mixStart + lag
+        );
+        tl.to(
+          el,
+          { x: dx, y: dy, rotation: mixed.rotation, scale: mixed.scale, duration: mixSpan * 0.45, ease: "power2.out" },
+          mixStart + lag + mixSpan * 0.45
+        );
+        tl.to(el, { "--coat": 1, duration: mixSpan * 0.7 }, mixStart + mixSpan * 0.1 + lag);
+      });
+
+      Object.values(backFillRefs.current).forEach((el) => {
+        if (el) tl.to(el, { opacity: 0, duration: mixSpan * 0.5 }, mixStart + mixSpan * 0.25);
+      });
+      if (mixedFillRef.current) {
+        tl.fromTo(
+          mixedFillRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: mixSpan * 0.5, immediateRender: false },
+          mixStart + mixSpan * 0.2
+        );
+      }
+
+      // A puff of the loose powder kicked up inside the sealed jar.
+      if (cloud) {
+        tl.fromTo(
+          cloud,
+          { y: () => 0.35 * fieldH(), scale: 1.4, opacity: 0 },
+          { opacity: 0.5, duration: mixSpan * 0.2, immediateRender: false },
+          mixStart
+        );
+        tl.to(cloud, { opacity: 0, duration: mixSpan * 0.45 }, mixStart + mixSpan * 0.3);
       }
 
       // Finale: the copy fades in *next to* the jar, per the spec — so the
@@ -272,7 +453,20 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
       }
     }, section);
 
-    return () => ctx.revert();
+    // The stage mounts after hydration (only once we know motion is
+    // allowed), and on a cold load ScrollTrigger never measured it: start and
+    // end stayed unset until a resize, so the scrub ran out of step with the
+    // scrollbar. Measure once the stage has laid out, and again whenever the
+    // page above it changes height as its images arrive.
+    const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    const resizeObserver = new ResizeObserver(() => ScrollTrigger.refresh());
+    resizeObserver.observe(document.body);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+      ctx.revert();
+    };
   }, [playCrunch]);
 
   // Past the last ingredient beat (shake/finale), keep the jar's fill/tint
@@ -316,13 +510,12 @@ export function JarStage({ onSkip, skipLinkRef }: JarStageProps) {
         </p>
 
         <div ref={jarCenterRef} className={styles.jarCenter}>
-          <div ref={jarWrapRef} className={[styles.jarWrap, styles.stageJar].join(" ")}>
-            <JarIllustration fillLevel={activeBeat?.fillLevel ?? 0} tint={activeBeat?.tint} lidRef={lidRef} />
-            <JarContents
-              registerRef={(key, el) => {
-                particleRefs.current[key] = el;
-              }}
-            />
+          <div ref={standRef} className={[styles.jarStand, styles.stageJar].join(" ")}>
+            <JarShadow shadowRef={shadowRef} />
+            <div ref={jarWrapRef} className={styles.jarWrap}>
+              <JarIllustration lidRef={lidRef} />
+              <JarContents state="layered" bindTargets={contentTargets} />
+            </div>
           </div>
         </div>
 

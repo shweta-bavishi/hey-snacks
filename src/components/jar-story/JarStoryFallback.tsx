@@ -5,7 +5,7 @@ import { ScrollReveal } from "@/components/scroll-reveal/ScrollReveal";
 import { BEATS } from "@/data/jarStoryBeats";
 import { IngredientSprite } from "./ingredientSprites";
 import { JarContents } from "./JarContents";
-import { JarIllustration } from "./JarIllustration";
+import { JarIllustration, JarShadow } from "./JarIllustration";
 import styles from "./jar-story.module.css";
 
 /**
@@ -21,14 +21,18 @@ import styles from "./jar-story.module.css";
  */
 export function JarStoryFallback() {
   const ingredientBeats = BEATS.slice(1); // drop the intro beat, it has no card
-  const finalFill = ingredientBeats[ingredientBeats.length - 1].fillLevel;
 
   return (
     <div className={styles.fallback}>
       <div className={styles.fallbackJar}>
-        <div className={styles.jarWrap}>
-          <JarIllustration fillLevel={finalFill} tint="var(--accent-tint)" />
-          <JarContents />
+        {/* The finished jar, not the layered pour: mixed and coated, the
+            same state the stage ends on, told without the movement. */}
+        <div className={styles.jarStand}>
+          <JarShadow />
+          <div className={styles.jarWrap}>
+            <JarIllustration />
+            <JarContents state="mixed" />
+          </div>
         </div>
       </div>
       <div className={styles.fallbackList}>

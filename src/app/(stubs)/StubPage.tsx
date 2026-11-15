@@ -8,7 +8,7 @@ interface StubPageProps {
 }
 
 // Thin styled "coming soon" page, tokens only, so header/footer links to
-// /about, /store-locator, /wholesale and /faq stop pointing into the void.
+// /about, /wholesale and /faq stop pointing into the void.
 export function StubPage({ eyebrow, heading, body }: StubPageProps) {
   return (
     <main id="main-content" className={styles.stub}>
