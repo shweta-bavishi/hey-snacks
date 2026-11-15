@@ -1,6 +1,7 @@
 "use client";
 
 import { Command } from "cmdk";
+import posthog from "posthog-js";
 import { useRouter } from "next/navigation";
 import {
   KeyboardEvent,
@@ -223,6 +224,7 @@ export function CommandPalette({
         closesOnSelect: true,
         onSelect: () => {
           navigator.clipboard?.writeText(DISCOUNT_CODE).catch(() => {});
+          posthog.capture("discount_code_copied");
           toast({ message: "copied ✱", tone: "success" });
         },
       },

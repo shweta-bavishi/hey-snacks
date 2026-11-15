@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useId, useMemo, useRef, useState } from "react";
+import posthog from "posthog-js";
 import type { Flavour, FlavourSlug } from "@/data/flavours";
 import { Input } from "@/components/input/Input";
 import { Checkbox } from "@/components/checkbox/Checkbox";
@@ -18,6 +19,8 @@ import {
   validateField,
 } from "./validation";
 import styles from "./notify-form.module.css";
+
+const posthogLogger = posthog.logger;
 
 export interface NotifyPayload {
   email: string;
@@ -155,6 +158,16 @@ export function NotifyForm({
       });
 
       setPhase("idle");
+      posthog.capture("waitlist_joined", {
+        flavour_slugs: result.mergedFlavourSlugs,
+        submission_status: result.status,
+        form_layout: layout,
+      });
+      posthogLogger.info("waitlist submission completed", {
+        submission_status: result.status,
+        form_layout: layout,
+        flavour_count: result.mergedFlavourSlugs.length,
+      });
       toast({
         message:
           result.status === "duplicate"
@@ -168,6 +181,7 @@ export function NotifyForm({
       // Network failure: form stays open, every value stays exactly as
       // typed, and a persistent retry banner replaces the submit path.
       // Focus is left alone here — the user didn't do anything wrong.
+      posthogLogger.warn("waitlist submission failed", { form_layout: layout });
       setPhase("network-error");
     }
   };
