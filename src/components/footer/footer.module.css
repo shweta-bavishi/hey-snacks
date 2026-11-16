@@ -95,6 +95,17 @@
   border-radius: var(--radius);
 }
 
+/* A <button> styled as a footer link (Cookie settings). */
+.linkButton {
+  padding: 0;
+  background: none;
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
 /* A footer item with no destination yet: same type, dimmed, not a link,
    no hover underline, nothing to click. */
 .linkInert {

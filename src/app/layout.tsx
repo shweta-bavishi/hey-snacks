@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { DEFAULT_THEME, themeInitScript } from "@/components/theme/theme-script";
 import { Grain } from "@/components/grain/Grain";
 import { ToastProvider } from "@/components/toast/ToastProvider";
+import { Analytics } from "@/components/analytics/Analytics";
+import { CookieNotice } from "@/components/cookie-notice/CookieNotice";
 
 // Variable names are distinct from the --font-* tokens in tokens.css
 // (which layer in the fallback stacks) so cascade order between the
@@ -61,6 +63,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Grain />
           <ThemeProvider>
             <ToastProvider>{children}</ToastProvider>
+          <CookieNotice />
+          <Analytics />
           </ThemeProvider>
         </div>
       </body>

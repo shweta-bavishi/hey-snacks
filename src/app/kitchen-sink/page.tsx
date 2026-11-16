@@ -30,6 +30,7 @@ import { ComicIntroStory } from "./comic-intro-story";
 import { FlavourGridStory } from "./flavour-grid-story";
 import { ProofBandStory } from "./proof-band-story";
 import { ShopStory } from "./shop-story";
+import { CookieNoticeStory } from "./cookie-notice-story";
 import { FaqStory } from "./faq-story";
 import { NotifyModalProvider } from "@/components/notify-form/NotifyModalProvider";
 import { ConnectModalProvider } from "@/components/connect-form/ConnectModalProvider";
@@ -74,6 +75,7 @@ export default function KitchenSinkPage() {
           <ShopStory />
         </ConnectModalProvider>
       </NotifyModalProvider>
+      <CookieNoticeStory />
       <FaqStory />
       <FooterStory />
     </main>

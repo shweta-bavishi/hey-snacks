@@ -2,6 +2,8 @@
 
 import { Command } from "cmdk";
 import posthog from "posthog-js";
+import { notifyMe } from "@/lib/api";
+import { getTurnstileToken } from "@/lib/mock-api";
 import { useRouter } from "next/navigation";
 import {
   KeyboardEvent,
@@ -315,10 +317,8 @@ export function CommandPalette({
     setTimeout(() => onOpenChange(false), SUCCESS_HOLD_MS);
   };
 
-  const mockNotifySubmit = async (payload: NotifyPayload): Promise<NotifyResult> => {
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    return { status: "created", ticket: "#2419", mergedFlavourSlugs: payload.flavourSlugs };
-  };
+  const notifySubmit = (payload: NotifyPayload): Promise<NotifyResult> =>
+    notifyMe({ ...payload, source: "command_palette" });
 
   const groupOrder: CommandDef["group"][] = ["Jump to", "Flavours", "Actions", "Theme"];
 
@@ -430,8 +430,8 @@ export function CommandPalette({
                 layout="compact"
                 sourceSlug={sourceSlug}
                 flavours={FLAVOURS}
-                getTurnstileToken={async () => "palette-token"}
-                onSubmit={mockNotifySubmit}
+                getTurnstileToken={getTurnstileToken}
+                onSubmit={notifySubmit}
                 onSuccess={(result) => handleNotifySuccess(result, sourceSlug)}
               />
             </div>

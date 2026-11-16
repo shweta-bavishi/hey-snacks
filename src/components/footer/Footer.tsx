@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Flavour } from "@/data/flavours";
 import { MascotAvatar } from "@/components/mascot-avatar/MascotAvatar";
 import mascotStyles from "@/components/mascot-avatar/mascot-avatar.module.css";
+import { CookieSettingsButton } from "@/components/cookie-notice/CookieSettingsButton";
 import styles from "./footer.module.css";
 
 interface FooterLinkItem {
@@ -92,6 +93,9 @@ export function Footer({ flavours, className }: FooterProps) {
                   <FooterLink item={item} />
                 </li>
               ))}
+              <li>
+                <CookieSettingsButton className={`${styles.link} ${styles.linkButton}`} />
+              </li>
             </ul>
           </nav>
         </div>

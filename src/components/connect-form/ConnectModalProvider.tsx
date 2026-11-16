@@ -6,7 +6,7 @@ import { FLAVOURS } from "@/data/flavours";
 import { Modal } from "@/components/modal/Modal";
 import { MascotAvatar } from "@/components/mascot-avatar/MascotAvatar";
 import { ConnectForm } from "./ConnectForm";
-import { sendConnectMessage } from "@/lib/mock-api";
+import { sendConnectMessage } from "@/lib/api";
 
 interface ConnectModalContextValue {
   openConnect: (slug: FlavourSlug) => void;

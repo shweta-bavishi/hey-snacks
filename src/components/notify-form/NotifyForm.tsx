@@ -30,6 +30,8 @@ export interface NotifyPayload {
   consent: true;
   honeypot: string;
   turnstileToken: string;
+  /** Which CTA opened the form (hero, sticky_bar...). Stored for attribution. */
+  source?: string;
 }
 
 export interface NotifyResult {

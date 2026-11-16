@@ -6,7 +6,8 @@ import { FLAVOURS } from "@/data/flavours";
 import { Modal } from "@/components/modal/Modal";
 import { MascotAvatar } from "@/components/mascot-avatar/MascotAvatar";
 import { NotifyForm, NotifyResult } from "./NotifyForm";
-import { notifyMe, getTurnstileToken } from "@/lib/mock-api";
+import { notifyMe } from "@/lib/api";
+import { getTurnstileToken } from "@/lib/mock-api";
 import { BATCH, JOIN_LABEL } from "@/data/launch";
 
 // Every CTA on the page — hero, flavour columns, shop cards, sticky mobile
@@ -68,8 +69,8 @@ export function NotifyModalProvider({ children }: { children: ReactNode }) {
   );
 
   const handleSubmit = useCallback(
-    async (payload: Parameters<typeof notifyMe>[0]): Promise<NotifyResult> => notifyMe(payload),
-    []
+    async (payload: Parameters<typeof notifyMe>[0]): Promise<NotifyResult> => notifyMe({ ...payload, source }),
+    [source]
   );
 
   return (

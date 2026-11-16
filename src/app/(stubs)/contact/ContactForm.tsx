@@ -6,7 +6,7 @@ import { Input } from "@/components/input/Input";
 import { Button } from "@/components/button/Button";
 import { validateEmail } from "@/components/notify-form/validation";
 import { useToast } from "@/components/toast/ToastProvider";
-import { sendContactMessage } from "@/lib/mock-api";
+import { sendContactMessage } from "@/lib/api";
 import styles from "./contact.module.css";
 
 type Errors = { name?: string; email?: string; message?: string };
